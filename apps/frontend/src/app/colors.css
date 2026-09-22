@@ -1,3 +1,4 @@
+  :root,
   .dark {
     --new-back-drop: #000;
     --new-settings: var(--card);
@@ -94,6 +95,7 @@
     --youtube-svg-border: #1A1A1A;
   }
 
+  :root,
   .dark {
     --pz-primary: var(--background);
     --pz-secondary: #090b13;
@@ -236,7 +238,6 @@
   }
 
 /* ---- shadcn/ui design tokens — agency orange (from @usesend/ui) ---- */
-:root,
 .light {
   --background: oklch(0.985 0.003 85);
   --foreground: oklch(0.205 0.004 60);
@@ -283,6 +284,7 @@
   --gray: #78767b;
   --primary-light: oklch(0.66 0.15 38);
 }
+:root,
 .dark {
   --background: oklch(0.147 0.004 49.25);
   --foreground: oklch(0.985 0.001 106.423);
