@@ -4,7 +4,7 @@ import { uniqBy } from 'lodash';
 import React, { FC, useCallback, useMemo, useRef, useState } from 'react';
 import { Integrations } from '@gitroom/frontend/components/launches/calendar.context';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { useClickOutside } from '@mantine/hooks';
 import { useToaster } from '@gitroom/react/toaster/toaster';
 import { useLaunchStore } from '@gitroom/frontend/components/new-launch/store';
@@ -57,9 +57,9 @@ export const SelectCustomer: FC<{
         data-tooltip-id="tooltip"
         data-tooltip-content={t('select_customer_tooltip', 'Select Customer')}
         onClick={openClose}
-        className={clsx(
+        className={cn(
           'relative z-[20] cursor-pointer h-[42px] rounded-[8px] pl-[16px] pr-[12px] gap-[8px] border flex items-center',
-          open ? 'border-[#612BD3]' : 'border-newColColor'
+          open ? 'border-[#612BD3]' : 'border-muted'
         )}
       >
         <div>
@@ -72,7 +72,7 @@ export const SelectCustomer: FC<{
       {open && (
         <div
           style={pos}
-          className="flex flex-col fixed pt-[12px] bg-newBgColorInner menu-shadow min-w-[250px]"
+          className="flex flex-col fixed pt-[12px] bg-card menu-shadow min-w-[250px]"
         >
           <div className="text-[14px] font-[600] px-[12px] mb-[5px]">
             {t('customers', 'Customers')}
@@ -92,7 +92,7 @@ export const SelectCustomer: FC<{
                   setCurrent('global')
                 }}
                 key={p.customer?.id}
-                className="p-[12px] hover:bg-newBgColor text-[14px] font-[500] h-[32px] flex items-center"
+                className="p-[12px] hover:bg-background text-[14px] font-[500] h-[32px] flex items-center"
               >
                 {p.customer?.name}
               </div>

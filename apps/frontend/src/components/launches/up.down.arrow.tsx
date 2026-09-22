@@ -1,5 +1,5 @@
 import { FC, useCallback } from 'react';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { ChevronUpIcon } from '@gitroom/frontend/components/ui/icons';
 
 const Arrow: FC<{
@@ -30,22 +30,22 @@ export const UpDownArrow: FC<{
     <div className="flex flex-col gap-[8px] pt-[8px]">
       <button
         onClick={changePosition('up')}
-        className={clsx(
+        className={cn(
           'outline-none w-[20px] h-[20px] flex justify-center items-center',
           isUp
             ? 'cursor-pointer'
-            : 'pointer-events-none text-textColor opacity-50'
+            : 'pointer-events-none text-foreground opacity-50'
         )}
       >
         <Arrow flip={true} />
       </button>
       <button
         onClick={changePosition('down')}
-        className={clsx(
+        className={cn(
           'outline-none rounded-bl-[20px] w-[20px] h-[20px] flex justify-center items-center',
           isDown
             ? 'cursor-pointer'
-            : 'pointer-events-none text-textColor opacity-50'
+            : 'pointer-events-none text-foreground opacity-50'
         )}
       >
         <Arrow flip={false} />

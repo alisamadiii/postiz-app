@@ -1,7 +1,7 @@
 'use client';
 
 import { DetailedHTMLProps, FC, InputHTMLAttributes, useMemo } from 'react';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { useFormContext } from 'react-hook-form';
 import { TranslatedLabel } from '../translation/translated-label';
 
@@ -35,7 +35,7 @@ export const Textarea: FC<
   }, [form?.formState?.errors?.[props?.name!]?.message, error]);
   return (
     <div
-      className={clsx(
+      className={cn(
         'flex flex-col gap-[6px]',
         props.disabled && 'opacity-50'
       )}
@@ -49,8 +49,8 @@ export const Textarea: FC<
       </div>
       <textarea
         {...(disableForm ? {} : form.register(props.name))}
-        className={clsx(
-          'bg-input min-h-[150px] p-[16px] outline-none border-fifth border rounded-md text-inputText placeholder:text-muted-foreground/70 transition-colors focus:border-ring focus:ring-3 focus:ring-ring/50',
+        className={cn(
+          'bg-input min-h-[150px] p-[16px] outline-none border-border border rounded-md text-muted-foreground placeholder:text-muted-foreground/70 transition-colors focus:border-ring focus:ring-3 focus:ring-ring/50',
           className
         )}
         {...rest}

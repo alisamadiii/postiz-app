@@ -27,7 +27,7 @@ export const NewPost = () => {
             withCloseButton: false,
             onClose: () => resolve('exit'),
             classNames: {
-              modal: 'text-textColor',
+              modal: 'text-foreground',
             },
             children: (
               <SetSelectionModal
@@ -56,7 +56,7 @@ export const NewPost = () => {
       askClose: true,
       fullScreen: true,
       classNames: {
-        modal: 'w-[100%] max-w-[1400px] text-textColor',
+        modal: 'w-[100%] max-w-[1400px] text-foreground',
       },
       children: (
         <AddEditModal
@@ -77,7 +77,7 @@ export const NewPost = () => {
   return (
     <button
       onClick={createAPost}
-      className="text-white flex-1 pt-[12px] pb-[14px] ps-[16px] pe-[20px] group-[.sidebar]:p-0 min-h-[44px] max-h-[44px] rounded-md bg-btnPrimary flex justify-center items-center gap-[5px] outline-none"
+      className="text-white flex-1 pt-[12px] pb-[14px] ps-[16px] pe-[20px] group-[.sidebar]:p-0 min-h-[44px] max-h-[44px] rounded-md bg-primary flex justify-center items-center gap-[5px] outline-none"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

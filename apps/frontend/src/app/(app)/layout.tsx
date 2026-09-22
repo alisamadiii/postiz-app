@@ -1,14 +1,14 @@
 import { SentryComponent } from '@gitroom/frontend/components/layout/sentry.component';
 
 export const dynamic = 'force-dynamic';
-import '../global.css';
+import '../globals.css';
 import 'react-tooltip/dist/react-tooltip.css';
 import '@copilotkit/react-ui/styles.css';
 import LayoutContext from '@gitroom/frontend/components/layout/layout.context';
 import { ReactNode } from 'react';
-import { Plus_Jakarta_Sans } from 'next/font/google';
+import { Inter, JetBrains_Mono } from 'next/font/google';
 import PlausibleProvider from 'next-plausible';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { VariableContextComponent } from '@gitroom/react/helpers/variable.context';
 import { Fragment } from 'react';
 import { PHProvider } from '@gitroom/react/helpers/posthog';
@@ -24,11 +24,16 @@ import {
 import { HtmlComponent } from '@gitroom/frontend/components/layout/html.component';
 import Script from 'next/script';
 import { ChangeDirClient } from '@gitroom/frontend/components/new-layout/change.dir.client';
+import { ThemeProviderClient } from '@gitroom/frontend/components/layout/theme.provider';
 
-const jakartaSans = Plus_Jakarta_Sans({
-  weight: ['600', '500'],
-  style: ['normal', 'italic'],
+const inter = Inter({
   subsets: ['latin'],
+  variable: '--font-sans',
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-mono',
 });
 
 export default async function AppLayout({ children }: { children: ReactNode }) {
@@ -38,7 +43,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
     ? PlausibleProvider
     : Fragment;
   return (
-    <html>
+    <html suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         {!!process.env.DATAFAST_WEBSITE_ID && (
@@ -52,7 +57,11 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
       </head>
       <ChangeDirClient />
       <body
-        className={clsx(jakartaSans.className, 'dark text-primary !bg-primary')}
+        className={cn(
+          'font-sans',
+          inter.variable,
+          jetbrainsMono.variable
+        )}
       >
         <VariableContextComponent
           storageProvider={
@@ -103,6 +112,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
         >
           <SentryComponent>
             {/*<SetTimezone />*/}
+            <ThemeProviderClient>
             <HtmlComponent />
             <DubAnalytics />
             <FacebookComponent />
@@ -120,6 +130,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
                 </LayoutContext>
               </PHProvider>
             </Plausible>
+            </ThemeProviderClient>
           </SentryComponent>
         </VariableContextComponent>
       </body>

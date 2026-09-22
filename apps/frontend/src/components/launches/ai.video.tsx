@@ -1,6 +1,6 @@
 import { Button } from '@gitroom/react/form/button';
 import React, { FC, useCallback, useState } from 'react';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import Loading from '@gitroom/frontend/components/layout/loading';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
@@ -212,8 +212,8 @@ export const AiVideo: FC<{
     <div className="relative">
       <div
         onClick={openVideoModal}
-        className={clsx(
-          'cursor-pointer h-[30px] rounded-[6px] justify-center items-center flex bg-newColColor px-[8px]'
+        className={cn(
+          'cursor-pointer h-[30px] rounded-[6px] justify-center items-center flex bg-muted px-[8px]'
         )}
       >
         {loading && (
@@ -222,7 +222,7 @@ export const AiVideo: FC<{
           </div>
         )}
         <div
-          className={clsx('flex gap-[5px] items-center', loading && 'invisible')}
+          className={cn('flex gap-[5px] items-center', loading && 'invisible')}
         >
           <div>
             <svg

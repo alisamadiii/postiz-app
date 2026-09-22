@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import EventEmitter from 'events';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 const toaster = new EventEmitter();
 export const Toaster = () => {
   const [showToaster, setShowToaster] = useState(false);
@@ -32,8 +32,8 @@ export const Toaster = () => {
   }
   return (
     <div
-      className={clsx(
-        'animate-fadeDown rounded-[8px] gap-[18px] flex items-center overflow-hidden bg-customColor8 p-[16px] min-w-[319px] fixed start-[50%] text-white z-[900] top-[32px] -translate-x-[50%] h-[56px]',
+      className={cn(
+        'animate-fadeDown rounded-[8px] gap-[18px] flex items-center overflow-hidden bg-secondary p-[16px] min-w-[319px] fixed start-[50%] text-white z-[900] top-[32px] -translate-x-[50%] h-[56px]',
         toasterType === 'success' ? 'shadow-greenToast' : 'shadow-yellowToast'
       )}
     >
@@ -66,7 +66,7 @@ export const Toaster = () => {
           </svg>
         )}
       </div>
-      <div className="flex-1 text-textColor">{toasterText}</div>
+      <div className="flex-1 text-foreground">{toasterText}</div>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="60"

@@ -1,5 +1,5 @@
 import { FC, ReactNode, useCallback, useState } from 'react';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -23,7 +23,7 @@ export const SliderComponent: FC<{
   const canGoNext = show < list.length - 1;
 
   return (
-    <div className={clsx(className, 'relative')}>
+    <div className={cn(className, 'relative')}>
       {list[show]}
 
       {/* Left Arrow */}
@@ -55,7 +55,7 @@ export const SliderComponent: FC<{
             <button
               key={index}
               onClick={() => setShow(index)}
-              className={clsx(
+              className={cn(
                 'w-2 h-2 rounded-full transition-colors cursor-pointer',
                 index === show
                   ? 'bg-white'

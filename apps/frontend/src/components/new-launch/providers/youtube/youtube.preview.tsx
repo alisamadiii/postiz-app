@@ -47,7 +47,7 @@ export const YoutubePreview: FC<{
   });
 
   return (
-    <div className="absolute left-0 top-0 gap-[12px] w-full h-full flex flex-col p-[16px] bg-bgYoutube">
+    <div className="absolute left-0 top-0 gap-[12px] w-full h-full flex flex-col p-[16px] bg-card">
       <div
         style={{ background: 'url(/no-video-youtube.png)' }}
         className="!bg-cover w-full aspect-[calc(16/9)] rounded-[4px] overflow-hidden"
@@ -75,7 +75,7 @@ export const YoutubePreview: FC<{
             <div className="text-[10px] font-[400]">16.7M subscribers</div>
           </div>
           <div>
-            <div className="h-[32px] text-[12px] text-newBgColor font-[500] px-[14px] flex justify-center items-center bg-youtubeButton rounded-[16px]">
+            <div className="h-[32px] text-[12px] text-background font-[500] px-[14px] flex justify-center items-center bg-youtubeButton rounded-[16px]">
               Subscribe
             </div>
           </div>

@@ -41,7 +41,7 @@ const CopyButton = ({
         copy(text);
         toaster.show(`${label} copied to clipboard`, 'success');
       }}
-      className="cursor-pointer px-[16px] h-[36px] bg-btnSimple hover:bg-boxHover transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
+      className="cursor-pointer px-[16px] h-[36px] bg-secondary hover:bg-accent transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
     >
       <svg
         width="14"
@@ -217,7 +217,7 @@ export const DeveloperComponent: FC = () => {
   if (!app && !creating) {
     return (
       <div className="flex flex-col gap-[40px]">
-        <div className="text-[14px] text-textColor leading-[1.7]">
+        <div className="text-[14px] text-foreground leading-[1.7]">
           {t(
             'oauth_app_note_line1',
             'Create an OAuth App to let other Postiz users authorize your product to post on their behalf.'
@@ -228,13 +228,13 @@ export const DeveloperComponent: FC = () => {
             'After a user completes the OAuth2 flow, you receive a pos_ prefixed token that works everywhere an API Key does — API, MCP, and CLI.'
           )}
         </div>
-        <div className="bg-newBgColorInner rounded-[12px] border border-newBorder overflow-hidden">
-          <div className="bg-newBgColorInner px-[20px] py-[14px] border-b border-newBorder flex items-start justify-between gap-[12px]">
+        <div className="bg-card rounded-[12px] border border-border overflow-hidden">
+          <div className="bg-card px-[20px] py-[14px] border-b border-border flex items-start justify-between gap-[12px]">
             <div>
               <div className="text-[15px] font-[600]">
                 {t('oauth_application', 'OAuth Application')}
               </div>
-              <div className="text-[13px] text-customColor18 mt-[2px]">
+              <div className="text-[13px] text-muted-foreground mt-[2px]">
                 {t(
                   'create_an_oauth_application',
                   'Create an OAuth application to allow third-party integrations with Postiz on behalf of your users.'
@@ -270,7 +270,7 @@ export const DeveloperComponent: FC = () => {
   if (creating && !app) {
     return (
       <div className="flex flex-col gap-[40px]">
-        <div className="text-[14px] text-textColor leading-[1.7]">
+        <div className="text-[14px] text-foreground leading-[1.7]">
           {t(
             'oauth_app_note_line1',
             'Create an OAuth App to let other Postiz users authorize your product to post on their behalf.'
@@ -281,12 +281,12 @@ export const DeveloperComponent: FC = () => {
             'After a user completes the OAuth2 flow, you receive a pos_ prefixed token that works everywhere an API Key does — API, MCP, and CLI.'
           )}
         </div>
-        <div className="bg-newBgColorInner rounded-[12px] border border-newBorder overflow-hidden">
-          <div className="bg-newBgColorInner px-[20px] py-[14px] border-b border-newBorder">
+        <div className="bg-card rounded-[12px] border border-border overflow-hidden">
+          <div className="bg-card px-[20px] py-[14px] border-b border-border">
             <div className="text-[15px] font-[600]">
               {t('create_oauth_app', 'Create OAuth App')}
             </div>
-            <div className="text-[13px] text-customColor18 mt-[2px]">
+            <div className="text-[13px] text-muted-foreground mt-[2px]">
               {t(
                 'fill_in_the_details_for_your_oauth_application',
                 'Fill in the details for your OAuth application.'
@@ -295,11 +295,11 @@ export const DeveloperComponent: FC = () => {
           </div>
           <div className="p-[20px] flex flex-col gap-[16px]">
             <div className="flex flex-col gap-[6px]">
-              <label className="text-[13px] font-[600] text-customColor18">
+              <label className="text-[13px] font-[600] text-muted-foreground">
                 {t('app_name', 'App Name')} *
               </label>
               <input
-                className="bg-newBgColorInner border border-newBorder rounded-[8px] px-[16px] h-[44px] text-textColor outline-none"
+                className="bg-card border border-border rounded-[8px] px-[16px] h-[44px] text-foreground outline-none"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="My Application"
@@ -307,11 +307,11 @@ export const DeveloperComponent: FC = () => {
               />
             </div>
             <div className="flex flex-col gap-[6px]">
-              <label className="text-[13px] font-[600] text-customColor18">
+              <label className="text-[13px] font-[600] text-muted-foreground">
                 {t('description', 'Description')}
               </label>
               <textarea
-                className="bg-newBgColorInner border border-newBorder rounded-[8px] p-[16px] text-textColor outline-none min-h-[80px]"
+                className="bg-card border border-border rounded-[8px] p-[16px] text-foreground outline-none min-h-[80px]"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Describe what your app does"
@@ -319,7 +319,7 @@ export const DeveloperComponent: FC = () => {
               />
             </div>
             <div className="flex flex-col gap-[6px]">
-              <label className="text-[13px] font-[600] text-customColor18">
+              <label className="text-[13px] font-[600] text-muted-foreground">
                 {t('profile_picture', 'Profile Picture')}
               </label>
               <div className="flex items-center gap-[12px]">
@@ -330,25 +330,25 @@ export const DeveloperComponent: FC = () => {
                     className="w-[48px] h-[48px] rounded-full object-cover"
                   />
                 ) : (
-                  <div className="w-[48px] h-[48px] rounded-full bg-btnSimple flex items-center justify-center text-customColor18">
+                  <div className="w-[48px] h-[48px] rounded-full bg-secondary flex items-center justify-center text-muted-foreground">
                     ?
                   </div>
                 )}
                 <button
                   type="button"
                   onClick={openMedia}
-                  className="cursor-pointer px-[16px] h-[36px] bg-btnSimple hover:bg-boxHover transition-colors rounded-[8px] text-[13px] font-[600]"
+                  className="cursor-pointer px-[16px] h-[36px] bg-secondary hover:bg-accent transition-colors rounded-[8px] text-[13px] font-[600]"
                 >
                   {t('choose_image', 'Choose Image')}
                 </button>
               </div>
             </div>
             <div className="flex flex-col gap-[6px]">
-              <label className="text-[13px] font-[600] text-customColor18">
+              <label className="text-[13px] font-[600] text-muted-foreground">
                 {t('redirect_url', 'Redirect URL')} *
               </label>
               <input
-                className="bg-newBgColorInner border border-newBorder rounded-[8px] px-[16px] h-[44px] text-textColor outline-none"
+                className="bg-card border border-border rounded-[8px] px-[16px] h-[44px] text-foreground outline-none"
                 value={redirectUrl}
                 onChange={(e) => setRedirectUrl(e.target.value)}
                 placeholder="https://yourapp.com/callback"
@@ -365,7 +365,7 @@ export const DeveloperComponent: FC = () => {
               <button
                 type="button"
                 onClick={() => setCreating(false)}
-                className="cursor-pointer px-[20px] h-[44px] bg-btnSimple hover:bg-boxHover transition-colors rounded-[8px] text-[15px] font-[600]"
+                className="cursor-pointer px-[20px] h-[44px] bg-secondary hover:bg-accent transition-colors rounded-[8px] text-[15px] font-[600]"
               >
                 {t('cancel', 'Cancel')}
               </button>
@@ -379,7 +379,7 @@ export const DeveloperComponent: FC = () => {
   // App exists — show details
   return (
     <div className="flex flex-col gap-[40px]">
-      <div className="text-[14px] text-textColor leading-[1.7]">
+      <div className="text-[14px] text-foreground leading-[1.7]">
         {t(
           'oauth_app_note_line1',
           'Create an OAuth App to let other Postiz users authorize your product to post on their behalf.'
@@ -391,13 +391,13 @@ export const DeveloperComponent: FC = () => {
         )}
       </div>
       {/* App details / edit */}
-      <div className="bg-newBgColorInner rounded-[12px] border border-newBorder overflow-hidden">
-        <div className="bg-newBgColorInner px-[20px] py-[14px] border-b border-newBorder flex items-start justify-between gap-[12px]">
+      <div className="bg-card rounded-[12px] border border-border overflow-hidden">
+        <div className="bg-card px-[20px] py-[14px] border-b border-border flex items-start justify-between gap-[12px]">
           <div>
             <div className="text-[15px] font-[600]">
               {t('oauth_application', 'OAuth Application')}
             </div>
-            <div className="text-[13px] text-customColor18 mt-[2px]">
+            <div className="text-[13px] text-muted-foreground mt-[2px]">
               {t(
                 'manage_your_oauth_application',
                 'Manage your OAuth application for third-party integrations.'
@@ -419,11 +419,11 @@ export const DeveloperComponent: FC = () => {
         {editing ? (
           <div className="p-[20px] flex flex-col gap-[16px]">
             <div className="flex flex-col gap-[6px]">
-              <label className="text-[13px] font-[600] text-customColor18">
+              <label className="text-[13px] font-[600] text-muted-foreground">
                 {t('app_name', 'App Name')} *
               </label>
               <input
-                className="bg-newBgColorInner border border-newBorder rounded-[8px] px-[16px] h-[44px] text-textColor outline-none"
+                className="bg-card border border-border rounded-[8px] px-[16px] h-[44px] text-foreground outline-none"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="My Application"
@@ -431,11 +431,11 @@ export const DeveloperComponent: FC = () => {
               />
             </div>
             <div className="flex flex-col gap-[6px]">
-              <label className="text-[13px] font-[600] text-customColor18">
+              <label className="text-[13px] font-[600] text-muted-foreground">
                 {t('description', 'Description')}
               </label>
               <textarea
-                className="bg-newBgColorInner border border-newBorder rounded-[8px] p-[16px] text-textColor outline-none min-h-[80px]"
+                className="bg-card border border-border rounded-[8px] p-[16px] text-foreground outline-none min-h-[80px]"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Describe what your app does"
@@ -443,7 +443,7 @@ export const DeveloperComponent: FC = () => {
               />
             </div>
             <div className="flex flex-col gap-[6px]">
-              <label className="text-[13px] font-[600] text-customColor18">
+              <label className="text-[13px] font-[600] text-muted-foreground">
                 {t('profile_picture', 'Profile Picture')}
               </label>
               <div className="flex items-center gap-[12px]">
@@ -454,25 +454,25 @@ export const DeveloperComponent: FC = () => {
                     className="w-[48px] h-[48px] rounded-full object-cover"
                   />
                 ) : (
-                  <div className="w-[48px] h-[48px] rounded-full bg-btnSimple flex items-center justify-center text-customColor18">
+                  <div className="w-[48px] h-[48px] rounded-full bg-secondary flex items-center justify-center text-muted-foreground">
                     ?
                   </div>
                 )}
                 <button
                   type="button"
                   onClick={openMedia}
-                  className="cursor-pointer px-[16px] h-[36px] bg-btnSimple hover:bg-boxHover transition-colors rounded-[8px] text-[13px] font-[600]"
+                  className="cursor-pointer px-[16px] h-[36px] bg-secondary hover:bg-accent transition-colors rounded-[8px] text-[13px] font-[600]"
                 >
                   {t('choose_image', 'Choose Image')}
                 </button>
               </div>
             </div>
             <div className="flex flex-col gap-[6px]">
-              <label className="text-[13px] font-[600] text-customColor18">
+              <label className="text-[13px] font-[600] text-muted-foreground">
                 {t('redirect_url', 'Redirect URL')} *
               </label>
               <input
-                className="bg-newBgColorInner border border-newBorder rounded-[8px] px-[16px] h-[44px] text-textColor outline-none"
+                className="bg-card border border-border rounded-[8px] px-[16px] h-[44px] text-foreground outline-none"
                 value={redirectUrl}
                 onChange={(e) => setRedirectUrl(e.target.value)}
                 placeholder="https://yourapp.com/callback"
@@ -489,7 +489,7 @@ export const DeveloperComponent: FC = () => {
               <button
                 type="button"
                 onClick={() => setEditing(false)}
-                className="cursor-pointer px-[20px] h-[44px] bg-btnSimple hover:bg-boxHover transition-colors rounded-[8px] text-[15px] font-[600]"
+                className="cursor-pointer px-[20px] h-[44px] bg-secondary hover:bg-accent transition-colors rounded-[8px] text-[15px] font-[600]"
               >
                 {t('cancel', 'Cancel')}
               </button>
@@ -505,21 +505,21 @@ export const DeveloperComponent: FC = () => {
                   className="w-[48px] h-[48px] rounded-full object-cover"
                 />
               ) : (
-                <div className="w-[48px] h-[48px] rounded-full bg-btnSimple flex items-center justify-center text-customColor18 text-[18px] font-[600]">
+                <div className="w-[48px] h-[48px] rounded-full bg-secondary flex items-center justify-center text-muted-foreground text-[18px] font-[600]">
                   {app.name?.[0]?.toUpperCase() || '?'}
                 </div>
               )}
               <div>
                 <div className="text-[15px] font-[600]">{app.name}</div>
                 {app.description && (
-                  <div className="text-customColor18 text-[13px]">
+                  <div className="text-muted-foreground text-[13px]">
                     {app.description}
                   </div>
                 )}
               </div>
             </div>
             <div className="flex flex-col gap-[4px]">
-              <div className="text-[13px] font-[600] text-customColor18">
+              <div className="text-[13px] font-[600] text-muted-foreground">
                 {t('redirect_url', 'Redirect URL')}
               </div>
               <div className="text-[14px]">{app.redirectUrl}</div>
@@ -528,7 +528,7 @@ export const DeveloperComponent: FC = () => {
               <button
                 type="button"
                 onClick={startEditing}
-                className="cursor-pointer px-[16px] h-[36px] bg-btnSimple hover:bg-boxHover transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
+                className="cursor-pointer px-[16px] h-[36px] bg-secondary hover:bg-accent transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>
                 {t('edit_app', 'Edit App')}
@@ -539,32 +539,32 @@ export const DeveloperComponent: FC = () => {
       </div>
 
       {/* Credentials */}
-      <div className="bg-newBgColorInner rounded-[12px] border border-newBorder overflow-hidden">
-        <div className="bg-newBgColorInner px-[20px] py-[14px] border-b border-newBorder">
+      <div className="bg-card rounded-[12px] border border-border overflow-hidden">
+        <div className="bg-card px-[20px] py-[14px] border-b border-border">
           <div className="text-[15px] font-[600]">
             {t('credentials', 'Credentials')}
           </div>
         </div>
         <div className="p-[20px] flex flex-col gap-[16px]">
           <div className="flex flex-col gap-[6px]">
-            <div className="text-[13px] font-[600] text-customColor18">
+            <div className="text-[13px] font-[600] text-muted-foreground">
               {t('client_id', 'Client ID')}
             </div>
-            <div className="bg-newBgColorInner border border-newBorder rounded-[8px] px-[16px] h-[44px] flex items-center overflow-hidden">
+            <div className="bg-card border border-border rounded-[8px] px-[16px] h-[44px] flex items-center overflow-hidden">
               <code className="text-[14px] flex-1 truncate">{app.clientId}</code>
             </div>
           </div>
           <div className="flex flex-col gap-[6px]">
-            <div className="text-[13px] font-[600] text-customColor18">
+            <div className="text-[13px] font-[600] text-muted-foreground">
               {t('client_secret', 'Client Secret')}
             </div>
-            <div className="bg-newBgColorInner border border-newBorder rounded-[8px] px-[16px] h-[44px] flex items-center overflow-hidden">
+            <div className="bg-card border border-border rounded-[8px] px-[16px] h-[44px] flex items-center overflow-hidden">
               {plaintextSecret ? (
                 <code className="text-[14px] flex-1 truncate">
                   {plaintextSecret}
                 </code>
               ) : (
-                <span className="text-customColor18 text-[13px]">
+                <span className="text-muted-foreground text-[13px]">
                   {t(
                     'secret_only_shown_on_creation',
                     'Secret is only shown on creation or rotation'
@@ -584,7 +584,7 @@ export const DeveloperComponent: FC = () => {
             <button
               type="button"
               onClick={rotateSecret}
-              className="cursor-pointer px-[16px] h-[36px] bg-btnSimple hover:bg-boxHover transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
+              className="cursor-pointer px-[16px] h-[36px] bg-secondary hover:bg-accent transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.5 2v6h-6" /><path d="M21.34 15.57a10 10 0 11-.57-8.38L21.5 8" /></svg>
               {t('rotate_secret', 'Rotate Secret')}

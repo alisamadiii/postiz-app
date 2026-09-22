@@ -20,10 +20,9 @@ import { useMediaDirectory } from '@gitroom/react/helpers/use.media.directory';
 import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
 import EventEmitter from 'events';
 import { useToaster } from '@gitroom/react/toaster/toaster';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { VideoFrame } from '@gitroom/react/helpers/video.frame';
 import { useUppyUploader } from '@gitroom/frontend/components/media/new.uploader';
-import dynamic from 'next/dynamic';
 import { useUser } from '@gitroom/frontend/components/layout/user.context';
 import { AiImage } from '@gitroom/frontend/components/launches/ai.image';
 import { DropFiles } from '@gitroom/frontend/components/layout/drop.files';
@@ -45,7 +44,6 @@ import {
   DragHandleIcon,
   MediaSettingsIcon,
   InsertMediaIcon,
-  DesignMediaIcon,
   VerticalDividerIcon,
   NoMediaIcon,
 } from '@gitroom/frontend/components/ui/icons';
@@ -53,9 +51,6 @@ import { useLaunchStore } from '@gitroom/frontend/components/new-launch/store';
 import { useShallow } from 'zustand/react/shallow';
 import { LoadingComponent } from '@gitroom/frontend/components/layout/loading';
 import { useDebounce } from 'use-debounce';
-const Polonto = dynamic(
-  () => import('@gitroom/frontend/components/launches/polonto')
-);
 const showModalEmitter = new EventEmitter();
 export const Pagination: FC<{
   current: number;
@@ -120,9 +115,9 @@ export const Pagination: FC<{
 
   return (
     <ul className="flex flex-row items-center gap-1 justify-center mt-[15px]">
-      <li className={clsx(current === 0 && 'opacity-20 pointer-events-none')}>
+      <li className={cn(current === 0 && 'opacity-20 pointer-events-none')}>
         <div
-          className="cursor-pointer inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-10 px-4 py-2 gap-1 ps-2.5 text-gray-400 hover:text-white border-[#1F1F1F] hover:bg-forth"
+          className="cursor-pointer inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-10 px-4 py-2 gap-1 ps-2.5 text-gray-400 hover:text-white border-[#1F1F1F] hover:bg-primary"
           aria-label="Go to previous page"
           onClick={() => setPage(current - 1)}
         >
@@ -133,18 +128,18 @@ export const Pagination: FC<{
       {paginationItems.map((item, index) => (
         <li key={index}>
           {item === '...' ? (
-            <span className="inline-flex items-center justify-center h-10 w-10 text-textColor select-none">
+            <span className="inline-flex items-center justify-center h-10 w-10 text-foreground select-none">
               ...
             </span>
           ) : (
             <div
               aria-current="page"
               onClick={() => setPage(item - 1)}
-              className={clsx(
-                'cursor-pointer inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border hover:bg-forth h-10 w-10 hover:text-white border-newBorder',
+              className={cn(
+                'cursor-pointer inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border hover:bg-primary h-10 w-10 hover:text-white border-border',
                 current === item - 1
-                  ? 'bg-forth !text-white'
-                  : 'text-textColor hover:text-white'
+                  ? 'bg-primary !text-white'
+                  : 'text-foreground hover:text-white'
               )}
             >
               {item}
@@ -153,12 +148,12 @@ export const Pagination: FC<{
         </li>
       ))}
       <li
-        className={clsx(
+        className={cn(
           current + 1 === totalPages && 'opacity-20 pointer-events-none'
         )}
       >
         <a
-          className="text-textColor hover:text-white group cursor-pointer inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-10 px-4 py-2 gap-1 pe-2.5 text-gray-400 border-[#1F1F1F] hover:bg-forth"
+          className="text-foreground hover:text-white group cursor-pointer inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-10 px-4 py-2 gap-1 pe-2.5 text-gray-400 border-[#1F1F1F] hover:bg-primary"
           aria-label="Go to next page"
           onClick={() => setPage(current + 1)}
         >
@@ -401,7 +396,7 @@ export const MediaBox: FC<{
       <button
         disabled={loading}
         onClick={() => uploaderRef?.current?.click()}
-        className="relative cursor-pointer bg-btnSimple changeColor flex gap-[8px] h-[44px] px-[18px] justify-center items-center rounded-[8px]"
+        className="relative cursor-pointer bg-secondary changeColor flex gap-[8px] h-[44px] px-[18px] justify-center items-center rounded-[8px]"
       >
         {loading ? (
           <div className="absolute left-[50%] top-[50%] -translate-y-[50%] -translate-x-[50%]">
@@ -419,7 +414,7 @@ export const MediaBox: FC<{
     <DropFiles disabled={loading} className="flex flex-col flex-1" onDrop={dragAndDrop}>
       <div className="flex flex-col flex-1">
         <div
-          className={clsx(
+          className={cn(
             'flex items-center gap-[12px]',
             !isLoading &&
               !data?.results?.length &&
@@ -433,7 +428,7 @@ export const MediaBox: FC<{
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder={t('search_media_by_name', 'Search by file name')}
-              className="w-full h-[44px] px-[14px] rounded-[8px] bg-newBgColorInner border border-newColColor text-[14px] outline-none focus:border-[#612BD3]"
+              className="w-full h-[44px] px-[14px] rounded-[8px] bg-card border border-muted text-[14px] outline-none focus:border-[#612BD3]"
             />
           </div>
           <input
@@ -449,7 +444,7 @@ export const MediaBox: FC<{
           </div>
         </div>
         <div className="w-full pointer-events-none relative mt-[5px] mb-[5px]">
-          <div className="w-full h-[46px] overflow-hidden absolute left-0 bg-newBgColorInner uppyChange">
+          <div className="w-full h-[46px] overflow-hidden absolute left-0 bg-card uppyChange">
             <Dashboard
               height={46}
               uppy={uppy}
@@ -465,16 +460,16 @@ export const MediaBox: FC<{
           <div className="w-full h-[46px] uppyChange" />
         </div>
         <div
-          className={clsx(
+          className={cn(
             'flex-1 relative',
             !isLoading &&
               !data?.results?.length &&
-              'bg-newTextColor/[0.02] rounded-[12px]'
+              'bg-foreground/[0.02] rounded-[12px]'
           )}
         >
           <div
-            className={clsx(
-              'absolute -left-[3px] -top-[3px] withp3 h-full overflow-x-hidden overflow-y-auto scrollbar scrollbar-thumb-newColColor scrollbar-track-newBgColorInner',
+            className={cn(
+              'absolute -left-[3px] -top-[3px] withp3 h-full overflow-x-hidden overflow-y-auto scrollbar scrollbar-thumb-muted scrollbar-track-card',
               !isLoading &&
                 !data?.results?.length &&
                 'flex justify-center items-center gap-[20px] flex-col'
@@ -494,7 +489,7 @@ export const MediaBox: FC<{
                         "You don't have any media yet"
                       )}
                 </div>
-                <div className="whitespace-pre-line text-newTextColor/[0.6] text-center">
+                <div className="whitespace-pre-line text-foreground/[0.6] text-center">
                   {t(
                     'select_or_upload_pictures_max_1gb',
                     'Select or upload pictures (maximum 1 GB per upload).'
@@ -515,12 +510,12 @@ export const MediaBox: FC<{
               <>
                 {[...new Array(16)].map((_, i) => (
                   <div
-                    className={clsx(
+                    className={cn(
                       'px-[3px] py-[3px] float-left rounded-[6px] cursor-pointer w8-max aspect-square'
                     )}
                     key={i}
                   >
-                    <div className="w-full h-full bg-newSep rounded-[6px] animate-pulse" />
+                    <div className="w-full h-full bg-border rounded-[6px] animate-pulse" />
                   </div>
                 ))}
               </>
@@ -536,14 +531,14 @@ export const MediaBox: FC<{
               })
               .map((media: any) => (
                 <div
-                  className={clsx(
+                  className={cn(
                     'group px-[3px] py-[3px] float-left rounded-[6px] w8-max aspect-square',
                     !standalone && 'cursor-pointer'
                   )}
                   key={media.id}
                 >
                   <div
-                    className={clsx(
+                    className={cn(
                       'w-full h-full rounded-[6px] border-[4px] relative',
                       !!selected.find((p) => p.id === media.id)
                         ? 'border-[#612BD3]'
@@ -610,7 +605,7 @@ export const MediaBox: FC<{
           <div className="flex justify-end mt-[32px] gap-[8px]">
             <button
               onClick={() => modals.closeCurrent()}
-              className="cursor-pointer h-[52px] px-[20px] items-center justify-center border border-newTextColor/10 flex rounded-[10px]"
+              className="cursor-pointer h-[52px] px-[20px] items-center justify-center border border-foreground/10 flex rounded-[10px]"
             >
               {t('cancel', 'Cancel')}
             </button>
@@ -741,19 +736,6 @@ export const MultiMediaComponent: FC<{
     [currentMedia]
   );
 
-  const designMedia = useCallback(() => {
-    if (!!user?.tier?.ai && !dummy) {
-      modals.openModal({
-        askClose: false,
-        title: t('design_media', 'Design Media'),
-        size: '80%',
-        children: (close) => (
-          <Polonto setMedia={changeMedia} closeModal={close} />
-        ),
-      });
-    }
-  }, [changeMedia, t]);
-
   return (
     <>
       <div className="b1 flex flex-col gap-[8px] rounded-bl-[8px] select-none w-full">
@@ -770,7 +752,7 @@ export const MultiMediaComponent: FC<{
               handle=".dragging"
             >
               {currentMedia.map((media, index) => (
-                  <div key={media.id} className="cursor-pointer rounded-[5px] w-[40px] h-[40px] border-2 border-tableBorder relative flex transition-all">
+                  <div key={media.id} className="cursor-pointer rounded-[5px] w-[40px] h-[40px] border-2 border-border relative flex transition-all">
                     <DragHandleIcon className="z-[20] dragging absolute pe-[1px] pb-[3px] -start-[4px] -top-[4px] cursor-move" />
 
                     <div className="w-full h-full relative group">
@@ -825,12 +807,12 @@ export const MultiMediaComponent: FC<{
             </ReactSortable>
           )}
         </div>
-        <div className="flex gap-[8px] px-[12px] border-t border-newColColor w-full b1 text-textColor">
+        <div className="flex gap-[8px] px-[12px] border-t border-muted w-full b1 text-foreground">
           {!mediaNotAvailable && (
             <div className="flex py-[10px] b2 items-center gap-[4px]">
               <div
                 onClick={showModal}
-                className="cursor-pointer h-[30px] rounded-[6px] justify-center items-center flex bg-newColColor px-[8px]"
+                className="cursor-pointer h-[30px] rounded-[6px] justify-center items-center flex bg-muted px-[8px]"
               >
                 <div className="flex gap-[8px] items-center">
                   <div>
@@ -841,20 +823,6 @@ export const MultiMediaComponent: FC<{
                   </div>
                 </div>
               </div>
-              <div
-                onClick={designMedia}
-                className="cursor-pointer h-[30px] rounded-[6px] justify-center items-center flex bg-newColColor px-[8px]"
-              >
-                <div className="flex gap-[5px] items-center">
-                  <div>
-                    <DesignMediaIcon />
-                  </div>
-                  <div className="text-[10px] font-[600] iconBreak:hidden block">
-                    {t('design_media', 'Design Media')}
-                  </div>
-                </div>
-              </div>
-
               <ThirdPartyMedia allData={allData} onChange={changeMedia} />
 
               {!!user?.tier?.ai && (
@@ -866,7 +834,7 @@ export const MultiMediaComponent: FC<{
             </div>
           )}
           {!mediaNotAvailable && (
-            <div className="text-newColColor h-full flex items-center">
+            <div className="text-muted h-full flex items-center">
               <VerticalDividerIcon />
             </div>
           )}
@@ -923,24 +891,6 @@ export const MediaComponent: FC<{
   const modals = useModals();
   const mediaDirectory = useMediaDirectory();
 
-  const showDesignModal = useCallback(() => {
-    modals.openModal({
-      title: t('media_editor', 'Media Editor'),
-      askClose: false,
-      closeOnEscape: true,
-      fullScreen: true,
-      size: 'calc(100% - 80px)',
-      height: 'calc(100% - 80px)',
-      children: (close) => (
-        <Polonto
-          width={width}
-          height={height}
-          setMedia={changeMedia}
-          closeModal={close}
-        />
-      ),
-    });
-  }, [t]);
   const changeMedia = useCallback((m: { path: string; id: string }[]) => {
     setCurrentMedia(m[0]);
     onChange({
@@ -977,7 +927,7 @@ export const MediaComponent: FC<{
       <div className="text-[14px]">{label}</div>
       <div className="text-[12px]">{description}</div>
       {!!currentMedia && (
-        <div className="my-[20px] cursor-pointer w-[200px] h-[200px] border-2 border-tableBorder">
+        <div className="my-[20px] cursor-pointer w-[200px] h-[200px] border-2 border-border">
           <img
             className="w-full h-full object-cover"
             src={currentMedia.path}
@@ -987,9 +937,6 @@ export const MediaComponent: FC<{
       )}
       <div className="flex gap-[5px]">
         <Button onClick={showModal}>{t('select', 'Select')}</Button>
-        <Button onClick={showDesignModal} className="!bg-customColor45">
-          {t('editor', 'Editor')}
-        </Button>
         <Button secondary={true} onClick={clearMedia}>
           {t('clear', 'Clear')}
         </Button>

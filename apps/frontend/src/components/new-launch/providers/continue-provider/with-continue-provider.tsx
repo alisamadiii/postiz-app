@@ -2,7 +2,7 @@
 
 import { FC, ReactNode, useCallback, useMemo, useState } from 'react';
 import useSWR from 'swr';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { Button } from '@gitroom/react/form/button';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { useCustomProviderFunction } from '@gitroom/frontend/components/launches/helpers/use.custom.provider.function';
@@ -130,9 +130,9 @@ export function withContinueProvider<TItem, TSelection>(
           {filteredData.map((item) => (
             <div
               key={getItemId(item)}
-              className={clsx(
-                'flex flex-col w-full text-center gap-[10px] border border-input p-[10px] hover:bg-seventh rounded-[8px]',
-                isSelected(item, selection) && 'bg-seventh border-primary'
+              className={cn(
+                'flex flex-col w-full text-center gap-[10px] border border-input p-[10px] hover:bg-primary rounded-[8px]',
+                isSelected(item, selection) && 'bg-primary border-primary'
               )}
               onClick={handleSelect(item)}
             >

@@ -107,7 +107,7 @@ export const TikTokLocationSelector: FC<{
     <div className="flex flex-col gap-[6px]">
       <div className="text-[14px]">{label}</div>
       {value?.id ? (
-        <div className="flex items-center gap-[12px] bg-newBgColorInner border-newTableBorder border rounded-[8px] p-[12px]">
+        <div className="flex items-center gap-[12px] bg-card border-border border rounded-[8px] p-[12px]">
           <div className="flex-1 flex flex-col">
             <div className="text-[14px]">{value.name}</div>
             {!!value.address && (
@@ -124,7 +124,7 @@ export const TikTokLocationSelector: FC<{
       ) : !open ? (
         <div>
           <div
-            className="h-[42px] px-[16px] inline-flex items-center cursor-pointer bg-newBgColorInner border-newTableBorder border rounded-[8px] text-[14px]"
+            className="h-[42px] px-[16px] inline-flex items-center cursor-pointer bg-card border-border border rounded-[8px] text-[14px]"
             onClick={() => setOpen(true)}
           >
             {t('tiktok_add_location', 'Add location')}
@@ -133,23 +133,23 @@ export const TikTokLocationSelector: FC<{
       ) : (
         <div className="flex flex-col gap-[6px]">
           <div className="flex gap-[6px]">
-            <div className="flex-1 h-[42px] bg-newBgColorInner border-newTableBorder border rounded-[8px] flex items-center">
+            <div className="flex-1 h-[42px] bg-card border-border border rounded-[8px] flex items-center">
               <input
-                className="h-full w-full bg-transparent outline-none px-[16px] text-[14px] text-textColor placeholder-textColor"
+                className="h-full w-full bg-transparent outline-none px-[16px] text-[14px] text-foreground placeholder-foreground"
                 placeholder={t('tiktok_search_location', 'Search location')}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
               />
             </div>
             <div
-              className="h-[42px] px-[16px] flex items-center cursor-pointer bg-newBgColorInner border-newTableBorder border rounded-[8px] text-[14px]"
+              className="h-[42px] px-[16px] flex items-center cursor-pointer bg-card border-border border rounded-[8px] text-[14px]"
               onClick={() => setOpen(false)}
             >
               {t('cancel', 'Cancel')}
             </div>
           </div>
           {!!query && (
-            <div className="max-h-[250px] overflow-y-auto flex flex-col bg-newBgColorInner border-newTableBorder border rounded-[8px]">
+            <div className="max-h-[250px] overflow-y-auto flex flex-col bg-card border-border border rounded-[8px]">
               {loading ? (
                 <div className="p-[12px] text-[14px] opacity-70">
                   {t('loading', 'Loading...')}
@@ -162,7 +162,7 @@ export const TikTokLocationSelector: FC<{
                 results.map((location) => (
                   <div
                     key={location.id}
-                    className="flex flex-col p-[8px] hover:bg-newTableBorder cursor-pointer"
+                    className="flex flex-col p-[8px] hover:bg-border cursor-pointer"
                     onClick={() => selectLocation(location)}
                   >
                     <div className="text-[14px]">{location.name}</div>

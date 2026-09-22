@@ -70,10 +70,10 @@ const AnnouncementDetailModal: FC<{
 
   return (
     <div className="flex flex-col gap-[16px] min-w-[500px]">
-      <div className="text-newTextColor/60 text-[13px]">
+      <div className="text-foreground/60 text-[13px]">
         {new Date(announcement.createdAt).toLocaleDateString()}
       </div>
-      <div className="whitespace-pre-wrap text-newTextColor">
+      <div className="whitespace-pre-wrap text-foreground">
         {announcement.description}
       </div>
       {isAdmin && (

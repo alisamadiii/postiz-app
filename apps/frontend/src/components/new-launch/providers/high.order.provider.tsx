@@ -20,7 +20,7 @@ import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import useSWR from 'swr';
 import { InternalChannels } from '@gitroom/frontend/components/launches/internal.channels';
 import { createPortal } from 'react-dom';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import SafeImage from '@gitroom/react/helpers/safe.image';
 
 class Empty {
@@ -239,7 +239,7 @@ export const withProvider = function <T extends object>(params: {
       >
         <FormProvider {...form}>
           <div
-            className={clsx(
+            className={cn(
               'border border-borderPreview rounded-[12px] shadow-previewShadow',
               !current && 'hidden'
             )}
@@ -288,7 +288,7 @@ export const withProvider = function <T extends object>(params: {
               ))}
             {(SettingsComponent || !!data?.internalPlugs?.length) &&
               createPortal(
-                <div data-id={props.id} className={isGlobal ? 'bg-newSettings pb-[12px] px-[12px]' : 'hidden bg-newSettings px-[12px] pb-[12px]'}>
+                <div data-id={props.id} className={isGlobal ? 'bg-card pb-[12px] px-[12px]' : 'hidden bg-card px-[12px] pb-[12px]'}>
                   {isGlobal && (
                     <style>{`#wrapper-settings {display: flex !important} #social-empty {display: block !important;}`}</style>
                   )}

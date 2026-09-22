@@ -71,7 +71,7 @@ export const MissingReleaseModal: FC<{
 
   if (!data || data.length === 0) {
     return (
-      <div className="text-center text-textColor py-[20px]">
+      <div className="text-center text-foreground py-[20px]">
         {t(
           'no_missing_content',
           'No content found from this provider. The provider may not support this feature.'
@@ -82,13 +82,13 @@ export const MissingReleaseModal: FC<{
 
   return (
     <div className="flex flex-col gap-[16px]">
-      <div className="text-[14px] text-textColor/70">
+      <div className="text-[14px] text-foreground/70">
         {t(
           'select_matching_content',
           'Select the content that matches this post:'
         )}
       </div>
-      <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-[10px] max-h-[400px] overflow-y-auto scrollbar scrollbar-thumb-fifth scrollbar-track-newBgColor p-[4px]">
+      <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-[10px] max-h-[400px] overflow-y-auto scrollbar scrollbar-thumb-border scrollbar-track-background p-[4px]">
         {data.map((item: { id: string; url: string }) => (
           <div
             key={item.id}
@@ -96,7 +96,7 @@ export const MissingReleaseModal: FC<{
             className={`cursor-pointer rounded-[8px] overflow-hidden border-2 transition-all ${
               selected === item.id
                 ? 'border-[#612BD3] scale-[1.02]'
-                : 'border-transparent hover:border-textColor/20'
+                : 'border-transparent hover:border-foreground/20'
             }`}
           >
             <img
@@ -107,11 +107,11 @@ export const MissingReleaseModal: FC<{
           </div>
         ))}
       </div>
-      <div className="flex justify-end gap-[10px] pt-[8px] border-t border-tableBorder">
+      <div className="flex justify-end gap-[10px] pt-[8px] border-t border-border">
         <Button
           type="button"
           onClick={() => modal.closeAll()}
-          className="bg-transparent border border-tableBorder text-textColor"
+          className="bg-transparent border border-border text-foreground"
         >
           {t('cancel', 'Cancel')}
         </Button>

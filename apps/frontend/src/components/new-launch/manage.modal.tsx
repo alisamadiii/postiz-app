@@ -10,7 +10,7 @@ import React, {
   useState,
 } from 'react';
 import { AddEditModalProps } from '@gitroom/frontend/components/new-launch/add.edit.modal';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { PicksSocialsComponent } from '@gitroom/frontend/components/new-launch/picks.socials.component';
 import { EditorWrapper } from '@gitroom/frontend/components/new-launch/editor';
@@ -425,7 +425,7 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
           title: '',
           children: <DummyCodeComponent code={data} />,
           classNames: {
-            modal: 'w-[100%] bg-transparent text-textColor',
+            modal: 'w-[100%] bg-transparent text-foreground',
           },
           size: '100%',
           withCloseButton: false,
@@ -468,10 +468,10 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
 
   return (
     <div className="w-full h-full flex-1 p-[40px] flex relative">
-      <div className="flex flex-1 bg-newBgColorInner rounded-[20px] flex-col">
+      <div className="flex flex-1 bg-card rounded-[20px] flex-col">
         <div className="flex-1 flex">
-          <div className="flex flex-col flex-1 border-e border-newBorder">
-            <div className="bg-newBgColor h-[65px] rounded-s-[20px] !rounded-b-[0] flex items-center gap-[12px] px-[20px] text-[20px] font-[600]">
+          <div className="flex flex-col flex-1 border-e border-border">
+            <div className="bg-background h-[65px] rounded-s-[20px] !rounded-b-[0] flex items-center gap-[12px] px-[20px] text-[20px] font-[600]">
               {t('create_post_title', 'Create Post')}
               <CreationMethodBadge
                 creationMethod={existingData?.posts?.[0]?.creationMethod}
@@ -480,11 +480,11 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
             </div>
             <div className="flex-1 flex flex-col gap-[16px]">
               <div
-                className={clsx('flex-1 relative', showSettings && 'hidden')}
+                className={cn('flex-1 relative', showSettings && 'hidden')}
               >
                 <div
                   id="social-content"
-                  className="gap-[32px] flex flex-col pe-[8px] pt-[20px] ps-[20px] absolute top-0 left-0 w-full h-full overflow-x-hidden overflow-y-scroll scrollbar scrollbar-thumb-newColColor scrollbar-track-newBgColorInner"
+                  className="gap-[32px] flex flex-col pe-[8px] pt-[20px] ps-[20px] absolute top-0 left-0 w-full h-full overflow-x-hidden overflow-y-scroll scrollbar scrollbar-thumb-muted scrollbar-track-card"
                 >
                   <div className="flex w-full">
                     <div className="flex flex-1">
@@ -506,7 +506,7 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
                     </div>
                     <div
                       id="social-empty"
-                      className={clsx(
+                      className={cn(
                         'pb-[16px]'
                         // current !== 'global' && 'hidden'
                       )}
@@ -516,16 +516,16 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
               </div>
               <div
                 id="wrapper-settings"
-                className={clsx(
+                className={cn(
                   'pb-[20px] px-[20px] select-none',
                   showSettings && 'flex-1 flex pt-[20px]',
                   current === 'global' && 'hidden'
                 )}
               >
-                <div className="flex-1 flex flex-col rounded-[12px] gap-[12px] overflow-hidden bg-newSettings">
+                <div className="flex-1 flex flex-col rounded-[12px] gap-[12px] overflow-hidden bg-card">
                   <div
                     onClick={() => setShowSettings(!showSettings)}
-                    className={clsx(
+                    className={cn(
                       'bg-[#612BD3] rounded-[12px] flex items-center gap-[8px] cursor-pointer p-[12px]',
                       showSettings ? '!rounded-b-none' : ''
                     )}
@@ -541,15 +541,15 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
                     </div>
                   </div>
                   <div
-                    className={clsx(
+                    className={cn(
                       !showSettings ? 'hidden' : 'flex-1',
-                      'text-[14px] text-textColor font-[500] relative'
+                      'text-[14px] text-foreground font-[500] relative'
                     )}
                   >
-                    <div className="absolute left-0 top-0 w-full h-full flex flex-col overflow-x-hidden overflow-y-auto scrollbar scrollbar-thumb-newBgColorInner scrollbar-track-newColColor">
+                    <div className="absolute left-0 top-0 w-full h-full flex flex-col overflow-x-hidden overflow-y-auto scrollbar scrollbar-thumb-card scrollbar-track-muted">
                       <div
                         id="social-settings"
-                        className="flex flex-col gap-[20px] bg-newBgColor"
+                        className="flex flex-col gap-[20px] bg-background"
                       />
                     </div>
                   </div>
@@ -561,7 +561,7 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
             </div>
           </div>
           <div className="w-[580px] flex flex-col">
-            <div className="bg-newBgColor h-[65px] rounded-e-[20px] !rounded-b-[0] flex items-center px-[20px] text-[20px] font-[600]">
+            <div className="bg-background h-[65px] rounded-e-[20px] !rounded-b-[0] flex items-center px-[20px] text-[20px] font-[600]">
               <div className="flex-1">{t('post_preview', 'Post Preview')}</div>
               <div className="cursor-pointer">
                 <CloseIcon onClick={askClose} className="text-[#A3A3A3]" />
@@ -570,14 +570,14 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
             <div className="flex-1 relative">
               <Scrollable
                 scrollClasses="!pe-[20px]"
-                className="absolute top-0 p-[20px] pe-[8px] left-0 w-full h-full overflow-x-hidden overflow-y-scroll scrollbar scrollbar-thumb-newColColor scrollbar-track-newBgColorInner"
+                className="absolute top-0 p-[20px] pe-[8px] left-0 w-full h-full overflow-x-hidden overflow-y-scroll scrollbar scrollbar-thumb-muted scrollbar-track-card"
               >
                 <ShowAllProviders ref={ref} />
               </Scrollable>
             </div>
           </div>
         </div>
-        <div className="select-none h-[84px] py-[20px] border-t border-newBorder flex items-center">
+        <div className="select-none h-[84px] py-[20px] border-t border-border flex items-center">
           <div className="flex-1 flex ps-[20px] gap-[8px]">
             {!dummy && (
               <TagsComponent
@@ -613,14 +613,14 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
                   selectedIntegrations.length === 0 || loading || locked
                 }
                 onClick={schedule('draft')}
-                className="relative cursor-pointer disabled:cursor-not-allowed px-[20px] h-[44px] bg-btnSimple justify-center items-center flex rounded-[8px] text-[15px] font-[600]"
+                className="relative cursor-pointer disabled:cursor-not-allowed px-[20px] h-[44px] bg-secondary justify-center items-center flex rounded-[8px] text-[15px] font-[600]"
               >
                 {loading && (
                   <div className="absolute left-[50%] top-[50%] -translate-y-[50%] -translate-x-[50%]">
-                    <div className="animate-spin h-[20px] w-[20px] border-4 border-textColor border-t-transparent rounded-full" />
+                    <div className="animate-spin h-[20px] w-[20px] border-4 border-foreground border-t-transparent rounded-full" />
                   </div>
                 )}
-                <div className={clsx(loading && 'invisible')}>
+                <div className={cn(loading && 'invisible')}>
                   {t('save_as_draft', 'Save as Draft')}
                 </div>
               </button>
@@ -651,7 +651,7 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
                     </div>
                   )}
                   <div
-                    className={clsx(
+                    className={cn(
                       'text-[15px] font-[600]',
                       loading && 'invisible'
                     )}
@@ -679,7 +679,7 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
                     disabled={
                       selectedIntegrations.length === 0 || loading || locked
                     }
-                    className="rounded-[8px] z-[300] disabled:cursor-not-allowed disabled:opacity-80 hidden group-hover:flex absolute bottom-[100%] -left-[12px] p-[12px] w-[206px] bg-newBgColorInner"
+                    className="rounded-[8px] z-[300] disabled:cursor-not-allowed disabled:opacity-80 hidden group-hover:flex absolute bottom-[100%] -left-[12px] p-[12px] w-[206px] bg-card"
                   >
                     <div className="text-white rounded-[8px] bg-[#D82D7E] h-[44px] w-full flex justify-center items-center post-now">
                       {t('post_now', 'Post Now')}
@@ -725,7 +725,7 @@ const Scrollable: FC<{
   const ref = useRef(undefined);
   const hasScroll = useHasScroll(ref);
   return (
-    <div className={clsx(className, hasScroll && scrollClasses)} ref={ref}>
+    <div className={cn(className, hasScroll && scrollClasses)} ref={ref}>
       {children}
     </div>
   );

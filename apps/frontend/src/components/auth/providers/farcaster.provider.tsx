@@ -22,7 +22,7 @@ export const FarcasterProvider = () => {
       title: t('farcaster', 'Farcaster'),
       withCloseButton: true,
       classNames: {
-        modal: 'bg-transparent text-textColor',
+        modal: 'bg-transparent text-foreground',
       },
       children: (close) => (
         <FarcasterApproval login={gotoLogin} onFail={close} />

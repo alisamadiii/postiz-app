@@ -14,7 +14,7 @@ import dayjs from 'dayjs';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import useSWR from 'swr';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import ReactLoading from '@gitroom/frontend/components/layout/loading';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
@@ -153,10 +153,10 @@ export const StarsTableComponent = () => {
   );
   return (
     <div className="flex flex-1 flex-col gap-[15px] min-h-[426px]">
-      <div className="text-textColor flex gap-[8px] items-center select-none">
+      <div className="text-foreground flex gap-[8px] items-center select-none">
         <div
           onClick={changePage('decrease')}
-          className={clsx(
+          className={cn(
             (page === 1 || loading) && 'opacity-50 pointer-events-none'
           )}
         >
@@ -176,7 +176,7 @@ export const StarsTableComponent = () => {
         <h2 className="text-[24px]">{t('stars_per_day', 'Stars per day')}</h2>
         <div
           onClick={changePage('increase')}
-          className={clsx(
+          className={cn(
             !isLoadingStars &&
               (loading || stars?.stars?.length < 10) &&
               'opacity-50 pointer-events-none'

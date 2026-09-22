@@ -10,7 +10,7 @@ import ReactLoading from '@gitroom/frontend/components/layout/loading';
 import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
 import { useToaster } from '@gitroom/react/toaster/toaster';
 import dayjs from 'dayjs';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { pricing } from '@gitroom/nestjs-libraries/database/prisma/subscriptions/pricing';
 import { FAQComponent } from '@gitroom/frontend/components/billing/faq.component';
 import { useSWRConfig } from 'swr';
@@ -120,7 +120,7 @@ export const Features: FC<{
     return list;
   }, [pack]);
   return (
-    <div className="flex flex-col gap-[10px] justify-center text-[16px] text-customColor18">
+    <div className="flex flex-col gap-[10px] justify-center text-[16px] text-muted-foreground">
       {features.map((feature) => (
         <div key={feature} className="flex gap-[20px]">
           <div>
@@ -199,7 +199,7 @@ const Info: FC<{
       </div>
       <div>
         <Textarea
-          className="bg-newBgColorInner"
+          className="bg-card"
           label={'Feedback'}
           name="feedback"
           disableForm={true}
@@ -332,7 +332,7 @@ export const MainBillingComponent: FC<{
                   title: 'Before you cancel',
                   withCloseButton: true,
                   classNames: {
-                    modal: 'bg-transparent text-textColor',
+                    modal: 'bg-transparent text-foreground',
                   },
                   children: <Accept resolve={res} />,
                 });
@@ -353,7 +353,7 @@ export const MainBillingComponent: FC<{
                 ),
                 withCloseButton: true,
                 classNames: {
-                  modal: 'bg-transparent text-textColor',
+                  modal: 'bg-transparent text-foreground',
                 },
                 children: <Info proceed={(e) => res(e)} />,
               });
@@ -462,7 +462,7 @@ export const MainBillingComponent: FC<{
     return (
       <div className="flex flex-col gap-[16px]">
         <div className="text-[20px]">{t('plans', 'Plans')}</div>
-        <div className="flex flex-col items-center gap-[8px] rounded-[8px] bg-newBgColorInner p-[24px] text-center">
+        <div className="flex flex-col items-center gap-[8px] rounded-[8px] bg-card p-[24px] text-center">
           <div className="text-[18px]">
             {t('subscription_managed_by', 'Your subscription is managed by')}{' '}
             <span className="capitalize">{subscription.provider}</span>
@@ -502,7 +502,7 @@ export const MainBillingComponent: FC<{
           .map(([name, values]) => (
             <div
               key={name}
-              className="flex-1 bg-sixth border border-customColor6 rounded-[4px] p-[24px] gap-[16px] flex flex-col [@media(max-width:1024px)]:items-center"
+              className="flex-1 bg-muted border border-border rounded-[4px] p-[24px] gap-[16px] flex flex-col [@media(max-width:1024px)]:items-center"
             >
               <div className="text-[18px]">{name}</div>
               <div className="text-[38px] flex gap-[2px] items-center">
@@ -512,7 +512,7 @@ export const MainBillingComponent: FC<{
                     ? values.year_price
                     : values.month_price}
                 </div>
-                <div className={`text-[14px] text-customColor18`}>
+                <div className={`text-[14px] text-muted-foreground`}>
                   {monthlyOrYearly === 'on' ? '/year' : '/month'}
                 </div>
               </div>
@@ -540,7 +540,7 @@ export const MainBillingComponent: FC<{
                         name.toUpperCase() === 'FREE') ||
                       currentPackage === name.toUpperCase()
                     }
-                    className={clsx(
+                    className={cn(
                       subscription &&
                         name.toUpperCase() === 'FREE' &&
                         '!bg-red-500'

@@ -10,7 +10,7 @@ import { Slider } from '@gitroom/react/form/slider';
 import { Input } from '@gitroom/react/form/input';
 import { Textarea } from '@gitroom/react/form/textarea';
 import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 const delayOptions = [
   {
@@ -148,7 +148,7 @@ const Plug: FC<{
   return (
     <div
       key={plug.title}
-      className="flex flex-col gap-[10px] border-tableBorder border p-[15px] rounded-lg"
+      className="flex flex-col gap-[10px] border-border border p-[15px] rounded-lg"
     >
       <div className="flex items-center">
         <div className="flex-1">{plug.title}</div>
@@ -167,7 +167,7 @@ const Plug: FC<{
           'No available accounts'
         ) : (
           <div
-            className={clsx(
+            className={cn(
               'flex flex-col gap-[10px]',
               !active && 'opacity-25 pointer-events-none'
             )}

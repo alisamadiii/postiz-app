@@ -73,7 +73,7 @@ export function Activate() {
           {t('activate_your_account', 'Activate your account')}
         </h1>
       </div>
-      <div className="text-textColor">
+      <div className="text-foreground">
         {t('thank_you_for_registering', 'Thank you for registering!')}
         <br />
         {t(
@@ -82,7 +82,7 @@ export function Activate() {
         )}
       </div>
 
-      <div className="mt-8 border-t border-fifth pt-6">
+      <div className="mt-8 border-t border-border pt-6">
         <h2 className="text-lg font-semibold mb-4">
           {t('didnt_receive_email', "Didn't receive the email?")}
         </h2>
@@ -95,7 +95,7 @@ export function Activate() {
               )}
             </div>
             {cooldown > 0 ? (
-              <p className="text-sm text-textColor">
+              <p className="text-sm text-foreground">
                 {t('resend_available_in', 'You can resend in')} {cooldown}s
               </p>
             ) : (
@@ -145,7 +145,7 @@ export function Activate() {
           </FormProvider>
         )}
         {status !== 'already_activated' && (
-          <p className="mt-4 text-sm text-textColor">
+          <p className="mt-4 text-sm text-foreground">
             {t('already_activated', 'Already activated?')}&nbsp;
             <Link href="/auth/login" className="underline cursor-pointer">
               {t('sign_in', 'Sign In')}

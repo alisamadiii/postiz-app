@@ -2,7 +2,7 @@ import React, { FC, Fragment, useCallback } from 'react';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import useSWR from 'swr';
 import { Button } from '@gitroom/react/form/button';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { useModals } from '@gitroom/frontend/components/layout/new-modal';
 import { TopTitle } from '@gitroom/frontend/components/launches/helpers/top.title.component';
 import { array, boolean, object, string } from 'yup';
@@ -61,13 +61,13 @@ export const SignaturesComponent: FC<{
   return (
     <div className="flex flex-col">
       <h3 className="text-[20px]">{t('signatures', 'Signatures')}</h3>
-      <div className="text-customColor18 mt-[4px]">
+      <div className="text-muted-foreground mt-[4px]">
         {t(
           'you_can_add_signatures_to_your_account_to_be_used_in_your_posts',
           'You can add signatures to your account to be used in your posts.'
         )}
       </div>
-      <div className="my-[16px] mt-[16px] bg-sixth border-fifth items-center border rounded-[4px] p-[24px] flex gap-[24px]">
+      <div className="my-[16px] mt-[16px] bg-muted border-border items-center border rounded-[4px] p-[24px] flex gap-[24px]">
         <div className="flex flex-col w-full">
           {!!data?.length && (
             <div
@@ -124,7 +124,7 @@ export const SignaturesComponent: FC<{
           <div>
             <Button
               onClick={addSignature()}
-              className={clsx((data?.length || 0) > 0 && 'my-[16px]')}
+              className={cn((data?.length || 0) > 0 && 'my-[16px]')}
             >
               {t('add_a_signature', 'Add a signature')}
             </Button>
@@ -180,7 +180,7 @@ const AddOrRemoveSignature: FC<{
       <form onSubmit={form.handleSubmit(callBack)}>
         <div className="relative flex gap-[20px] flex-col flex-1 rounded-[4px] pt-0">
           <button
-            className="outline-none absolute end-[20px] top-[15px] mantine-UnstyledButton-root mantine-ActionIcon-root hover:bg-tableBorder cursor-pointer mantine-Modal-close mantine-1dcetaa"
+            className="outline-none absolute end-[20px] top-[15px] mantine-UnstyledButton-root mantine-ActionIcon-root hover:bg-border cursor-pointer mantine-Modal-close mantine-1dcetaa"
             type="button"
             onClick={() => modal.closeCurrent()}
           >
@@ -200,11 +200,11 @@ const AddOrRemoveSignature: FC<{
             </svg>
           </button>
 
-          <div className="relative bg-customColor2">
+          <div className="relative bg-muted">
             <CopilotTextarea
               disableBranding={true}
-              className={clsx(
-                '!min-h-40 !max-h-80 p-2 overflow-x-hidden scrollbar scrollbar-thumb-[#612AD5] bg-bigStrip outline-none'
+              className={cn(
+                '!min-h-40 !max-h-80 p-2 overflow-x-hidden scrollbar scrollbar-thumb-[#612AD5] bg-muted outline-none'
               )}
               value={text}
               onChange={(e) => {

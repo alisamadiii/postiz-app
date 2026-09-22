@@ -121,7 +121,7 @@ export const FacebookPreview: FC<{
     return { text: finalValue, images: p.image };
   });
   return (
-    <div className="py-[15px] flex flex-col px-[15px] w-full gap-[20px] bg-bgFacebook rounded-[12px]">
+    <div className="py-[15px] flex flex-col px-[15px] w-full gap-[20px] bg-card rounded-[12px]">
       <div className="flex gap-[8px]">
         <div className="w-[36px] h-[36px]">
           <img

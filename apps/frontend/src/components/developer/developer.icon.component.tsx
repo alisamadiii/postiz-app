@@ -11,7 +11,7 @@ export const DeveloperIconComponent: FC = () => {
 
   return (
     <div
-      className="hover:text-newTextColor cursor-pointer"
+      className="hover:text-foreground cursor-pointer"
       data-tooltip-id="tooltip"
       data-tooltip-content={t('developer', 'Developer')}
       onClick={() => {

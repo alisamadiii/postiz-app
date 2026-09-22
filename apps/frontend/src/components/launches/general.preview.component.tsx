@@ -1,6 +1,6 @@
 import { useIntegration } from '@gitroom/frontend/components/launches/helpers/use.integration';
 import { useMediaDirectory } from '@gitroom/react/helpers/use.media.directory';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { VideoOrImage } from '@gitroom/react/helpers/video.or.image';
 import { FC } from 'react';
 import { textSlicer } from '@gitroom/helpers/utils/count.length';
@@ -49,13 +49,13 @@ export const GeneralPreviewComponent: FC<{
   });
 
   return (
-    <div className={clsx('w-full p-[15px]')}>
+    <div className={cn('w-full p-[15px]')}>
       <div className="w-full h-full relative flex flex-col">
         {renderContent.map((value, index) => (
           <div
             key={`tweet_${index}`}
             style={{}}
-            className={clsx(
+            className={cn(
               `flex gap-[8px] relative`,
               index === renderContent.length - 1 ? 'pb-[12px]' : 'pb-[24px]'
             )}
@@ -75,7 +75,7 @@ export const GeneralPreviewComponent: FC<{
                 {current !== 'global' && (
                   <SafeImage
                     src={`/icons/platforms/${integration?.identifier}.png`}
-                    className="min-w-[20px] min-h-[20px] rounded-full absolute z-10 -bottom-[5px] -end-[5px] border border-fifth"
+                    className="min-w-[20px] min-h-[20px] rounded-full absolute z-10 -bottom-[5px] -end-[5px] border border-border"
                     alt={integration.identifier}
                     width={20}
                     height={20}
@@ -83,7 +83,7 @@ export const GeneralPreviewComponent: FC<{
                 )}
               </div>
               {index !== topValue.length - 1 && (
-                <div className="flex-1 w-[2px] h-[calc(100%-10px)] bg-customColor25 absolute top-[10px] z-[1]" />
+                <div className="flex-1 w-[2px] h-[calc(100%-10px)] bg-muted absolute top-[10px] z-[1]" />
               )}
             </div>
             <div className="flex-1 flex flex-col gap-[4px]">
@@ -91,7 +91,7 @@ export const GeneralPreviewComponent: FC<{
                 <div className="h-[22px] text-[15px] font-[700]">
                   {current === 'global' ? 'Global Edit' : integration?.name}
                 </div>
-                <div className="text-[15px] text-customColor26 mt-[1px] ms-[2px]">
+                <div className="text-[15px] text-blue mt-[1px] ms-[2px]">
                   <svg
                     viewBox="0 0 22 22"
                     aria-label="Verified account"
@@ -104,21 +104,21 @@ export const GeneralPreviewComponent: FC<{
                     </g>
                   </svg>
                 </div>
-                <div className="text-[15px] font-[400] text-customColor27 ms-[4px]">
+                <div className="text-[15px] font-[400] text-muted-foreground ms-[4px]">
                   {current === 'global'
                     ? ''
                     : integration?.display || '@username'}
                 </div>
               </div>
               <div
-                className={clsx('text-wrap whitespace-pre', 'preview')}
+                className={cn('text-wrap whitespace-pre', 'preview')}
                 dangerouslySetInnerHTML={{
                   __html: value.text,
                 }}
               />
               {!!value?.images?.length && (
                 <div
-                  className={clsx(
+                  className={cn(
                     'w-full rounded-[16px] overflow-hidden mt-[12px]',
                     value?.images?.length > 3
                       ? 'grid grid-cols-2 gap-[4px]'

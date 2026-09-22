@@ -48,7 +48,7 @@ export const InstagramPreview: FC<{
     return { text: finalValue, images: p.image };
   });
   return (
-    <div className="py-[10px] flex flex-col px-[15px] w-full gap-[10px] bg-bgInstagram rounded-[12px]">
+    <div className="py-[10px] flex flex-col px-[15px] w-full gap-[10px] bg-card rounded-[12px]">
       <div className="flex gap-[10px] items-center">
         <div className="w-[36px] h-[36px]">
           <img
@@ -87,7 +87,7 @@ export const InstagramPreview: FC<{
           __html: renderContent?.[0]?.text,
         }}
       />
-      <div className="py-[8px] text-textColor flex text-[14px] font-[700] gap-[10.5px]">
+      <div className="py-[8px] text-foreground flex text-[14px] font-[700] gap-[10.5px]">
         <div className="flex gap-[4px] items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"

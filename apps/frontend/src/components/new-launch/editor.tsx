@@ -11,7 +11,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from 'react';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { makeId } from '@gitroom/nestjs-libraries/services/make.is';
 import EmojiPicker from 'emoji-picker-react';
 import { Theme } from 'emoji-picker-react';
@@ -359,11 +359,11 @@ export const EditorWrapper: FC<{
 
   return (
     <div
-      className={clsx(
+      className={cn(
         'relative flex-col gap-[20px] flex-1',
         (items.length === 1 || !canEdit || !comments) && 'flex',
         ((!canEdit && !isCreateSet) || !comments) &&
-          'bg-newSettings rounded-[12px]'
+          'bg-card rounded-[12px]'
       )}
     >
       {isCreateSet && current !== 'global' && (
@@ -373,7 +373,7 @@ export const EditorWrapper: FC<{
               <div className="w-[54px] h-[54px] rounded-full absolute z-[101] flex justify-center items-center">
                 <LockIcon />
               </div>
-              <div className="w-[54px] h-[54px] rounded-full bg-newSettings opacity-80" />
+              <div className="w-[54px] h-[54px] rounded-full bg-card opacity-80" />
             </div>
             <div className="text-[14px] font-[600] text-white">
               {t(
@@ -398,7 +398,7 @@ export const EditorWrapper: FC<{
               <div className="w-[54px] h-[54px] rounded-full absolute z-[101] flex justify-center items-center">
                 <LockIcon />
               </div>
-              <div className="w-[54px] h-[54px] rounded-full bg-newSettings opacity-80" />
+              <div className="w-[54px] h-[54px] rounded-full bg-card opacity-80" />
             </div>
             <div className="text-[14px] font-[600] text-white">
               {t(
@@ -418,8 +418,8 @@ export const EditorWrapper: FC<{
       {items.map((g, index) => (
         <div
           key={g.id}
-          className={clsx(
-            'relative flex flex-col gap-[20px] flex-1 bg-newSettings',
+          className={cn(
+            'relative flex flex-col gap-[20px] flex-1 bg-card',
             index === 0 && 'rounded-t-[12px]',
             (index === items.length - 1 || !comments) && 'rounded-b-[12px]',
             !canEdit && !isCreateSet && 'blur-s',
@@ -429,7 +429,7 @@ export const EditorWrapper: FC<{
           <div className="flex gap-[5px] flex-1 w-full">
             <div className="flex-1 flex w-full">
               {index > 0 && (
-                <div className="flex justify-center pl-[12px] text-newSep">
+                <div className="flex justify-center pl-[12px] text-border">
                   <ConnectionLineIcon />
                 </div>
               )}
@@ -697,7 +697,7 @@ export const Editor: FC<{
   return (
     <div className="flex flex-col gap-[20px] flex-1">
       <div
-        className={clsx(
+        className={cn(
           'relative flex-1 px-[12px] pt-[12px] pb-[12px] flex flex-col',
           num > 0 && '!rounded-bs-[0]'
         )}
@@ -706,14 +706,14 @@ export const Editor: FC<{
         <div className="relative cursor-text flex flex-1 flex-col">
           <div {...getRootProps()} className="flex flex-1 flex-col">
             <div
-              className={clsx(
+              className={cn(
                 'absolute left-0 top-0 w-full h-full bg-black/70 z-[300] transition-all items-center justify-center flex text-white text-sm',
                 !isDragActive ? 'pointer-events-none opacity-0' : 'opacity-100'
               )}
             >
               {t('drop_files_here_to_upload', 'Drop your files here to upload')}
             </div>
-            <div className="px-[10px] pt-[10px] bg-newBgColorInner rounded-t-[6px] relative z-[99]">
+            <div className="px-[10px] pt-[10px] bg-card rounded-t-[6px] relative z-[99]">
               <OnlyEditor
                 value={props.value}
                 editorType={editorType}
@@ -723,7 +723,7 @@ export const Editor: FC<{
               />
             </div>
             <div
-              className="bg-newBgColorInner flex-1"
+              className="bg-card flex-1"
               onClick={() => {
                 if (editorRef?.current?.editor?.isFocused) {
                   return;
@@ -732,7 +732,7 @@ export const Editor: FC<{
               }}
             />
             <div className="w-full pointer-events-none">
-              <div className="w-full h-[46px] overflow-hidden absolute left-0 bg-newBgColorInner uppyChange">
+              <div className="w-full h-[46px] overflow-hidden absolute left-0 bg-card uppyChange">
                 <Dashboard
                   height={46}
                   uppy={uppy}
@@ -747,7 +747,7 @@ export const Editor: FC<{
               </div>
             </div>
             <div
-              className="w-full h-[46px] bg-newBgColorInner cursor-text"
+              className="w-full h-[46px] bg-card cursor-text"
               onClick={() => {
                 if (editorRef?.current?.editor?.isFocused) {
                   return;
@@ -755,7 +755,7 @@ export const Editor: FC<{
                 editorRef?.current?.editor?.commands?.focus('end');
               }}
             />
-            <div className="flex bg-newBgColorInner rounded-b-[6px] cursor-default">
+            <div className="flex bg-card rounded-b-[6px] cursor-default">
               {setImages && (
                 <MultiMediaComponent
                   mediaNotAvailable={num > 0 && comments === 'no-media'}
@@ -810,14 +810,14 @@ export const Editor: FC<{
                       <div
                         data-tooltip-id="tooltip"
                         data-tooltip-content={t('insert_emoji', 'Insert Emoji')}
-                        className="select-none cursor-pointer rounded-[6px] w-[30px] h-[30px] bg-newColColor flex justify-center items-center"
+                        className="select-none cursor-pointer rounded-[6px] w-[30px] h-[30px] bg-muted flex justify-center items-center"
                         onClick={() => setEmojiPickerOpen(!emojiPickerOpen)}
                       >
                         <EmojiIcon />
                       </div>
                       <div className="relative">
                         <div
-                          className={clsx(
+                          className={cn(
                             'absolute z-[500] -start-[50px]',
                             num === 0 && allValues?.length > 1
                               ? 'top-[35px]'

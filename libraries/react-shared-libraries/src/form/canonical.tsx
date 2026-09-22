@@ -7,7 +7,7 @@ import React, {
   useCallback,
   useMemo,
 } from 'react';
-import { clsx } from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { useFormContext } from 'react-hook-form';
 import dayjs from 'dayjs';
 import { useShowPostSelector } from '../../../../apps/frontend/src/components/post-url-selector/post.url.selector';
@@ -84,8 +84,8 @@ export const Canonical: FC<
       </div>
       <input
         {...(disableForm ? {} : form.register(props.name))}
-        className={clsx(
-          'bg-input h-[44px] px-[16px] outline-none border-fifth border rounded-[4px] text-inputText placeholder-inputText',
+        className={cn(
+          'bg-input h-[44px] px-[16px] outline-none border-border border rounded-[4px] text-muted-foreground placeholder-muted-foreground',
           className
         )}
         {...rest}

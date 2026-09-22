@@ -67,7 +67,7 @@ export const AgentChat: FC = () => {
             '--copilot-kit-background-color': 'var(--new-bg-color)',
           } as CopilotKitCSSProperties
         }
-        className="trz agent bg-newBgColorInner flex flex-col gap-[15px] transition-all flex-1 items-center relative"
+        className="[transform:translateZ(0)] agent bg-card flex flex-col gap-[15px] transition-all flex-1 items-center relative"
       >
         <div className="absolute left-0 w-full h-full pb-[20px]">
           <CopilotChat
@@ -167,7 +167,7 @@ const Message: FC<UserMessageProps> = (props) => {
         return `<video controls class="h-[150px] w-[150px] rounded-[8px] mb-[10px]"><source src="${p1.trim()}" type="video/mp4">Your browser does not support the video tag.</video>`;
       })
       .replace(/Image: (http.*\n)/g, (match, p1) => {
-        return `<img src="${p1.trim()}" class="h-[150px] w-[150px] max-w-full border border-newBgColorInner" />`;
+        return `<img src="${p1.trim()}" class="h-[150px] w-[150px] max-w-full border border-card" />`;
       })
       .replace(/\[\-\-Media\-\-\](.*)\[\-\-Media\-\-\]/g, (match, p1) => {
         return `<div class="flex justify-center mt-[20px]">${p1}</div>`;
@@ -338,7 +338,7 @@ const OpenModal: FC<{
           size: '80%',
           title: ``,
           classNames: {
-            modal: 'w-[100%] max-w-[1400px] text-textColor',
+            modal: 'w-[100%] max-w-[1400px] text-foreground',
           },
           children: (
             <ExistingDataContextProvider

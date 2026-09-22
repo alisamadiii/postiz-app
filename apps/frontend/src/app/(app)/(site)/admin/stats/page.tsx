@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default async function Page() {
   return (
-    <div className="bg-newBgColorInner flex-1 min-w-0 flex-col flex p-[20px] gap-[12px]">
+    <div className="bg-card flex-1 min-w-0 flex-col flex p-[20px] gap-[12px]">
       <AdminStatsComponent />
     </div>
   );

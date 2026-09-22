@@ -12,7 +12,7 @@ import { Button } from '@gitroom/react/form/button';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { Textarea } from '@gitroom/react/form/textarea';
 import { Checkbox } from '@gitroom/react/form/checkbox';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import {
   CalendarWeekProvider,
   useCalendar,
@@ -183,7 +183,7 @@ const FirstStep: FC = (props) => {
           askClose: true,
           fullScreen: true,
           classNames: {
-            modal: 'w-[100%] max-w-[1400px] text-textColor',
+            modal: 'w-[100%] max-w-[1400px] text-foreground',
           },
           children: (
             <AddEditModal
@@ -281,7 +281,7 @@ const FirstStep: FC = (props) => {
                   </option>
                 </Select>
                 <div
-                  className={clsx('flex items-center', loading && 'opacity-50')}
+                  className={cn('flex items-center', loading && 'opacity-50')}
                 >
                   <Checkbox
                     disabled={loading}
@@ -342,7 +342,7 @@ export const GeneratorComponent = () => {
       title: t('generate_posts', 'Generate Posts'),
       withCloseButton: false,
       classNames: {
-        modal: 'bg-transparent text-textColor',
+        modal: 'bg-transparent text-foreground',
       },
       size: 'xl',
       children: (
@@ -354,7 +354,7 @@ export const GeneratorComponent = () => {
   }, [user, all]);
   return (
     <div
-      className="h-[44px] w-[44px] group-[.sidebar]:w-full bg-ai justify-center items-center flex rounded-[8px] cursor-pointer"
+      className="h-[44px] w-[44px] group-[.sidebar]:w-full bg-primary justify-center items-center flex rounded-[8px] cursor-pointer"
       onClick={generate}
     >
       <svg

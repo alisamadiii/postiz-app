@@ -13,7 +13,7 @@ import React, {
 } from 'react';
 import { Button } from '@gitroom/react/form/button';
 import { useHotkeys } from 'react-hotkeys-hook';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { EventEmitter } from 'events';
 
 interface OpenModalInterface {
@@ -133,24 +133,24 @@ export const Component: FC<{
     return (
       <div
         style={{ zIndex }}
-        className={clsx(
+        className={cn(
           !modal.fullScreen
             ? 'pb-[50px] min-w-full min-h-full'
             : 'w-full h-full',
-          'fixed flex left-0 top-0 bg-popup transition-all animate-fadeIn overflow-y-auto text-newTextColor',
+          'fixed flex left-0 top-0 bg-popover transition-all animate-fadeIn overflow-y-auto text-foreground',
           !isLast && '!overflow-hidden'
         )}
       >
-        <div className={clsx(modal.fullScreen && 'flex', 'relative flex-1')}>
+        <div className={cn(modal.fullScreen && 'flex', 'relative flex-1')}>
           <div
-            className={clsx(
+            className={cn(
               modal.fullScreen
                 ? 'flex flex-1'
                 : 'absolute top-0 left-0 min-w-full min-h-full'
             )}
           >
             <div
-              className={clsx(
+              className={cn(
                 modal.fullScreen ? 'w-full h-full flex-1' : 'mx-auto py-[48px]'
               )}
               {...(modal.size && { style: { width: modal.size } })}
@@ -170,8 +170,8 @@ export const Component: FC<{
       <div
         onClick={closeModalFunction}
         style={{ zIndex }}
-        className={clsx(
-          'fixed flex left-0 top-0 min-w-full min-h-full bg-popup transition-all animate-fadeIn overflow-y-auto text-newTextColor',
+        className={cn(
+          'fixed flex left-0 top-0 min-w-full min-h-full bg-popover transition-all animate-fadeIn overflow-y-auto text-foreground',
           !modal.fullScreen && 'pb-[50px]'
         )}
       >
@@ -182,7 +182,7 @@ export const Component: FC<{
                 ? { paddingTop: modal.top, paddingBottom: modal.top }
                 : {}
             }
-            className={clsx(
+            className={cn(
               'absolute min-w-full',
               !modal.fullScreen
                 ? modal.top
@@ -195,9 +195,9 @@ export const Component: FC<{
             )}
           >
             <div
-              className={clsx(
+              className={cn(
                 !modal.removeLayout && 'gap-[40px] p-[32px]',
-                'bg-newBgColorInner mx-auto flex flex-col w-fit rounded-[24px] relative',
+                'bg-card mx-auto flex flex-col w-fit rounded-[24px] relative',
                 modal.size ? '' : 'min-w-[600px]',
                 modal.fullScreen && 'h-full'
               )}
@@ -218,7 +218,7 @@ export const Component: FC<{
                 modal.withCloseButton ? (
                   <div className="cursor-pointer">
                     <button
-                      className="outline-none absolute end-[20px] top-[20px] mantine-UnstyledButton-root mantine-ActionIcon-root hover:bg-tableBorder cursor-pointer mantine-Modal-close mantine-1dcetaa"
+                      className="outline-none absolute end-[20px] top-[20px] mantine-UnstyledButton-root mantine-ActionIcon-root hover:bg-border cursor-pointer mantine-Modal-close mantine-1dcetaa"
                       type="button"
                       onClick={closeModalFunction}
                     >
@@ -241,7 +241,7 @@ export const Component: FC<{
                 ) : null}
               </div>
               <div
-                className={clsx(
+                className={cn(
                   'whitespace-pre-line',
                   !!modal.height && !!modal.size && 'flex flex-1 flex-col'
                 )}

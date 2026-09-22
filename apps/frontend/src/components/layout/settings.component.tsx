@@ -16,7 +16,7 @@ import { classValidatorResolver } from '@hookform/resolvers/class-validator';
 import { UserDetailDto } from '@gitroom/nestjs-libraries/dtos/users/user.details.dto';
 import { useToaster } from '@gitroom/react/toaster/toaster';
 import { useSWRConfig } from 'swr';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { TeamsComponent } from '@gitroom/frontend/components/settings/teams.component';
 import { useUser } from '@gitroom/frontend/components/layout/user.context';
 import { LogoutComponent } from '@gitroom/frontend/components/layout/logout.component';
@@ -117,19 +117,19 @@ export const SettingsPopup: FC<{
 
   return (
     <>
-      <div className="bg-newBgColorInner p-[20px] flex flex-col transition-all w-[260px]">
+      <div className="bg-card p-[20px] flex flex-col transition-all w-[260px]">
         <div className="flex flex-1 flex-col gap-[15px]">
           {list.map(({ tab: tabKey, label }) => (
             <div
               key={tabKey}
-              className={clsx(
-                'cursor-pointer flex items-center gap-[12px] group/profile hover:bg-boxHover rounded-e-[8px]',
-                tabKey === tab && 'bg-boxHover'
+              className={cn(
+                'cursor-pointer flex items-center gap-[12px] group/profile hover:bg-accent rounded-e-[8px]',
+                tabKey === tab && 'bg-accent'
               )}
               onClick={() => setTab(tabKey)}
             >
               <div
-                className={clsx(
+                className={cn(
                   'h-full w-[4px] rounded-s-[3px] opacity-0 group-hover/profile:opacity-100 transition-opacity',
                   tabKey === tab && 'opacity-100'
                 )}
@@ -148,14 +148,14 @@ export const SettingsPopup: FC<{
           )}
         </div>
       </div>
-      <div className="bg-newBgColorInner flex-1 flex-col flex p-[20px] gap-[12px]">
+      <div className="bg-card flex-1 flex-col flex p-[20px] gap-[12px]">
         <FormProvider {...form}>
           <form onSubmit={form.handleSubmit(submit)}>
             {!!getRef && (
               <button type="submit" className="hidden" ref={getRef}></button>
             )}
             <div
-              className={clsx(
+              className={cn(
                 'w-full mx-auto gap-[24px] flex flex-col relative',
                 !getRef && 'rounded-[4px]'
               )}
@@ -225,12 +225,12 @@ export const SettingsComponent = () => {
     }
     settings.openModal({
       children: (
-        <div className="relative flex gap-[20px] flex-col flex-1 rounded-[4px] border border-customColor6 bg-sixth p-[16px] w-[500px] mx-auto">
+        <div className="relative flex gap-[20px] flex-col flex-1 rounded-[4px] border border-border bg-muted p-[16px] w-[500px] mx-auto">
           <SettingsPopup />
         </div>
       ),
       classNames: {
-        modal: 'bg-transparent text-textColor',
+        modal: 'bg-transparent text-foreground',
       },
       withCloseButton: false,
       size: '100%',

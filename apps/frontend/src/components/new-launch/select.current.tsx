@@ -5,7 +5,7 @@ import {
   SelectedIntegrations,
   useLaunchStore,
 } from '@gitroom/frontend/components/new-launch/store';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import SafeImage from '@gitroom/react/helpers/safe.image';
 import { useShallow } from 'zustand/react/shallow';
 import { GlobalIcon } from '@gitroom/frontend/components/ui/icons';
@@ -97,8 +97,8 @@ export const SelectCurrent: FC = () => {
       <div className="select-none left-0 absolute w-full z-[100] px-[20px]">
         <div
           ref={contentRef}
-          className={clsx(
-            'flex gap-[6px] w-full overflow-x-auto scrollbar scrollbar-thumb-tableBorder scrollbar-track-secondary',
+          className={cn(
+            'flex gap-[6px] w-full overflow-x-auto scrollbar scrollbar-thumb-border scrollbar-track-secondary',
             locked && 'opacity-50 pointer-events-none'
           )}
         >
@@ -107,8 +107,8 @@ export const SelectCurrent: FC = () => {
               setHide(true);
               setCurrent('global');
             }}
-            className={clsx(
-              'cursor-pointer flex gap-[8px] rounded-[8px] w-[40px] h-[40px] justify-center items-center bg-newBgLineColor',
+            className={cn(
+              'cursor-pointer flex gap-[8px] rounded-[8px] w-[40px] h-[40px] justify-center items-center bg-border',
               current !== 'global'
                 ? 'text-[#A3A3A3]'
                 : 'border border-[#FC69FF] text-[#FC69FF]'
@@ -125,8 +125,8 @@ export const SelectCurrent: FC = () => {
                 setCurrent(integration.id);
               }}
               key={integration.id}
-              className={clsx(
-                'border cursor-pointer relative flex gap-[8px] w-[40px] h-[40px] rounded-[8px] items-center bg-newBgLineColor justify-center',
+              className={cn(
+                'border cursor-pointer relative flex gap-[8px] w-[40px] h-[40px] rounded-[8px] items-center bg-border justify-center',
                 current === integration.id
                   ? 'border-[#FC69FF] text-[#FC69FF]'
                   : 'border-transparent'
@@ -144,7 +144,7 @@ export const SelectCurrent: FC = () => {
                   'data-tooltip-id': 'tooltip',
                   'data-tooltip-content': integration.name,
                 }}
-                className={clsx(
+                className={cn(
                   'relative w-full h-full rounded-full flex justify-center items-center filter transition-all duration-500'
                 )}
               >
@@ -179,7 +179,7 @@ export const SelectCurrent: FC = () => {
           ))}
         </div>
       </div>
-      <div className={clsx(hasScroll ? 'h-[55px]' : 'h-[40px]')} />
+      <div className={cn(hasScroll ? 'h-[55px]' : 'h-[40px]')} />
     </>
   );
 };

@@ -16,7 +16,7 @@ import { object, string } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { web3List } from '@gitroom/frontend/components/launches/web3/web3.list';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import copy from 'copy-to-clipboard';
 import { capitalize } from 'lodash';
 const resolver = classValidatorResolver(ApiKeyDto);
@@ -46,7 +46,7 @@ export const AddProviderButton: FC<{
   return (
     <div className="flex group-[.sidebar]:block gap-[8px]">
       <button
-        className="flex-1 group-[.sidebar]:w-[100%] group-[.sidebar]:flex-none text-btnText bg-btnSimple h-[44px] pt-[12px] pb-[14px] ps-[16px] pe-[20px] justify-center items-center flex rounded-[8px] gap-[8px]"
+        className="flex-1 group-[.sidebar]:w-[100%] group-[.sidebar]:flex-none text-foreground bg-secondary h-[44px] pt-[12px] pb-[14px] ps-[16px] pe-[20px] justify-center items-center flex rounded-[8px] gap-[8px]"
         onClick={add}
       >
         <div>
@@ -77,7 +77,7 @@ export const AddProviderButton: FC<{
           'invite_link',
           'Send Invite Link to a customer to add channel'
         )}
-        className="group-[.sidebar]:hidden min-h-[44px] min-w-[44px] bg-btnSimple justify-center items-center flex rounded-[8px] cursor-pointer"
+        className="group-[.sidebar]:hidden min-h-[44px] min-w-[44px] bg-secondary justify-center items-center flex rounded-[8px] cursor-pointer"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -120,11 +120,11 @@ export const UrlModal: FC<{
     gotoUrl(data.url);
   }, []);
   return (
-    <div className="rounded-[4px] border border-customColor6 bg-sixth px-[16px] pb-[16px] relative">
+    <div className="rounded-[4px] border border-border bg-muted px-[16px] pb-[16px] relative">
       <TopTitle title={`Instance URL`} />
       <button
         onClick={close}
-        className="outline-none absolute end-[20px] top-[20px] mantine-UnstyledButton-root mantine-ActionIcon-root hover:bg-tableBorder cursor-pointer mantine-Modal-close mantine-1dcetaa"
+        className="outline-none absolute end-[20px] top-[20px] mantine-UnstyledButton-root mantine-ActionIcon-root hover:bg-border cursor-pointer mantine-Modal-close mantine-1dcetaa"
         type="button"
       >
         <svg
@@ -244,7 +244,7 @@ export const CustomVariables: FC<{
                     <span
                       data-tooltip-id="tooltip"
                       data-tooltip-content={variable.hint}
-                      className="w-[16px] h-[16px] rounded-full border border-textColor/60 text-textColor/60 flex items-center justify-center text-[11px] leading-none cursor-help select-none"
+                      className="w-[16px] h-[16px] rounded-full border border-foreground/60 text-foreground/60 flex items-center justify-center text-[11px] leading-none cursor-help select-none"
                     >
                       i
                     </span>
@@ -277,7 +277,7 @@ const ExtensionNotFound: FC = () => {
   const t = useT();
   return (
     <div className="flex flex-col gap-[16px] pt-[8px]">
-      <p className="text-[14px] text-textColor/80">
+      <p className="text-[14px] text-foreground/80">
         {t(
           'extension_not_available',
           'The Postiz browser extension is not installed. You need to install it before connecting this channel.'
@@ -299,7 +299,7 @@ const ExtensionNotFound: FC = () => {
         </Button>
         <Button
           type="button"
-          className="flex-1 !bg-transparent border border-tableBorder text-textColor"
+          className="flex-1 !bg-transparent border border-border text-foreground"
           onClick={() => modals.closeCurrent()}
         >
           {t('cancel', 'Cancel')}
@@ -317,13 +317,13 @@ const ChromeExtensionWarning: FC<{
   const t = useT();
   return (
     <div className="flex flex-col gap-[16px] pt-[8px]">
-      <p className="text-[14px] text-textColor/80">
+      <p className="text-[14px] text-foreground/80">
         {t(
           'chrome_extension_warning_intro',
           'This channel connects via the browser extension. Please be aware of the following:'
         )}
       </p>
-      <ul className="flex flex-col gap-[8px] list-disc ps-[20px] text-[14px] text-textColor/80">
+      <ul className="flex flex-col gap-[8px] list-disc ps-[20px] text-[14px] text-foreground/80">
         <li>
           {t(
             'chrome_extension_warning_tos',
@@ -363,7 +363,7 @@ const ChromeExtensionWarning: FC<{
         </Button>
         <Button
           type="button"
-          className="flex-1 !bg-transparent border border-tableBorder text-textColor"
+          className="flex-1 !bg-transparent border border-border text-foreground"
           onClick={() => {
             modals.closeCurrent();
             onCancel();
@@ -445,7 +445,7 @@ export const AddProviderComponent: FC<{
             withCloseButton: true,
             ...(isMobile ? { removeLayout: true, fullScreen: true } : {}),
             classNames: {
-              modal: 'bg-transparent text-textColor',
+              modal: 'bg-transparent text-foreground',
             },
             children: (
               <div
@@ -633,7 +633,7 @@ export const AddProviderComponent: FC<{
             withCloseButton: true,
             ...(isMobile ? { removeLayout: true, fullScreen: true } : {}),
             classNames: {
-              modal: 'bg-transparent text-textColor',
+              modal: 'bg-transparent text-foreground',
             },
             children: <UrlModal gotoUrl={gotoIntegration} />,
           });
@@ -645,7 +645,7 @@ export const AddProviderComponent: FC<{
             withCloseButton: true,
             ...(isMobile ? { removeLayout: true, fullScreen: true } : {}),
             classNames: {
-              modal: 'bg-transparent text-textColor',
+              modal: 'bg-transparent text-foreground',
             },
             children: (
               <div
@@ -673,7 +673,7 @@ export const AddProviderComponent: FC<{
     <div className="w-full flex flex-col gap-[20px] rounded-[4px] relative]">
       <div className="flex flex-col">
         <div
-          className={clsx(
+          className={cn(
             isMobile && 'gap-[20px] flex flex-col',
             !isMobile &&
               'grid grid-cols-5 gap-[10px] justify-items-center justify-center',
@@ -710,11 +710,11 @@ export const AddProviderComponent: FC<{
                       'data-tooltip-content': item.toolTip,
                     }
                   : {})}
-                className={clsx(
+                className={cn(
                   isMobile
                     ? 'flex-row h-[72px] p-[16px]'
                     : 'flex-col p-[10px] h-[100px] justify-center',
-                  'w-full text-[14px] rounded-[8px] bg-newTableHeader text-textColor relative items-center flex gap-[10px] cursor-pointer'
+                  'w-full text-[14px] rounded-[8px] bg-muted text-foreground relative items-center flex gap-[10px] cursor-pointer'
                 )}
               >
                 <div>
@@ -722,7 +722,7 @@ export const AddProviderComponent: FC<{
                     <img src={`/icons/platforms/youtube.svg`} />
                   ) : (
                     <img
-                      className={clsx(
+                      className={cn(
                         'w-[32px] h-[32px]',
                         item.identifier !== 'google_my_business' &&
                           'rounded-full'
@@ -732,7 +732,7 @@ export const AddProviderComponent: FC<{
                   )}
                 </div>
                 <div
-                  className={clsx(
+                  className={cn(
                     isMobile ? '' : 'whitespace-pre-wrap',
                     'text-center'
                   )}

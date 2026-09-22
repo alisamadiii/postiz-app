@@ -1,7 +1,7 @@
 'use client';
 
 import { FC, useMemo } from 'react';
-import { clsx } from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { useFormContext } from 'react-hook-form';
 import { TranslatedLabel } from '../translation/translated-label';
 
@@ -65,8 +65,8 @@ export const MultiSelect: FC<{
         />
       </div>
       <div
-        className={clsx(
-          'bg-newBgColorInner border border-newTableBorder rounded-md max-h-[160px] overflow-auto p-[12px] flex flex-col gap-[8px]',
+        className={cn(
+          'bg-card border border-border rounded-md max-h-[160px] overflow-auto p-[12px] flex flex-col gap-[8px]',
           className
         )}
       >

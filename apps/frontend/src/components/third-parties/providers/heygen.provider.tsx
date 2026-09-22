@@ -10,7 +10,7 @@ import { Textarea } from '@gitroom/react/form/textarea';
 import { Button } from '@gitroom/react/form/button';
 import { FC, useCallback, useState } from 'react';
 import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { object, string } from 'zod';
 import { Select } from '@gitroom/react/form/select';
@@ -42,11 +42,11 @@ const SelectAvatarComponent: FC<{
             onChange(p.avatar_id === current?.avatar_id ? {} : p.avatar_id);
           }}
           key={p.avatar_id}
-          className={clsx(
-            'w-full h-full p-[20px] min-h-[100px] text-[14px] hover:bg-input transition-all text-textColor relative flex flex-col gap-[15px] cursor-pointer',
+          className={cn(
+            'w-full h-full p-[20px] min-h-[100px] text-[14px] hover:bg-input transition-all text-foreground relative flex flex-col gap-[15px] cursor-pointer',
             current?.avatar_id === p.avatar_id
               ? 'bg-input border border-red-500'
-              : 'bg-third'
+              : 'bg-secondary'
           )}
         >
           <div>
@@ -78,11 +78,11 @@ const SelectVoiceComponent: FC<{
             onChange(p.voice_id === current?.voice_id ? {} : p.voice_id);
           }}
           key={p.avatar_id}
-          className={clsx(
-            'w-full h-full p-[20px] min-h-[100px] text-[14px] hover:bg-input transition-all text-textColor relative flex flex-col gap-[15px] cursor-pointer',
+          className={cn(
+            'w-full h-full p-[20px] min-h-[100px] text-[14px] hover:bg-input transition-all text-foreground relative flex flex-col gap-[15px] cursor-pointer',
             current?.voice_id === p.voice_id
               ? 'bg-input border border-red-500'
-              : 'bg-third'
+              : 'bg-secondary'
           )}
         >
           <div className="text-[14px] text-balance whitespace-pre-line">

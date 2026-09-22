@@ -14,7 +14,7 @@ import {
   RedditSettingsDto,
   RedditSettingsValueDto,
 } from '@gitroom/nestjs-libraries/dtos/posts/providers-settings/reddit.dto';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { useMediaDirectory } from '@gitroom/react/helpers/use.media.directory';
 import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
 import SafeImage from '@gitroom/react/helpers/safe.image';
@@ -94,8 +94,8 @@ const RedditPreview: FC = (props) => {
         .map(({ value }, index) => (
           <div
             key={index}
-            className={clsx(
-              `bg-customColor37 w-full p-[10px] flex flex-col border-tableBorder border`
+            className={cn(
+              `bg-card w-full p-[10px] flex flex-col border-border border`
             )}
           >
             <div className="flex flex-col">
@@ -112,7 +112,7 @@ const RedditPreview: FC = (props) => {
                 {value.title}
               </div>
               <div
-                className={clsx(
+                className={cn(
                   restOfPosts.length && 'mt-[40px] flex flex-col gap-[20px]'
                 )}
               >
@@ -188,7 +188,7 @@ const RedditSettings: FC = () => {
           <div key={field.id} className="flex flex-col relative">
             <div
               onClick={deleteField(index)}
-              className="absolute -start-[10px] justify-center items-center flex -top-[10px] w-[20px] h-[20px] bg-red-600 rounded-full text-textColor"
+              className="absolute -start-[10px] justify-center items-center flex -top-[10px] w-[20px] h-[20px] bg-red-600 rounded-full text-foreground"
             >
               x
             </div>

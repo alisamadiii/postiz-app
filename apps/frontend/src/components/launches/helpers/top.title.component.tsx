@@ -1,6 +1,6 @@
 import { FC, ReactNode } from 'react';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { ExpandIcon, CollapseIcon } from '@gitroom/frontend/components/ui/icons';
 
 export const TopTitle: FC<{
@@ -30,14 +30,14 @@ export const TopTitle: FC<{
 
   return (
     <div
-      className={clsx(
-        'border-b flex items-center border-newBgLineColor -mx-[24px]',
+      className={cn(
+        'border-b flex items-center border-border -mx-[24px]',
         props.extraClass ? props.extraClass : 'h-[57px]'
       )}
     >
       <div className="px-[24px] flex flex-1 items-center">
         {!removeTitle && (
-          <div className={clsx('flex-1', props.titleSize)}>
+          <div className={cn('flex-1', props.titleSize)}>
             {translatedTitle}
           </div>
         )}

@@ -2,7 +2,7 @@
 
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { DelayIcon, DropdownArrowIcon } from '@gitroom/frontend/components/ui/icons';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { useLaunchStore } from '@gitroom/frontend/components/new-launch/store';
 import { useShallow } from 'zustand/react/shallow';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
@@ -87,7 +87,7 @@ export const DelayComponent: FC<{
             ? t('delay_comment', 'Delay comment')
             : `${t('delay_comment_by', 'Comment delayed by')} ${getCurrentDelayLabel()}`
         }
-        className={clsx(
+        className={cn(
           'cursor-pointer flex items-center gap-[4px]',
           currentDelay > 0 && 'bg-[#D82D7E] text-white rounded-full'
         )}
@@ -95,14 +95,14 @@ export const DelayComponent: FC<{
         <DelayIcon />
       </div>
       {isOpen && (
-        <div className="z-[300] absolute end-0 top-[100%] w-[200px] bg-newBgColorInner p-[8px] menu-shadow translate-y-[10px] flex flex-col rounded-[8px]">
+        <div className="z-[300] absolute end-0 top-[100%] w-[200px] bg-card p-[8px] menu-shadow translate-y-[10px] flex flex-col rounded-[8px]">
           <div className="grid grid-cols-4 gap-[4px]">
             {delayOptions.map((option) => (
               <div
                 onClick={() => handleSelectDelay(option.value)}
                 key={option.value}
-                className={clsx(
-                  'h-[32px] flex items-center justify-center rounded-[4px] cursor-pointer hover:bg-newBgColor text-[13px]',
+                className={cn(
+                  'h-[32px] flex items-center justify-center rounded-[4px] cursor-pointer hover:bg-background text-[13px]',
                   currentDelay === option.value && 'bg-[#612BD3] text-white hover:bg-[#612BD3]'
                 )}
               >
@@ -110,7 +110,7 @@ export const DelayComponent: FC<{
               </div>
             ))}
           </div>
-          <div className="border-t border-newTextColor/10 mt-[8px] pt-[8px]">
+          <div className="border-t border-foreground/10 mt-[8px] pt-[8px]">
             <div className="flex gap-[4px]">
               <input
                 type="number"
@@ -119,9 +119,9 @@ export const DelayComponent: FC<{
                 onChange={(e) => setCustomValue(e.target.value)}
                 onClick={(e) => e.stopPropagation()}
                 placeholder="Custom min"
-                className={clsx(
-                  'flex-1 w-full h-[32px] px-[8px] rounded-[4px] bg-newBgColor border text-[13px] outline-none focus:border-[#612BD3]',
-                  isCustomDelay ? 'border-[#612BD3]' : 'border-newTextColor/10'
+                className={cn(
+                  'flex-1 w-full h-[32px] px-[8px] rounded-[4px] bg-background border text-[13px] outline-none focus:border-[#612BD3]',
+                  isCustomDelay ? 'border-[#612BD3]' : 'border-foreground/10'
                 )}
               />
               <button

@@ -4,7 +4,7 @@ import React, { FC, useCallback, useMemo } from 'react';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import useSWR from 'swr';
 import { useUser } from '@gitroom/frontend/components/layout/user.context';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 export const OrganizationSelector: FC<{ asOpenSelect?: boolean }> = ({
   asOpenSelect,
 }) => {
@@ -43,10 +43,10 @@ export const OrganizationSelector: FC<{ asOpenSelect?: boolean }> = ({
   }
   return (
     <>
-      <div className="hover:text-newTextColor">
+      <div className="hover:text-foreground">
         <div className="group text-[12px] relative">
           {asOpenSelect && (
-            <div className="bg-btnPrimary !flex !relative max-w-[500px] mx-auto py-[12px] px-[12px]">Select Organization</div>
+            <div className="bg-primary !flex !relative max-w-[500px] mx-auto py-[12px] px-[12px]">Select Organization</div>
           )}
           {!asOpenSelect && (
             <div className="flex items-center gap-[6px]">
@@ -70,8 +70,8 @@ export const OrganizationSelector: FC<{ asOpenSelect?: boolean }> = ({
           )}
           {data?.length > 1 && (
             <div
-              className={clsx(
-                'hidden py-[12px] px-[12px] group-hover:flex absolute top-[100%] end-0 w-max max-w-[400px] bg-third border-tableBorder border gap-[12px] cursor-pointer flex-col',
+              className={cn(
+                'hidden py-[12px] px-[12px] group-hover:flex absolute top-[100%] end-0 w-max max-w-[400px] bg-secondary border-border border gap-[12px] cursor-pointer flex-col',
                 asOpenSelect ? '!flex !relative max-w-[500px] mx-auto mb-[10px]' : '',
               )}
             >
@@ -88,7 +88,7 @@ export const OrganizationSelector: FC<{ asOpenSelect?: boolean }> = ({
                   >
                     {org?.name}
                     {!!org?.users?.[0]?.role && (
-                      <span className="text-customColor18">
+                      <span className="text-muted-foreground">
                         {' '}
                         (
                         {org?.users?.[0]?.role === 'SUPERADMIN'
@@ -106,7 +106,7 @@ export const OrganizationSelector: FC<{ asOpenSelect?: boolean }> = ({
           )}
         </div>
       </div>
-      {!asOpenSelect && <div className="w-[1px] h-[20px] bg-blockSeparator" />}
+      {!asOpenSelect && <div className="w-[1px] h-[20px] bg-border" />}
     </>
   );
 };

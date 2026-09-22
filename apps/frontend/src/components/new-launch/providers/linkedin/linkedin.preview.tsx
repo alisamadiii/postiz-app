@@ -14,7 +14,7 @@ const Icons = () => {
       viewBox="0 0 71 22"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="text-bgLinkedin"
+      className="text-card"
     >
       <rect
         x={1.0625}
@@ -284,7 +284,7 @@ export const LinkedinPreview: FC<{
     return { text: finalValue, images: p.image };
   });
   return (
-    <div className="py-[15px] flex flex-col px-[15px] w-full gap-[20px] bg-bgLinkedin rounded-[12px]">
+    <div className="py-[15px] flex flex-col px-[15px] w-full gap-[20px] bg-card rounded-[12px]">
       <div className="flex gap-[8px]">
         <div className="w-[48px] h-[48px]">
           <img

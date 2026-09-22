@@ -1,7 +1,7 @@
 'use client';
 
 import { FC, ReactNode, useCallback, useState } from 'react';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { useVariables } from '@gitroom/react/helpers/variable.context';
 import { useUser } from '@gitroom/frontend/components/layout/user.context';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
@@ -88,7 +88,7 @@ export const FAQSection: FC<{
   }, [show]);
   return (
     <div
-      className="bg-sixth p-[24px] border border-tableBorder rounded-[8px] flex flex-col"
+      className="bg-muted p-[24px] border border-border rounded-[8px] flex flex-col"
       onClick={changeShow}
     >
       <div className={`text-[20px] cursor-pointer flex justify-center`}>
@@ -128,7 +128,7 @@ export const FAQSection: FC<{
         </div>
       </div>
       <div
-        className={clsx(
+        className={cn(
           'transition-all duration-500 overflow-hidden',
           !show ? 'max-h-[0]' : 'max-h-[500px]'
         )}
@@ -137,7 +137,7 @@ export const FAQSection: FC<{
           onClick={(e) => {
             e.stopPropagation();
           }}
-          className={`mt-[16px] w-full text-wrap font-[400] text-[16px] text-customColor17 select-text max-w-[450px]`}
+          className={`mt-[16px] w-full text-wrap font-[400] text-[16px] text-muted-foreground select-text max-w-[450px]`}
           dangerouslySetInnerHTML={{
             __html: description,
           }}

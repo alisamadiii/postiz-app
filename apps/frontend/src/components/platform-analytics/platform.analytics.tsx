@@ -3,7 +3,7 @@
 import useSWR from 'swr';
 import { useCallback, useMemo, useState } from 'react';
 import { capitalize, orderBy } from 'lodash';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import ImageWithFallback from '@gitroom/react/helpers/image.with.fallback';
 import SafeImage from '@gitroom/react/helpers/safe.image';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
@@ -140,7 +140,7 @@ export const PlatformAnalytics = () => {
 
   if (isLoading) {
     return (
-      <div className="bg-newBgColorInner p-[20px] flex flex-1 flex-col gap-[15px] transition-all items-center justify-center">
+      <div className="bg-card p-[20px] flex flex-1 flex-col gap-[15px] transition-all items-center justify-center">
         <LoadingComponent />
       </div>
     );
@@ -148,7 +148,7 @@ export const PlatformAnalytics = () => {
 
   if (!sortedIntegrations.length && !isLoading) {
     return (
-      <div className="bg-newBgColorInner p-[20px] flex flex-col gap-[15px] transition-all flex-1 justify-center items-center text-center">
+      <div className="bg-card p-[20px] flex flex-col gap-[15px] transition-all flex-1 justify-center items-center text-center">
         <div>
           <img src="/peoplemarketplace.svg" />
         </div>
@@ -176,8 +176,8 @@ export const PlatformAnalytics = () => {
   return (
     <>
       <div
-        className={clsx(
-          'bg-newBgColorInner p-[20px] flex flex-col gap-[15px] transition-all',
+        className={cn(
+          'bg-card p-[20px] flex flex-col gap-[15px] transition-all',
           collapseMenu === '1' ? 'group sidebar w-[100px]' : 'w-[260px]'
         )}
       >
@@ -188,7 +188,7 @@ export const PlatformAnalytics = () => {
             </h2>
             <div
               onClick={() => setCollapseMenu(collapseMenu === '1' ? '0' : '1')}
-              className="group-[.sidebar]:rotate-[180deg] group-[.sidebar]:mx-auto text-btnText bg-btnSimple rounded-[6px] w-[24px] h-[24px] flex items-center justify-center cursor-pointer select-none"
+              className="group-[.sidebar]:rotate-[180deg] group-[.sidebar]:mx-auto text-foreground bg-secondary rounded-[6px] w-[24px] h-[24px] flex items-center justify-center cursor-pointer select-none"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -224,14 +224,14 @@ export const PlatformAnalytics = () => {
                 }, 10);
                 setCurrent(index);
               }}
-              className={clsx(
-                'flex gap-[12px] items-center group/profile justify-center hover:bg-boxHover rounded-e-[8px]',
+              className={cn(
+                'flex gap-[12px] items-center group/profile justify-center hover:bg-accent rounded-e-[8px]',
                 currentIntegration.id !== integration.id &&
                   'opacity-20 hover:opacity-100 cursor-pointer'
               )}
             >
               <div
-                className={clsx(
+                className={cn(
                   'relative rounded-full flex justify-center items-center gap-[6px]',
                   integration.disabled && 'opacity-50'
                 )}
@@ -257,14 +257,14 @@ export const PlatformAnalytics = () => {
                 />
                 <SafeImage
                   src={`/icons/platforms/${integration.identifier}.png`}
-                  className="rounded-[8px] absolute z-10 bottom-[5px] -end-[5px] border border-fifth"
+                  className="rounded-[8px] absolute z-10 bottom-[5px] -end-[5px] border border-border"
                   alt={integration.identifier}
                   width={18.41}
                   height={18.41}
                 />
               </div>
               <div
-                className={clsx(
+                className={cn(
                   'flex-1 whitespace-nowrap text-ellipsis overflow-hidden group-[.sidebar]:hidden',
                   integration.disabled && 'opacity-50'
                 )}
@@ -275,7 +275,7 @@ export const PlatformAnalytics = () => {
           ))}
         </div>
       </div>
-      <div className="bg-newBgColorInner flex-1 flex-col flex p-[20px] gap-[12px]">
+      <div className="bg-card flex-1 flex-col flex p-[20px] gap-[12px]">
         {!!options.length && (
           <div className="flex-1 flex flex-col gap-[14px]">
             <div className="max-w-[200px]">

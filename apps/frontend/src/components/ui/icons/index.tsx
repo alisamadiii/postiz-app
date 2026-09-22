@@ -1,5 +1,5 @@
 import React, { FC, SVGProps, useEffect } from 'react';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import useCookie from 'react-use-cookie';
 import { modeEmitter } from '@gitroom/frontend/components/layout/mode.component';
 
@@ -54,7 +54,7 @@ export const ChevronDownIcon: FC<IconProps & { rotated?: boolean }> = ({
     height={size}
     viewBox="0 0 20 20"
     fill="none"
-    className={clsx(rotated && 'rotate-180', 'transition-transform', className)}
+    className={cn(rotated && 'rotate-180', 'transition-transform', className)}
     {...props}
   >
     <path
@@ -198,7 +198,7 @@ export const DropdownArrowIcon: FC<IconProps & { rotated?: boolean }> = ({
     height={size}
     viewBox="0 0 20 20"
     fill="none"
-    className={clsx(rotated && 'rotate-180', 'transition-transform', className)}
+    className={cn(rotated && 'rotate-180', 'transition-transform', className)}
     {...props}
   >
     <path
@@ -220,7 +220,7 @@ export const DropdownArrowSmallIcon: FC<IconProps & { rotated?: boolean }> = ({
     height="4"
     viewBox="0 0 6 4"
     fill="none"
-    className={clsx(rotated && 'rotate-180', 'transition-transform', className)}
+    className={cn(rotated && 'rotate-180', 'transition-transform', className)}
     {...props}
   >
     <path

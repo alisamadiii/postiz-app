@@ -1,7 +1,7 @@
 'use client';
 
 import { FC } from 'react';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import SafeImage from '@gitroom/react/helpers/safe.image';
 import { useLaunchStore } from '@gitroom/frontend/components/new-launch/store';
 import { useShallow } from 'zustand/react/shallow';
@@ -29,7 +29,7 @@ export const PicksSocialsComponent: FC<{ toolTip?: boolean }> = ({
   );
 
   return (
-    <div className={clsx('flex', locked && 'opacity-50 pointer-events-none')}>
+    <div className={cn('flex', locked && 'opacity-50 pointer-events-none')}>
       <div className="flex flex-1">
         <div className="innerComponent flex-1 flex">
           <div className="flex flex-wrap gap-[12px] flex-1">
@@ -56,8 +56,8 @@ export const PicksSocialsComponent: FC<{ toolTip?: boolean }> = ({
                       }
                       addOrRemoveSelectedIntegration(integration, {});
                     }}
-                    className={clsx(
-                      'cursor-pointer border-[2px] relative rounded-full flex justify-center items-center bg-fifth filter transition-all duration-500',
+                    className={cn(
+                      'cursor-pointer border-[2px] relative rounded-full flex justify-center items-center bg-border filter transition-all duration-500',
                       selectedIntegrations.findIndex(
                         (p) => p.integration.id === integration.id
                       ) === -1
@@ -68,7 +68,7 @@ export const PicksSocialsComponent: FC<{ toolTip?: boolean }> = ({
                     <ImageWithFallback
                       fallbackSrc="/no-picture.jpg"
                       src={integration.picture || '/no-picture.jpg'}
-                      className={clsx(
+                      className={cn(
                         'rounded-full transition-all min-w-[42px] border-[1.5px] min-h-[42px]',
                         selectedIntegrations.findIndex(
                           (p) => p.integration.id === integration.id

@@ -1,7 +1,7 @@
 'use client';
 import { FC, ReactNode } from 'react';
 import { usePathname } from 'next/navigation';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import Link from 'next/link';
 
 export const MenuItem: FC<{ label: string; icon: ReactNode; path: string; onClick?: () => void }> = ({
@@ -13,9 +13,9 @@ export const MenuItem: FC<{ label: string; icon: ReactNode; path: string; onClic
   const currentPath = usePathname();
   const isActive = currentPath.indexOf(path) === 0;
 
-  const className = clsx(
-    'group w-full minCustom:h-[54px] custom:h-[44px] py-[8px] px-[6px] minCustom:gap-[4px] custom:gap-[2px] flex flex-col font-[600] items-center justify-center rounded-[12px] hover:text-textItemFocused hover:bg-boxFocused transition-colors',
-    isActive ? 'text-textItemFocused bg-boxFocused' : 'text-textItemBlur'
+  const className = cn(
+    'group w-full minCustom:h-[54px] custom:h-[44px] py-[8px] px-[6px] minCustom:gap-[4px] custom:gap-[2px] flex flex-col font-[600] items-center justify-center rounded-[12px] hover:text-foreground hover:bg-accent transition-colors',
+    isActive ? 'text-foreground bg-accent' : 'text-muted-foreground'
   );
 
   const inner = (

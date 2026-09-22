@@ -12,7 +12,7 @@ import { TikTokDto } from '@gitroom/nestjs-libraries/dtos/posts/providers-settin
 import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
 import { Select } from '@gitroom/react/form/select';
 import { Checkbox } from '@gitroom/react/form/checkbox';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { useIntegration } from '@gitroom/frontend/components/launches/helpers/use.integration';
 import { Input } from '@gitroom/react/form/input';
@@ -49,7 +49,7 @@ const TikTokSettings: FC<{
   // method is UPLOAD, so we hide them rather than pretend they apply. The fields
   // stay mounted and registered: their values must survive the switch, and
   // TikTokDto still requires most of them at save time.
-  const directPostOnly = clsx(isUploadMode && 'invisible h-0 overflow-hidden');
+  const directPostOnly = cn(isUploadMode && 'invisible h-0 overflow-hidden');
 
   const tiktokRestrictionNotice = useMemo(() => {
     if (!hasMedia || !isVideo) return null;
@@ -114,7 +114,7 @@ const TikTokSettings: FC<{
     <div className="flex flex-col">
       {/*<CheckTikTokValidity picture={props?.values?.[0]?.image?.[0]?.path} />*/}
       {tiktokRestrictionNotice && (
-        <div className="bg-tableBorder p-[10px] mb-[18px] rounded-[10px] flex gap-[10px] items-start text-[13px] text-balance">
+        <div className="bg-border p-[10px] mb-[18px] rounded-[10px] flex gap-[10px] items-start text-[13px] text-balance">
           <div className="shrink-0 mt-[2px]">
             <svg
               width="20"
@@ -170,7 +170,7 @@ const TikTokSettings: FC<{
         ))}
       </Select>
       {isUploadMode && <div className="-mt-[23px] mb-[23px] text-red-600">After posting you fill find a notification inside your Inbox about your post (not content studio)</div>}
-      <div className={clsx('flex flex-col', directPostOnly)}>
+      <div className={cn('flex flex-col', directPostOnly)}>
         <Select
           label={
             isBusiness
@@ -205,7 +205,7 @@ const TikTokSettings: FC<{
             {/* Random music replaces a manual choice for photos, so the
                 selector is hidden (but stays registered) while it's on. */}
             <div
-              className={clsx(
+              className={cn(
                 !isVideo &&
                   autoAddMusic === 'yes' &&
                   'invisible h-0 overflow-hidden'
@@ -223,7 +223,7 @@ const TikTokSettings: FC<{
             />
           </div>
         )}
-        <hr className="mb-[15px] border-tableBorder" />
+        <hr className="mb-[15px] border-border" />
         <div className="text-[14px] mb-[10px]">
           {t('tiktok_video_features', 'Video features')}
         </div>
@@ -253,7 +253,7 @@ const TikTokSettings: FC<{
             })}
           />
         </div>
-        <hr className="my-[15px] mb-[25px] border-tableBorder" />
+        <hr className="my-[15px] mb-[25px] border-border" />
         <div className="flex flex-col gap-[20px]">
           <Checkbox
             label={t('label_comments', 'Allow Comments')}
@@ -272,7 +272,7 @@ const TikTokSettings: FC<{
             })}
           />
           {disclose && (
-            <div className="bg-tableBorder p-[10px] mt-[10px] rounded-[10px] flex gap-[20px] items-center">
+            <div className="bg-border p-[10px] mt-[10px] rounded-[10px] flex gap-[20px] items-center">
               <div>
                 <svg
                   width="24"
@@ -307,7 +307,7 @@ const TikTokSettings: FC<{
             )}
           </div>
         </div>
-        <div className={clsx(!disclose && 'invisible h-0 overflow-hidden', 'mt-[20px]')}>
+        <div className={cn(!disclose && 'invisible h-0 overflow-hidden', 'mt-[20px]')}>
           <Checkbox
             variant="hollow"
             label={t('label_your_brand', 'Your brand')}

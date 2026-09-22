@@ -1,6 +1,6 @@
 import { Button } from '@gitroom/react/form/button';
 import { FC, useCallback, useState } from 'react';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import Loading from '@gitroom/frontend/components/layout/loading';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
@@ -86,7 +86,7 @@ ${style}
             'describe_the_image_you_want_to_generate',
             'Describe the image you want to generate'
           )}
-          className="bg-input min-h-[150px] p-[16px] outline-none border-fifth border rounded-[4px] text-inputText placeholder-inputText"
+          className="bg-input min-h-[150px] p-[16px] outline-none border-border border rounded-[4px] text-muted-foreground placeholder-muted-foreground"
         />
       </div>
       <div className="flex flex-col gap-[6px]">
@@ -96,11 +96,11 @@ ${style}
             <div
               key={p}
               onClick={() => setStyle(p)}
-              className={clsx(
+              className={cn(
                 'cursor-pointer rounded-[4px] px-[10px] h-[30px] flex items-center text-[12px] border',
                 style === p
                   ? 'bg-[#612BD3] border-[#612BD3] text-white'
-                  : 'bg-newColColor border-newBgLineColor'
+                  : 'bg-muted border-border'
               )}
             >
               {p}
@@ -146,8 +146,8 @@ export const AiImage: FC<{
     <div className="relative">
       <div
         onClick={openImageModal}
-        className={clsx(
-          'cursor-pointer h-[30px] rounded-[6px] justify-center items-center flex bg-newColColor px-[8px]'
+        className={cn(
+          'cursor-pointer h-[30px] rounded-[6px] justify-center items-center flex bg-muted px-[8px]'
         )}
       >
         {loading && (
@@ -156,7 +156,7 @@ export const AiImage: FC<{
           </div>
         )}
         <div
-          className={clsx(
+          className={cn(
             'flex gap-[5px] items-center',
             loading && 'invisible'
           )}

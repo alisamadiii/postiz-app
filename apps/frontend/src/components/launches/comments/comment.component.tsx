@@ -4,7 +4,7 @@ import { TopTitle } from '@gitroom/frontend/components/launches/helpers/top.titl
 import { useModals } from '@gitroom/frontend/components/layout/new-modal';
 import { Textarea } from '@gitroom/react/form/textarea';
 import { Button } from '@gitroom/react/form/button';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { useUser } from '@gitroom/frontend/components/layout/user.context';
 import { Input } from '@gitroom/react/form/input';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
@@ -33,12 +33,12 @@ export const CommentBox: FC<{
   }, [newComment]);
   return (
     <div
-      className={clsx(
+      className={cn(
         'flex',
         type === 'textarea' ? 'flex-col' : 'flex-row flex items-end gap-[10px]'
       )}
     >
-      <div className={clsx(type === 'input' && 'flex-1')}>
+      <div className={cn(type === 'input' && 'flex-1')}>
         <Component
           label={type === 'textarea' ? 'Add comment' : ''}
           placeholder={type === 'input' ? 'Add comment' : ''}
@@ -51,7 +51,7 @@ export const CommentBox: FC<{
       <Button
         disabled={newComment.length < 2}
         onClick={changeIt}
-        className={clsx(type === 'input' && 'mb-[27px]')}
+        className={cn(type === 'input' && 'mb-[27px]')}
       >
         {value ? 'Update' : 'Add comment'}
       </Button>
@@ -266,11 +266,11 @@ export const CommentComponent: FC<{
     );
   }, []);
   return (
-    <div className="relative flex gap-[20px] flex-col flex-1 rounded-[4px] border border-customColor6 bg-sixth p-[16px] pt-0">
+    <div className="relative flex gap-[20px] flex-col flex-1 rounded-[4px] border border-border bg-muted p-[16px] pt-0">
       <TopTitle title={`Comments for ${date.format('DD/MM/YYYY HH:mm')}`} />
       <button
         onClick={closeAll}
-        className="outline-none absolute end-[20px] top-[15px] mantine-UnstyledButton-root mantine-ActionIcon-root hover:bg-tableBorder cursor-pointer mantine-Modal-close mantine-1dcetaa"
+        className="outline-none absolute end-[20px] top-[15px] mantine-UnstyledButton-root mantine-ActionIcon-root hover:bg-border cursor-pointer mantine-Modal-close mantine-1dcetaa"
         type="button"
       >
         <svg
@@ -293,7 +293,7 @@ export const CommentComponent: FC<{
         {commentsList.map((comment, index) => (
           <Fragment key={`comment_${index}_${comment.content}`}>
             <div
-              className={clsx(
+              className={cn(
                 `flex relative flex-col`,
                 comment?.childrenComment?.length && 'gap-[10px]'
               )}
@@ -301,11 +301,11 @@ export const CommentComponent: FC<{
               <div className="flex gap-[8px]">
                 <div className="w-[40px] flex flex-col items-center">
                   <div
-                    className={`rounded-full relative z-[2] text-blue-500 font-bold flex justify-center items-center w-[40px] h-[40px] bg-white border-tableBorder border`}
+                    className={`rounded-full relative z-[2] text-blue-500 font-bold flex justify-center items-center w-[40px] h-[40px] bg-white border-border border`}
                   >
                     {comment.user.email[0].toUpperCase()}
                   </div>
-                  <div className="flex-1 w-[2px] h-[calc(100%-10px)] bg-customColor25 absolute top-[10px] z-[1]" />
+                  <div className="flex-1 w-[2px] h-[calc(100%-10px)] bg-muted absolute top-[10px] z-[1]" />
                 </div>
                 <div className="flex-1 flex flex-col gap-[4px]">
                   <div className="flex">
@@ -325,11 +325,11 @@ export const CommentComponent: FC<{
                 {comment?.childrenComment?.map((childComment, index2) => (
                   <div
                     key={`comment2_${index2}_${childComment.content}`}
-                    className={clsx(`flex gap-[8px] relative`)}
+                    className={cn(`flex gap-[8px] relative`)}
                   >
                     <div className="w-[40px] flex flex-col items-center">
                       <div
-                        className={`rounded-full relative z-[2] text-blue-500 font-bold flex justify-center items-center w-[40px] h-[40px] bg-white border-tableBorder border`}
+                        className={`rounded-full relative z-[2] text-blue-500 font-bold flex justify-center items-center w-[40px] h-[40px] bg-white border-border border`}
                       >
                         {childComment.user.email[0].toUpperCase()}
                       </div>
@@ -354,8 +354,8 @@ export const CommentComponent: FC<{
             </div>
             <div className="flex">
               <div className="relative w-[40px] flex flex-col items-center">
-                <div className="h-[30px] w-[2px] bg-customColor25 absolute top-0 z-[1]" />
-                <div className="h-[2px] w-[21px] bg-customColor25 absolute top-[30px] end-0 z-[1]" />
+                <div className="h-[30px] w-[2px] bg-muted absolute top-0 z-[1]" />
+                <div className="h-[2px] w-[21px] bg-muted absolute top-[30px] end-0 z-[1]" />
               </div>
               <div className="flex-1">
                 <CommentBox

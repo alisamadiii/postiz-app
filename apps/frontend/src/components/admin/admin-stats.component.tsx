@@ -92,7 +92,7 @@ const SummaryCard: FC<{ label: string; value: number }> = ({
   label,
   value,
 }) => (
-  <div className="border border-newTableBorder rounded-[8px] p-[16px] bg-newBgColorInner">
+  <div className="border border-border rounded-[8px] p-[16px] bg-card">
     <div className="text-[12px] opacity-70">{label}</div>
     <div className="text-[28px] font-[600]">{value.toLocaleString()}</div>
   </div>
@@ -102,8 +102,8 @@ const PerSocialTable: FC<{ title: string; block: StatsBlock }> = ({
   title,
   block,
 }) => (
-  <div className="border border-newTableBorder rounded-[8px] overflow-hidden">
-    <div className="grid grid-cols-[1fr_120px] gap-[12px] px-[12px] py-[10px] bg-newBgColorInner text-[12px] uppercase opacity-70 border-b border-newTableBorder">
+  <div className="border border-border rounded-[8px] overflow-hidden">
+    <div className="grid grid-cols-[1fr_120px] gap-[12px] px-[12px] py-[10px] bg-card text-[12px] uppercase opacity-70 border-b border-border">
       <div>{title}</div>
       <div className="text-right">Count</div>
     </div>
@@ -115,7 +115,7 @@ const PerSocialTable: FC<{ title: string; block: StatsBlock }> = ({
       block.perSocial.map((row) => (
         <div
           key={row.provider}
-          className="grid grid-cols-[1fr_120px] gap-[12px] px-[12px] py-[10px] text-[13px] border-b border-newTableBorder last:border-b-0"
+          className="grid grid-cols-[1fr_120px] gap-[12px] px-[12px] py-[10px] text-[13px] border-b border-border last:border-b-0"
         >
           <div className="capitalize">{row.provider}</div>
           <div className="text-right">{row.count.toLocaleString()}</div>
@@ -143,14 +143,14 @@ export const AdminStatsComponent: FC = () => {
 
   if (!user?.isSuperAdmin) {
     return (
-      <div className="text-textColor p-[20px]">
+      <div className="text-foreground p-[20px]">
         You do not have access to this page.
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-[16px] text-textColor">
+    <div className="flex flex-col gap-[16px] text-foreground">
       <div className="flex items-center justify-between">
         <div className="text-[20px] font-[600]">Admin Stats</div>
         {data && (
@@ -172,8 +172,8 @@ export const AdminStatsComponent: FC = () => {
               onClick={() => applyRange(next)}
               className={`h-[32px] px-[12px] rounded-[8px] text-[13px] border cursor-pointer whitespace-nowrap ${
                 active
-                  ? 'bg-forth text-white border-forth'
-                  : 'bg-newBgColorInner text-textColor border-newTableBorder hover:bg-tableBorder'
+                  ? 'bg-primary text-white border-primary'
+                  : 'bg-card text-foreground border-border hover:bg-border'
               }`}
             >
               {preset.label}
@@ -182,7 +182,7 @@ export const AdminStatsComponent: FC = () => {
         })}
       </div>
 
-      <div className="flex flex-wrap gap-[12px] items-end bg-newBgColorInner border border-newTableBorder rounded-[8px] p-[12px]">
+      <div className="flex flex-wrap gap-[12px] items-end bg-card border border-border rounded-[8px] p-[12px]">
         <div className="flex flex-col gap-[6px]">
           <div className="text-[12px] opacity-70">From</div>
           <input
@@ -190,7 +190,7 @@ export const AdminStatsComponent: FC = () => {
             value={fromInput}
             max={toInput}
             onChange={(e) => setFromInput(e.target.value)}
-            className="bg-newBgColorInner h-[38px] border border-newTableBorder rounded-[8px] px-[10px] text-[14px] text-textColor"
+            className="bg-card h-[38px] border border-border rounded-[8px] px-[10px] text-[14px] text-foreground"
           />
         </div>
         <div className="flex flex-col gap-[6px]">
@@ -201,7 +201,7 @@ export const AdminStatsComponent: FC = () => {
             min={fromInput}
             max={today()}
             onChange={(e) => setToInput(e.target.value)}
-            className="bg-newBgColorInner h-[38px] border border-newTableBorder rounded-[8px] px-[10px] text-[14px] text-textColor"
+            className="bg-card h-[38px] border border-border rounded-[8px] px-[10px] text-[14px] text-foreground"
           />
         </div>
         <Button
@@ -229,7 +229,7 @@ export const AdminStatsComponent: FC = () => {
       ) : error || !data ? (
         <div className="text-red-400">Failed to load stats.</div>
       ) : (
-        <div className="overflow-x-auto pb-[8px] scrollbar scrollbar-thumb-fifth scrollbar-track-newBgColor flex flex-col gap-[16px]">
+        <div className="overflow-x-auto pb-[8px] scrollbar scrollbar-thumb-border scrollbar-track-background flex flex-col gap-[16px]">
           <div className="flex gap-[12px]">
             <div className="flex-1 min-w-[220px] shrink-0">
               <SummaryCard

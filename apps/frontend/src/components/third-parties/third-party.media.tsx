@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@gitroom/react/form/button';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import React, {
   createContext,
@@ -93,7 +93,7 @@ export const ThirdPartyPopup: FC<{
   }, []);
 
   return (
-    <div className={clsx('flex flex-wrap flex-col gap-[10px] pt-[20px]')}>
+    <div className={cn('flex flex-wrap flex-col gap-[10px] pt-[20px]')}>
       {!thirdParty && (
         <div className="grid grid-cols-4 gap-[10px] justify-items-center justify-center">
           {thirdParties.map((p: any) => (
@@ -102,7 +102,7 @@ export const ThirdPartyPopup: FC<{
                 setThirdParty(p);
               }}
               key={p.identifier}
-              className="w-full h-full p-[20px] min-h-[100px] text-[14px] bg-newTableHeader hover:bg-newTableBorder rounded-[8px] transition-all text-textColor relative flex flex-col gap-[15px] cursor-pointer"
+              className="w-full h-full p-[20px] min-h-[100px] text-[14px] bg-muted hover:bg-border rounded-[8px] transition-all text-foreground relative flex flex-col gap-[15px] cursor-pointer"
             >
               <div>
                 <img
@@ -183,8 +183,8 @@ export const ThirdPartyMedia: FC<{
     <>
       <div className="relative group">
         <div
-          className={clsx(
-            'cursor-pointer h-[30px] rounded-[6px] justify-center items-center flex bg-newColColor px-[8px]'
+          className={cn(
+            'cursor-pointer h-[30px] rounded-[6px] justify-center items-center flex bg-muted px-[8px]'
           )}
           onClick={() => {
             modals.openModal({
@@ -201,7 +201,7 @@ export const ThirdPartyMedia: FC<{
             });
           }}
         >
-          <div className={clsx('flex gap-[5px] items-center')}>
+          <div className={cn('flex gap-[5px] items-center')}>
             <div>
               <svg
                 width="16"

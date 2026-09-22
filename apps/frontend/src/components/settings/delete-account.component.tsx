@@ -58,12 +58,12 @@ const DeleteAccountComponent: FC<{ isLink?: boolean }> = ({ isLink }) => {
   }, [isSecured]);
 
   const loadingOverlay = loading && (
-    <div className="text-textColor fixed start-0 top-0 bg-primary/80 z-[500] w-full h-full animate-fade flex flex-col items-center justify-center gap-[24px]">
-      <div className="w-[48px] h-[48px] border-[3px] border-forth border-t-transparent rounded-full animate-spin" />
+    <div className="text-foreground fixed start-0 top-0 bg-primary/80 z-[500] w-full h-full animate-fade flex flex-col items-center justify-center gap-[24px]">
+      <div className="w-[48px] h-[48px] border-[3px] border-primary border-t-transparent rounded-full animate-spin" />
       <div className="text-[20px] font-semibold">
         {t('deleting_your_account', 'Deleting your account...')}
       </div>
-      <div className="text-[14px] text-textItemBlur">
+      <div className="text-[14px] text-muted-foreground">
         {t(
           'deleting_your_account_description',
           'We are removing your channels and posts, this can take a while. Please don’t close this window.'
@@ -88,7 +88,7 @@ const DeleteAccountComponent: FC<{ isLink?: boolean }> = ({ isLink }) => {
   }
 
   return (
-    <div className="my-[16px] mt-[16px] bg-sixth border-fifth border rounded-[4px] p-[24px] flex flex-col gap-[24px]">
+    <div className="my-[16px] mt-[16px] bg-muted border-border border rounded-[4px] p-[24px] flex flex-col gap-[24px]">
       {loadingOverlay}
       <div className="mt-[4px]">{t('delete_account', 'Delete Account')}</div>
       <div className="flex items-center justify-between">
@@ -96,7 +96,7 @@ const DeleteAccountComponent: FC<{ isLink?: boolean }> = ({ isLink }) => {
           <div className="text-[14px]">
             {t('delete_your_account', 'Delete your account')}
           </div>
-          <div className="text-[12px] text-textItemBlur">
+          <div className="text-[12px] text-muted-foreground">
             {t(
               'delete_account_description',
               'Your account, organizations and channels will be deleted permanently'

@@ -1,7 +1,7 @@
 'use client';
 
 import { Slider } from '@gitroom/react/form/slider';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { Editor } from '@gitroom/frontend/components/new-launch/editor';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { useIntegration } from '@gitroom/frontend/components/launches/helpers/use.integration';
@@ -29,7 +29,7 @@ export const ThreadFinisher = () => {
   const value = watch('thread_finisher');
 
   return (
-    <div className="flex flex-col gap-[10px] border-tableBorder border p-[15px] rounded-lg mb-5">
+    <div className="flex flex-col gap-[10px] border-border border p-[15px] rounded-lg mb-5">
       <div className="flex items-center">
         <div className="flex-1">Add a thread finisher</div>
         <div>
@@ -42,13 +42,13 @@ export const ThreadFinisher = () => {
       </div>
       <div className="w-full mt-[20px]">
         <div
-          className={clsx(
+          className={cn(
             !slider && 'relative opacity-25 pointer-events-none editor'
           )}
         >
           <div>
             <div className="flex gap-[4px]">
-              <div className="flex-1 editor text-textColor">
+              <div className="flex-1 editor text-foreground">
                 <Editor
                   comments={true}
                   chars={{}}

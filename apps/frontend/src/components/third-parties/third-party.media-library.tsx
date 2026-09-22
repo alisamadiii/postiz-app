@@ -6,7 +6,7 @@ import useSWR from 'swr';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { useModals } from '@gitroom/frontend/components/layout/new-modal';
 import { useToaster } from '@gitroom/react/toaster/toaster';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { VideoFrame } from '@gitroom/react/helpers/video.frame';
 import { Pagination } from '@gitroom/frontend/components/media/media.component';
 
@@ -89,19 +89,19 @@ const ThirdPartyMediaLibraryBrowser: FC<{
         {integration.title}: {integration.name}
       </div>
       <div className="flex-1 relative">
-        <div className="absolute left-0 top-0 w-full h-full overflow-x-hidden overflow-y-auto scrollbar scrollbar-thumb-newColColor scrollbar-track-newBgColorInner">
+        <div className="absolute left-0 top-0 w-full h-full overflow-x-hidden overflow-y-auto scrollbar scrollbar-thumb-muted scrollbar-track-card">
           {isLoading && (
             <div className="grid grid-cols-4 gap-[8px]">
               {[...new Array(8)].map((_, i) => (
                 <div
                   key={i}
-                  className="aspect-square bg-newSep rounded-[6px] animate-pulse"
+                  className="aspect-square bg-border rounded-[6px] animate-pulse"
                 />
               ))}
             </div>
           )}
           {!isLoading && (!data?.results || !data.results.length) && (
-            <div className="flex items-center justify-center h-full text-textColor/60">
+            <div className="flex items-center justify-center h-full text-foreground/60">
               {t('no_media_found', 'No media found')}
             </div>
           )}
@@ -116,7 +116,7 @@ const ThirdPartyMediaLibraryBrowser: FC<{
                     className="cursor-pointer aspect-square rounded-[6px] overflow-hidden relative group"
                   >
                     <div
-                      className={clsx(
+                      className={cn(
                         'w-full h-full border-[4px] rounded-[6px]',
                         isSelected
                           ? 'border-[#612BD3]'
@@ -160,7 +160,7 @@ const ThirdPartyMediaLibraryBrowser: FC<{
       <div className="flex justify-end gap-[8px]">
         <button
           onClick={() => modals.closeCurrent()}
-          className="cursor-pointer h-[52px] px-[20px] items-center justify-center border border-newTextColor/10 flex rounded-[10px]"
+          className="cursor-pointer h-[52px] px-[20px] items-center justify-center border border-foreground/10 flex rounded-[10px]"
         >
           {t('cancel', 'Cancel')}
         </button>
@@ -209,7 +209,7 @@ const ThirdPartyMediaLibraryPicker: FC<{
         <div
           key={p.id}
           onClick={() => setSelected(p)}
-          className="w-full h-full p-[20px] min-h-[100px] text-[14px] bg-newTableHeader hover:bg-newTableBorder rounded-[8px] transition-all text-textColor relative flex flex-col gap-[15px] cursor-pointer"
+          className="w-full h-full p-[20px] min-h-[100px] text-[14px] bg-muted hover:bg-border rounded-[8px] transition-all text-foreground relative flex flex-col gap-[15px] cursor-pointer"
         >
           <div>
             <img
@@ -271,7 +271,7 @@ export const ThirdPartyMediaLibrary: FC<{
           ),
         });
       }}
-      className="cursor-pointer bg-btnSimple changeColor flex gap-[8px] h-[44px] px-[18px] justify-center items-center rounded-[8px]"
+      className="cursor-pointer bg-secondary changeColor flex gap-[8px] h-[44px] px-[18px] justify-center items-center rounded-[8px]"
     >
       <svg
         width="14"

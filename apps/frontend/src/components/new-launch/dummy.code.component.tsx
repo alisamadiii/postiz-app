@@ -10,7 +10,7 @@ export const DummyCodeComponent: FC<{ code: any }> = ({ code }) => {
   const toaster = useToaster();
 
   return (
-    <div className="rounded-[4px] border border-customColor6 bg-sixth px-[16px] pb-[16px] relative w-full">
+    <div className="rounded-[4px] border border-border bg-muted px-[16px] pb-[16px] relative w-full">
       <TopTitle title={`Output`}>
         <Button
           className="mr-[50px]"
@@ -23,7 +23,7 @@ export const DummyCodeComponent: FC<{ code: any }> = ({ code }) => {
         </Button>
       </TopTitle>
       <button
-        className="outline-none absolute end-[20px] top-[20px] mantine-UnstyledButton-root mantine-ActionIcon-root hover:bg-tableBorder cursor-pointer mantine-Modal-close mantine-1dcetaa"
+        className="outline-none absolute end-[20px] top-[20px] mantine-UnstyledButton-root mantine-ActionIcon-root hover:bg-border cursor-pointer mantine-Modal-close mantine-1dcetaa"
         type="button"
         onClick={() => modal.closeAll()}
       >

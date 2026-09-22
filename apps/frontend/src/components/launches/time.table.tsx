@@ -16,7 +16,7 @@ import { sortBy } from 'lodash';
 import { usePreventWindowUnload } from '@gitroom/react/helpers/use.prevent.window.unload';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { newDayjs } from '@gitroom/frontend/components/layout/set.timezone';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import {
   TrashIcon,
   PlusIcon,
@@ -130,7 +130,7 @@ export const TimeTable: FC<{
   return (
     <div className="relative w-full max-w-[400px] mx-auto">
       {/* Add Time Slot Section */}
-      <div className="bg-newBgColorInner rounded-[12px] p-[20px] border border-newTableBorder">
+      <div className="bg-card rounded-[12px] p-[20px] border border-border">
         <div className="text-[15px] font-semibold mb-[16px] flex items-center gap-[8px]">
           <DelayIcon size={18} className="text-[#612BD3]" />
           {t('add_time_slot', 'Add Time Slot')}
@@ -182,12 +182,12 @@ export const TimeTable: FC<{
 
       {/* Time Slots List */}
       <div className="mt-[20px]">
-        <div className="text-[14px] text-newTextColor/60 mb-[12px]">
+        <div className="text-[14px] text-foreground/60 mb-[12px]">
           {t('scheduled_times', 'Scheduled Times')} ({times.length})
         </div>
 
         {times.length === 0 ? (
-          <div className="text-center py-[32px] text-newTextColor/40 text-[14px] border border-dashed border-newTableBorder rounded-[12px]">
+          <div className="text-center py-[32px] text-foreground/40 text-[14px] border border-dashed border-border rounded-[12px]">
             {t('no_time_slots', 'No time slots added yet')}
           </div>
         ) : (
@@ -195,10 +195,10 @@ export const TimeTable: FC<{
             {times.map((timeSlot, index) => (
               <div
                 key={`${timeSlot.value}-${index}`}
-                className={clsx(
+                className={cn(
                   'group flex items-center justify-between',
                   'h-[48px] px-[16px] rounded-[8px]',
-                  'bg-newBgColorInner border border-newTableBorder',
+                  'bg-card border border-border',
                   'hover:border-[#612BD3]/40 transition-colors'
                 )}
               >

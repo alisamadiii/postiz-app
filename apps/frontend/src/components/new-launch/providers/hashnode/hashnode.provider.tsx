@@ -12,7 +12,7 @@ import { HashnodeTags } from '@gitroom/frontend/components/new-launch/providers/
 import { HashnodeSettingsDto } from '@gitroom/nestjs-libraries/dtos/posts/providers-settings/hashnode.settings.dto';
 import { useIntegration } from '@gitroom/frontend/components/launches/helpers/use.integration';
 import { useMediaDirectory } from '@gitroom/react/helpers/use.media.directory';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { MediaComponent } from '@gitroom/frontend/components/media/media.component';
 import { Canonical } from '@gitroom/react/form/canonical';
 

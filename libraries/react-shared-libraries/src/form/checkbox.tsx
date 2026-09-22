@@ -1,7 +1,7 @@
 'use client';
 
 import { FC, forwardRef, useCallback, useState } from 'react';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { useFormContext, useWatch } from 'react-hook-form';
 export const Checkbox = forwardRef<
   null,
@@ -49,11 +49,11 @@ export const Checkbox = forwardRef<
         ref={ref}
         {...disableForm ? {} : form.register(props.name!)}
         onClick={changeStatus}
-        className={clsx(
+        className={cn(
           'cursor-pointer rounded-md select-none w-[24px] h-[24px] justify-center items-center flex text-white transition-colors',
           variant === 'default' || !variant
-            ? 'bg-sdprimary'
-            : 'border-customColor1 border-2 bg-customColor2',
+            ? 'bg-primary'
+            : 'border-border border-2 bg-muted',
           className
         )}
       >

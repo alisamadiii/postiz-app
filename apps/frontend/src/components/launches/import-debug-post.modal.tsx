@@ -7,7 +7,7 @@ import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { Button } from '@gitroom/react/form/button';
 import { useIntegrationList } from '@gitroom/frontend/components/launches/helpers/use.integration.list';
 import { useSWRConfig } from 'swr';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 
 interface DebugPostData {
   type: string;
@@ -128,7 +128,7 @@ export const ImportDebugPostModal: FC<{ close: () => void }> = ({ close }) => {
   return (
     <div className="flex flex-col gap-[16px] min-w-[500px]">
       <textarea
-        className="w-full h-[200px] p-[12px] rounded-[8px] bg-input border border-tableBorder text-textColor font-mono text-[13px] resize-y"
+        className="w-full h-[200px] p-[12px] rounded-[8px] bg-input border border-border text-foreground font-mono text-[13px] resize-y"
         placeholder={t(
           'paste_debug_json',
           'Paste the debug JSON copied from a failed post...'
@@ -143,11 +143,11 @@ export const ImportDebugPostModal: FC<{ close: () => void }> = ({ close }) => {
 
       {parsed && (
         <div className="flex flex-col gap-[12px]">
-          <div className="flex flex-col gap-[8px] p-[12px] rounded-[8px] bg-input border border-tableBorder">
-            <div className="text-[13px] font-[600] text-textColor">
+          <div className="flex flex-col gap-[8px] p-[12px] rounded-[8px] bg-input border border-border">
+            <div className="text-[13px] font-[600] text-foreground">
               {t('debug_info', 'Debug Info')}
             </div>
-            <div className="text-[12px] text-textColor/70 flex flex-col gap-[4px] min-w-0 break-all">
+            <div className="text-[12px] text-foreground/70 flex flex-col gap-[4px] min-w-0 break-all">
               <div>
                 <span className="font-[500]">
                   {t('provider', 'Provider')}:
@@ -175,7 +175,7 @@ export const ImportDebugPostModal: FC<{ close: () => void }> = ({ close }) => {
                   <span className="font-[500]">
                     {t('error_details', 'Error Details')}:
                   </span>
-                  <div className="mt-[4px] max-h-[100px] overflow-y-auto bg-newBgColor p-[8px] rounded-[4px] text-[11px] font-mono break-all whitespace-pre-wrap">
+                  <div className="mt-[4px] max-h-[100px] overflow-y-auto bg-background p-[8px] rounded-[4px] text-[11px] font-mono break-all whitespace-pre-wrap">
                     {parsed._debug.errors.map((err, i) => (
                       <div key={i} className="mb-[4px]">
                         [{err.platform}] {err.message}
@@ -194,9 +194,9 @@ export const ImportDebugPostModal: FC<{ close: () => void }> = ({ close }) => {
           </div>
 
           <div className="flex flex-col gap-[8px]">
-            <div className="text-[13px] font-[600] text-textColor">
+            <div className="text-[13px] font-[600] text-foreground">
               {t('select_local_integration', 'Select Local Integration')}
-              <span className="text-[12px] font-[400] text-textColor/60 ml-[8px]">
+              <span className="text-[12px] font-[400] text-foreground/60 ml-[8px]">
                 ({parsed._debug.providerIdentifier})
               </span>
             </div>
@@ -213,11 +213,11 @@ export const ImportDebugPostModal: FC<{ close: () => void }> = ({ close }) => {
                 {matchingIntegrations.map((integration) => (
                   <div
                     key={integration.id}
-                    className={clsx(
+                    className={cn(
                       'flex items-center gap-[10px] p-[10px] rounded-[8px] border cursor-pointer transition-all',
                       selectedIntegrationId === integration.id
-                        ? 'border-forth bg-forth/10'
-                        : 'border-tableBorder hover:border-textColor/30'
+                        ? 'border-primary bg-primary/10'
+                        : 'border-border hover:border-foreground/30'
                     )}
                     onClick={() => setSelectedIntegrationId(integration.id)}
                   >
@@ -226,7 +226,7 @@ export const ImportDebugPostModal: FC<{ close: () => void }> = ({ close }) => {
                       className="w-[24px] h-[24px] rounded-[6px]"
                       alt={integration.name}
                     />
-                    <div className="text-[13px] text-textColor">
+                    <div className="text-[13px] text-foreground">
                       {integration.name}
                     </div>
                     <img

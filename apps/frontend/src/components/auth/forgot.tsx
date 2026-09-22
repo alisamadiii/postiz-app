@@ -46,7 +46,7 @@ export function Forgot() {
           </div>
           {!state ? (
             <>
-              <div className="space-y-4 text-textColor">
+              <div className="space-y-4 text-foreground">
                 <Input
                   label="Email"
                   translationKey="label_email"

@@ -5,7 +5,7 @@ import { useCustomProviderFunction } from '@gitroom/frontend/components/launches
 import { Input } from '@gitroom/react/form/input';
 import { useDebouncedCallback } from 'use-debounce';
 import { Button } from '@gitroom/react/form/button';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { MultiMediaComponent } from '@gitroom/frontend/components/media/media.component';
 import { useWatch } from 'react-hook-form';
 import { Select } from '@gitroom/react/form/select';
@@ -41,7 +41,7 @@ export const RenderOptions: FC<{
     <div className="flex">
       {mapValues.map((p) => (
         <Button
-          className={clsx('flex-1', p.id !== value && 'bg-secondary')}
+          className={cn('flex-1', p.id !== value && 'bg-secondary')}
           key={p.id}
           {...p}
         />
@@ -252,7 +252,7 @@ export const Subreddit: FC<{
             }}
           />
           {!!results.length && !loading && (
-            <div className="z-[400] w-full absolute bg-input -mt-[20px] outline-none border-fifth border cursor-pointer">
+            <div className="z-[400] w-full absolute bg-input -mt-[20px] outline-none border-border border cursor-pointer">
               {results.map((r: { id: string; name: string }) => (
                 <div
                   onClick={setResult(r)}

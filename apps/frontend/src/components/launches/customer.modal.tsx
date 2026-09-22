@@ -60,7 +60,7 @@ export const CustomerModal: FC<{
           onChange={(e) => setCustomer(e.target.value)}
           placeholder={t('start_typing', 'Start typing...')}
           autoComplete="off"
-          className="bg-newBgColorInner h-[42px] border-newTableBorder border rounded-[8px] text-textColor placeholder-textColor px-[16px] text-[14px] outline-none"
+          className="bg-card h-[42px] border-border border rounded-[8px] text-foreground placeholder-foreground px-[16px] text-[14px] outline-none"
         />
         <datalist id="customer-name-options">
           {(data?.map((p: any) => p.name) || []).map((name: string) => (

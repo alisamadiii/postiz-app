@@ -8,7 +8,7 @@ import {
   useEffect,
   useMemo,
 } from 'react';
-import { clsx } from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { TranslatedLabel } from '../translation/translated-label';
 
@@ -52,7 +52,7 @@ export const Input: FC<
   return (
     <div className="flex flex-col gap-[6px]">
       {!!label && (
-        <div className="text-[14px] text-textColor">
+        <div className="text-[14px] text-foreground">
           <TranslatedLabel
             label={label}
             translationKey={translationKey}
@@ -61,15 +61,15 @@ export const Input: FC<
         </div>
       )}
       <div
-        className={clsx(
-          'flex items-center h-[42px] rounded-md border border-newTableBorder bg-newBgColorInner text-textColor transition-colors focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50',
+        className={cn(
+          'flex items-center h-[42px] rounded-md border border-border bg-card text-foreground transition-colors focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50',
           className
         )}
       >
         {icon && <div className="ps-[16px]">{icon}</div>}
         <input
-          className={clsx(
-            'h-full bg-transparent outline-none flex-1 text-[14px] text-textColor placeholder:text-muted-foreground/70',
+          className={cn(
+            'h-full bg-transparent outline-none flex-1 text-[14px] text-foreground placeholder:text-muted-foreground/70',
             icon ? 'pl-[8px] pe-[16px]' : 'px-[16px]'
           )}
           {...(disableForm ? {} : form.register(props.name))}

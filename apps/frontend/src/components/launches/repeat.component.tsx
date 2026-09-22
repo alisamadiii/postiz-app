@@ -5,7 +5,7 @@ import { Select } from '@gitroom/react/form/select';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { useClickOutside } from '@mantine/hooks';
 import { isUSCitizen } from '@gitroom/frontend/components/launches/helpers/isuscitizen.utils';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { RepeatIcon, DropdownArrowIcon } from '@gitroom/frontend/components/ui/icons';
 const getList = (t: (key: string, fallback: string) => string) => [
   {
@@ -75,9 +75,9 @@ export const RepeatComponent: FC<{
   return (
     <div
       ref={ref}
-      className={clsx(
+      className={cn(
         'border rounded-[8px] justify-center flex items-center relative h-[44px] text-[15px] font-[600] select-none',
-        isOpen ? 'border-[#612BD3]' : 'border-newTextColor/10',
+        isOpen ? 'border-[#612BD3]' : 'border-foreground/10',
       )}
     >
       <div
@@ -97,7 +97,7 @@ export const RepeatComponent: FC<{
         </div>
       </div>
       {isOpen && (
-        <div className="z-[300] absolute start-0 bottom-[100%] w-[240px] bg-newBgColorInner p-[12px] menu-shadow -translate-y-[10px] flex flex-col">
+        <div className="z-[300] absolute start-0 bottom-[100%] w-[240px] bg-card p-[12px] menu-shadow -translate-y-[10px] flex flex-col">
           {list.map((p) => (
             <div
               onClick={() => {
@@ -105,7 +105,7 @@ export const RepeatComponent: FC<{
                 setIsOpen(false);
               }}
               key={p.label}
-              className="h-[40px] py-[8px] px-[20px] -mx-[12px] hover:bg-newBgColor"
+              className="h-[40px] py-[8px] px-[20px] -mx-[12px] hover:bg-background"
             >
               {p.label}
             </div>

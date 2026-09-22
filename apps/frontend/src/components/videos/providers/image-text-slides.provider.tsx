@@ -4,7 +4,7 @@ import { useVideoFunction } from '@gitroom/frontend/components/videos/video.rend
 import useSWR from 'swr';
 import { useFormContext } from 'react-hook-form';
 import { Button } from '@gitroom/react/form/button';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { useVideo } from '@gitroom/frontend/components/videos/video.context.wrapper';
 
 export interface Voices {
@@ -108,18 +108,18 @@ const VoiceSelector: FC = () => {
 
   return (
     <div className="space-y-3">
-      <div className="text-sm font-medium text-textColor mb-4">
+      <div className="text-sm font-medium text-foreground mb-4">
         Select a Voice
       </div>
       <div className="space-y-2">
         {data.voices.map((voice) => (
           <div
             key={voice.id}
-            className={clsx(
+            className={cn(
               'flex items-center justify-between p-3 rounded-lg border transition-colors cursor-pointer',
               selectedVoice === voice.id
                 ? 'border-primary bg-primary/10'
-                : 'border-tableBorder bg-sixth hover:bg-seventh'
+                : 'border-border bg-muted hover:bg-primary'
             )}
             onClick={() => selectVoice(voice.id)}
           >
@@ -133,7 +133,7 @@ const VoiceSelector: FC = () => {
                 onChange={() => selectVoice(voice.id)}
               />
               <div>
-                <div className="text-sm font-medium text-textColor">
+                <div className="text-sm font-medium text-foreground">
                   {voice.name}
                 </div>
               </div>
@@ -141,7 +141,7 @@ const VoiceSelector: FC = () => {
 
             <Button
               type="button"
-              className={clsx(
+              className={cn(
                 'px-3 py-1 text-xs',
                 loadingVoice === voice.id && 'opacity-50 cursor-not-allowed',
                 currentlyPlaying === voice.id && 'bg-red-500 hover:bg-red-600'

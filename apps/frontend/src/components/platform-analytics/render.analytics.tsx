@@ -63,8 +63,8 @@ const AnalyticsCard: FC<{
       <div
         className={`
           flex flex-col h-full
-          bg-newTableHeader
-          border border-newTableBorder
+          bg-muted
+          border border-border
           rounded-[12px]
           overflow-hidden
           transition-all duration-200
@@ -82,7 +82,7 @@ const AnalyticsCard: FC<{
                 ${color === 'blue' ? 'bg-[#1d9bf0]' : ''}
               `}
             />
-            <span className="text-[15px] font-medium text-newTableText">
+            <span className="text-[15px] font-medium text-muted-foreground">
               {item.label}
             </span>
           </div>
@@ -125,7 +125,7 @@ const EmptyState: FC<{ onRefresh: () => void }> = ({ onRefresh }) => {
   const t = useT();
 
   return (
-    <div className="col-span-full flex flex-col items-center justify-center py-[48px] px-[24px] bg-newTableHeader border border-newTableBorder rounded-[12px]">
+    <div className="col-span-full flex flex-col items-center justify-center py-[48px] px-[24px] bg-muted border border-border rounded-[12px]">
       <div className="w-[48px] h-[48px] mb-[16px] rounded-full bg-[#612bd3]/10 flex items-center justify-center">
         <svg
           width="24"
@@ -140,7 +140,7 @@ const EmptyState: FC<{ onRefresh: () => void }> = ({ onRefresh }) => {
           <path d="M12 8v4l2 2" />
         </svg>
       </div>
-      <p className="text-[15px] text-newTableText text-center mb-[12px]">
+      <p className="text-[15px] text-muted-foreground text-center mb-[12px]">
         {t(
           'this_channel_needs_to_be_refreshed',
           'This channel needs to be refreshed to display analytics'

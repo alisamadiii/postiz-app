@@ -11,7 +11,7 @@ import { CreateOrgUserDto } from '@gitroom/nestjs-libraries/dtos/auth/create.org
 import { GithubProvider } from '@gitroom/frontend/components/auth/providers/github.provider';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { LoadingComponent } from '@gitroom/frontend/components/layout/loading';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { GoogleProvider } from '@gitroom/frontend/components/auth/providers/google.provider';
 import { AppleProvider } from '@gitroom/frontend/components/auth/providers/apple.provider';
 import { OauthProvider } from '@gitroom/frontend/components/auth/providers/oauth.provider';
@@ -183,7 +183,7 @@ export function RegisterAfter({
               ))}
             {!isAfterProvider && (
               <div className="h-[20px] mb-[24px] mt-[24px] relative">
-                <div className="absolute w-full h-[1px] bg-fifth top-[50%] -translate-y-[50%]" />
+                <div className="absolute w-full h-[1px] bg-border top-[50%] -translate-y-[50%]" />
                 <div
                   className={`absolute z-[1] justify-center items-center w-full start-0 -top-[4px] flex`}
                 >
@@ -192,7 +192,7 @@ export function RegisterAfter({
               </div>
             )}
             <div className="flex flex-col gap-[12px]">
-              <div className="text-textColor">
+              <div className="text-foreground">
                 {!isAfterProvider && (
                   <>
                     <Input
@@ -221,7 +221,7 @@ export function RegisterAfter({
                   placeholder={t('label_company', 'Company')}
                 />
               </div>
-              <div className={clsx('text-[12px]')}>
+              <div className={cn('text-[12px]')}>
                 {t(
                   'by_registering_you_agree_to_our',
                   'By registering you agree to our'

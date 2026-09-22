@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 
 type CreationMethod = 'UNKNOWN' | 'WEB' | 'API' | 'MCP' | 'AUTOPOST' | 'CLI';
 
@@ -30,7 +30,7 @@ export const CreationMethodBadge: FC<Props> = ({
 
   return (
     <div
-      className={clsx(
+      className={cn(
         'inline-flex items-center justify-center rounded-full text-white font-bold uppercase tracking-wide leading-none cursor-default',
         sizeClasses,
         creationMethod === 'WEB' && 'bg-[#6b7280]',

@@ -1,6 +1,6 @@
 'use client';
 
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import ImageWithFallback from '@gitroom/react/helpers/image.with.fallback';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { ThirdPartyListComponent } from '@gitroom/frontend/components/third-parties/third-party.list.component';
@@ -64,7 +64,7 @@ export const ThirdPartyMenuComponent: FC<{
       {show && (
         <div
           onClick={(e) => e.stopPropagation()}
-          className={`absolute top-[100%] start-0 p-[8px] px-[20px] bg-fifth flex flex-col gap-[16px] z-[100] rounded-[8px] border border-tableBorder text-nowrap`}
+          className={`absolute top-[100%] start-0 p-[8px] px-[20px] bg-border flex flex-col gap-[16px] z-[100] rounded-[8px] border border-border text-nowrap`}
         >
           <div
             className="flex gap-[12px] items-center"
@@ -115,8 +115,8 @@ export const ThirdPartyComponent = () => {
   return (
     <>
       <div
-        className={clsx(
-          'bg-newBgColorInner p-[20px] flex flex-col gap-[15px] transition-all',
+        className={cn(
+          'bg-card p-[20px] flex flex-col gap-[15px] transition-all',
           collapseMenu === '1' ? 'group sidebar w-[100px]' : 'w-[260px]'
         )}
       >
@@ -127,7 +127,7 @@ export const ThirdPartyComponent = () => {
             </h2>
             <div
               onClick={() => setCollapseMenu(collapseMenu === '1' ? '0' : '1')}
-              className="group-[.sidebar]:rotate-[180deg] group-[.sidebar]:mx-auto text-btnText bg-btnSimple rounded-[6px] w-[24px] h-[24px] flex items-center justify-center cursor-pointer select-none"
+              className="group-[.sidebar]:rotate-[180deg] group-[.sidebar]:mx-auto text-foreground bg-secondary rounded-[6px] w-[24px] h-[24px] flex items-center justify-center cursor-pointer select-none"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -149,7 +149,7 @@ export const ThirdPartyComponent = () => {
           <div className="flex flex-col gap-[10px]">
             <div className="flex-1 flex flex-col gap-[14px]">
               <div
-                className={clsx(
+                className={cn(
                   'gap-[16px] flex flex-col relative justify-center rounded-e-[8px]'
                 )}
               >
@@ -159,13 +159,13 @@ export const ThirdPartyComponent = () => {
                   data?.map((p: any) => (
                     <div
                       key={p.id}
-                      className={clsx('flex gap-[8px] items-center group/profile hover:bg-boxHover')}
+                      className={cn('flex gap-[8px] items-center group/profile hover:bg-accent')}
                     >
                       <div className="h-full w-[4px] rounded-s-[3px] opacity-0 group-hover/profile:opacity-100 transition-opacity">
                         <SVGLine />
                       </div>
                       <div
-                        className={clsx(
+                        className={cn(
                           'relative rounded-full flex justify-center items-center'
                         )}
                         data-tooltip-id="tooltip"
@@ -183,7 +183,7 @@ export const ThirdPartyComponent = () => {
                       <div
                         // @ts-ignore
                         role="Handle"
-                        className={clsx(
+                        className={cn(
                           'flex-1 whitespace-nowrap text-ellipsis overflow-hidden group-[.sidebar]:hidden'
                         )}
                         data-tooltip-id="tooltip"
@@ -200,7 +200,7 @@ export const ThirdPartyComponent = () => {
           </div>
         </div>
       </div>
-      <div className="bg-newBgColorInner flex-1 flex-col flex p-[20px] gap-[12px]">
+      <div className="bg-card flex-1 flex-col flex p-[20px] gap-[12px]">
         <ThirdPartyListComponent reload={mutate} />
       </div>
     </>

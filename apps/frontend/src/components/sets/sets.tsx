@@ -8,7 +8,7 @@ import { useUser } from '@gitroom/frontend/components/layout/user.context';
 import { Button } from '@gitroom/react/form/button';
 import { Input } from '@gitroom/react/form/input';
 import { useToaster } from '@gitroom/react/toaster/toaster';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { AddEditModal } from '@gitroom/frontend/components/new-launch/add.edit.modal';
@@ -101,7 +101,7 @@ export const Sets: FC = () => {
         askClose: true,
         fullScreen: true,
         classNames: {
-          modal: 'w-[100%] max-w-[1400px] text-textColor',
+          modal: 'w-[100%] max-w-[1400px] text-foreground',
         },
         children: (
           <AddEditModal
@@ -168,10 +168,10 @@ export const Sets: FC = () => {
   return (
     <div className="flex flex-col">
       <h3 className="text-[20px]">Sets ({data?.length || 0})</h3>
-      <div className="text-customColor18 mt-[4px]">
+      <div className="text-muted-foreground mt-[4px]">
         Manage your content sets for easy reuse across posts.
       </div>
-      <div className="my-[16px] mt-[16px] bg-sixth border-fifth items-center border rounded-[4px] p-[24px] flex gap-[24px]">
+      <div className="my-[16px] mt-[16px] bg-muted border-border items-center border rounded-[4px] p-[24px] flex gap-[24px]">
         <div className="flex flex-col w-full">
           {!!data?.length && (
             <div className="grid grid-cols-[2fr,1fr,1fr] w-full gap-y-[10px]">
@@ -200,7 +200,7 @@ export const Sets: FC = () => {
           <div>
             <Button
               onClick={addSet()}
-              className={clsx((data?.length || 0) > 0 && 'my-[16px]')}
+              className={cn((data?.length || 0) > 0 && 'my-[16px]')}
             >
               Add a set
             </Button>

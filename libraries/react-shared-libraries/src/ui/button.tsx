@@ -10,17 +10,17 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-sdprimary text-sdprimary-foreground hover:bg-sdprimary/80",
+        default: "bg-primary text-primary-foreground hover:bg-primary/80",
         destructive:
           "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
         outline:
-          "border-border bg-card hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-sdinput dark:bg-sdinput/30 dark:hover:bg-sdinput/50",
+          "border-border bg-card hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
         secondary:
-          "bg-sdsecondary text-sdsecondary-foreground hover:bg-sdsecondary/80 aria-expanded:bg-sdsecondary aria-expanded:text-sdsecondary-foreground",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
         ghost:
           "hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50",
         icon: "bg-transparent hover:bg-muted hover:text-foreground dark:hover:bg-muted/50",
-        link: "text-sdprimary underline-offset-4 hover:underline",
+        link: "text-primary underline-offset-4 hover:underline",
         silent: "bg-transparent hover:bg-muted/50 p-1",
       },
       size: {

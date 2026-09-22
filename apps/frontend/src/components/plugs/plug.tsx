@@ -19,7 +19,7 @@ import {
 } from 'react-hook-form';
 import { Input } from '@gitroom/react/form/input';
 import { CopilotTextarea } from '@copilotkit/react-textarea';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { string, object } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Slider } from '@gitroom/react/form/slider';
@@ -46,8 +46,8 @@ export const TextArea: FC<{
         disableBranding={true}
         placeholder={props.placeHolder}
         value={value}
-        className={clsx(
-          '!min-h-40 !max-h-80 p-[24px] overflow-hidden bg-customColor2 outline-none rounded-[4px] border-fifth border'
+        className={cn(
+          '!min-h-40 !max-h-80 p-[24px] overflow-hidden bg-muted outline-none rounded-[4px] border-border border'
         )}
         onChange={(e) => {
           onChange({
@@ -145,7 +145,7 @@ export const PlugPop: FC<{
                   <Input
                     name={field.name}
                     label={field.description}
-                    className="w-full mt-[8px] p-[8px] border border-tableBorder rounded-md text-black"
+                    className="w-full mt-[8px] p-[8px] border border-border rounded-md text-black"
                     placeholder={field.placeholder}
                     type={field.type}
                   />
@@ -198,7 +198,7 @@ export const PlugItem: FC<{
     <div
       onClick={() => addPlug(data)}
       key={plug.title}
-      className="w-full h-[300px] rounded-[8px] bg-newTableHeader hover:bg-newTableBorder"
+      className="w-full h-[300px] rounded-[8px] bg-muted hover:bg-border"
     >
       <div key={plug.title} className="p-[16px] h-full flex flex-col flex-1">
         <div className="flex">

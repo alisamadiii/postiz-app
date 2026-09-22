@@ -113,7 +113,7 @@ export const StatisticsModal: FC<{
                   const color = colorVariants[index % colorVariants.length];
                   return (
                     <div key={`analytics-${index}`} className="group">
-                      <div className="flex flex-col h-full bg-newTableHeader border border-newTableBorder rounded-[12px] overflow-hidden transition-all duration-200 hover:border-[#612bd3]/50">
+                      <div className="flex flex-col h-full bg-muted border border-border rounded-[12px] overflow-hidden transition-all duration-200 hover:border-[#612bd3]/50">
                         <div className="flex items-center justify-between px-[16px] pt-[14px] pb-[8px]">
                           <div className="flex items-center gap-[10px]">
                             <div
@@ -123,7 +123,7 @@ export const StatisticsModal: FC<{
                                 color === 'blue' ? 'bg-[#1d9bf0]' : ''
                               }`}
                             />
-                            <span className="text-[15px] font-medium text-newTableText">
+                            <span className="text-[15px] font-medium text-muted-foreground">
                               {p.label}
                             </span>
                           </div>
@@ -157,24 +157,24 @@ export const StatisticsModal: FC<{
               </div>
             ) : (
               <div className="grid grid-cols-3">
-                <div className="bg-forth p-[4px] rounded-tl-lg">
+                <div className="bg-primary p-[4px] rounded-tl-lg">
                   {t('short_link', 'Short Link')}
                 </div>
-                <div className="bg-forth p-[4px]">
+                <div className="bg-primary p-[4px]">
                   {t('original_link', 'Original Link')}
                 </div>
-                <div className="bg-forth p-[4px] rounded-tr-lg">
+                <div className="bg-primary p-[4px] rounded-tr-lg">
                   {t('clicks', 'Clicks')}
                 </div>
                 {statisticsData?.clicks?.map((p: any) => (
                   <Fragment key={p.short}>
-                    <div className="p-[4px] py-[10px] bg-customColor6">
+                    <div className="p-[4px] py-[10px] bg-border">
                       {p.short}
                     </div>
-                    <div className="p-[4px] py-[10px] bg-customColor6">
+                    <div className="p-[4px] py-[10px] bg-border">
                       {p.original}
                     </div>
-                    <div className="p-[4px] py-[10px] bg-customColor6">
+                    <div className="p-[4px] py-[10px] bg-border">
                       {p.clicks}
                     </div>
                   </Fragment>

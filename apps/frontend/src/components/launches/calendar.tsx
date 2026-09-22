@@ -31,7 +31,7 @@ import 'dayjs/locale/tr';
 import 'dayjs/locale/vi';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import { useModals } from '@gitroom/frontend/components/layout/new-modal';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { ExistingDataContextProvider } from '@gitroom/frontend/components/launches/helpers/use.existing.data';
 import { useDrag, useDrop } from 'react-dnd';
@@ -132,7 +132,7 @@ const usePostActions = (onMutate?: () => void) => {
         askClose: true,
         fullScreen: true,
         classNames: {
-          modal: 'w-[100%] max-w-[1400px] text-textColor',
+          modal: 'w-[100%] max-w-[1400px] text-foreground',
         },
         children: (
           <ExistingData value={data}>
@@ -301,7 +301,7 @@ export const DayView = () => {
 
   return (
     <div className="flex flex-col gap-[10px] flex-1 relative">
-      <div className="absolute start-0 top-0 w-full h-full flex flex-col overflow-auto scrollbar scrollbar-thumb-fifth scrollbar-track-newBgColor">
+      <div className="absolute start-0 top-0 w-full h-full flex flex-col overflow-auto scrollbar scrollbar-thumb-border scrollbar-track-background">
         {options.map((option) => (
           <Fragment key={option[0].time}>
             <div className="text-center text-[14px] min-h-[21px]">
@@ -359,27 +359,27 @@ export const WeekView = () => {
   }, [i18next.resolvedLanguage, startDate]);
 
   return (
-    <div className="flex flex-col text-textColor flex-1">
+    <div className="flex flex-col text-foreground flex-1">
       <div className="flex-1 relative">
-        <div className="grid [grid-template-columns:136px_repeat(7,_minmax(0,_1fr))] gap-[4px] rounded-[10px] absolute h-full start-0 top-0 w-full overflow-auto scrollbar scrollbar-thumb-fifth scrollbar-track-newBgColor">
-          <div className="z-10 bg-newTableHeader flex justify-center items-center flex-col h-[62px] rounded-[8px] sticky top-0"></div>
+        <div className="grid [grid-template-columns:136px_repeat(7,_minmax(0,_1fr))] gap-[4px] rounded-[10px] absolute h-full start-0 top-0 w-full overflow-auto scrollbar scrollbar-thumb-border scrollbar-track-background">
+          <div className="z-10 bg-muted flex justify-center items-center flex-col h-[62px] rounded-[8px] sticky top-0"></div>
           {localizedDays.map((day, index) => (
             <div
               key={day.name}
-              className="p-2 text-center bg-newTableHeader flex justify-center items-center flex-col h-[62px] rounded-[8px] sticky top-0 z-[20]"
+              className="p-2 text-center bg-muted flex justify-center items-center flex-col h-[62px] rounded-[8px] sticky top-0 z-[20]"
             >
-              <div className="text-[14px] font-[500] text-newTableText">
+              <div className="text-[14px] font-[500] text-muted-foreground">
                 {day.name}
               </div>
               <div
-                className={clsx(
+                className={cn(
                   'text-[14px] font-[600] flex items-center justify-center gap-[6px]',
                   day.day === newDayjs().format('L') &&
-                    'text-newTableTextFocused'
+                    'text-primary'
                 )}
               >
                 {day.day === newDayjs().format('L') && (
-                  <div className="w-[6px] h-[6px] bg-newTableTextFocused rounded-full" />
+                  <div className="w-[6px] h-[6px] bg-primary rounded-full" />
                 )}
                 {day.day}
               </div>
@@ -387,7 +387,7 @@ export const WeekView = () => {
           ))}
           {hours.map((hour) => (
             <Fragment key={hour}>
-              <div className="p-2 pe-4 text-center items-center justify-center flex text-[14px] text-newTableText">
+              <div className="p-2 pe-4 text-center items-center justify-center flex text-[14px] text-muted-foreground">
                 {convertTimeFormatBasedOnLocality(hour)}
               </div>
               {localizedDays.map((day, indexDay) => (
@@ -458,13 +458,13 @@ export const MonthView = () => {
   }, [startDate]);
 
   return (
-    <div className="flex flex-col text-textColor flex-1">
+    <div className="flex flex-col text-foreground flex-1">
       <div className="flex-1 flex relative">
-        <div className="grid grid-cols-7 grid-rows-[62px_auto] gap-[4px] rounded-[10px] absolute start-0 top-0 overflow-auto w-full h-full scrollbar scrollbar-thumb-tableBorder scrollbar-track-secondary">
+        <div className="grid grid-cols-7 grid-rows-[62px_auto] gap-[4px] rounded-[10px] absolute start-0 top-0 overflow-auto w-full h-full scrollbar scrollbar-thumb-border scrollbar-track-secondary">
           {localizedDays.map((day) => (
             <div
               key={day}
-              className="z-[20] p-2 bg-newTableHeader flex justify-center items-center flex-col h-[62px] rounded-[8px] sticky top-0"
+              className="z-[20] p-2 bg-muted flex justify-center items-center flex-col h-[62px] rounded-[8px] sticky top-0"
             >
               <div>{day}</div>
             </div>
@@ -517,7 +517,7 @@ export const ListView = () => {
   if (loading) {
     return (
       <div className="flex flex-col flex-1 items-center justify-center">
-        <div className="text-textColor">{t('loading', 'Loading...')}</div>
+        <div className="text-foreground">{t('loading', 'Loading...')}</div>
       </div>
     );
   }
@@ -525,17 +525,17 @@ export const ListView = () => {
   if (listPosts.length === 0) {
     return (
       <div className="flex flex-col flex-1 items-center justify-center">
-        <div className="text-textColor text-[16px]">{emptyMessage}</div>
+        <div className="text-foreground text-[16px]">{emptyMessage}</div>
       </div>
     );
   }
 
   return (
     <div className="flex flex-col gap-[10px] flex-1 relative">
-      <div className="absolute start-0 top-0 w-full h-full flex flex-col overflow-auto scrollbar scrollbar-thumb-fifth scrollbar-track-newBgColor">
+      <div className="absolute start-0 top-0 w-full h-full flex flex-col overflow-auto scrollbar scrollbar-thumb-border scrollbar-track-background">
         {groupedPosts.map(([dateKey, datePosts]) => (
           <Fragment key={dateKey}>
-            <div className="text-center text-[14px] min-h-[21px] text-textColor font-[500] mt-[10px]">
+            <div className="text-center text-[14px] min-h-[21px] text-foreground font-[500] mt-[10px]">
               {newDayjs(dateKey).format(isUSCitizen() ? 'dddd, MMMM D, YYYY' : 'dddd, D MMMM YYYY')}
             </div>
             <div className="flex flex-col gap-[10px] mb-[20px] px-[10px]">
@@ -796,7 +796,7 @@ export const CalendarColumn: FC<{
       askClose: true,
       fullScreen: true,
       classNames: {
-        modal: 'w-[100%] max-w-[1400px] text-textColor',
+        modal: 'w-[100%] max-w-[1400px] text-foreground',
       },
       children: (
         <AddEditModal
@@ -835,42 +835,42 @@ export const CalendarColumn: FC<{
   const addProvider = useAddProvider();
   return (
     <div
-      className={clsx(
+      className={cn(
         'flex flex-col w-full min-h-full relative',
         isBeforeNow && 'repeated-strip',
         loading && 'animate-pulse',
         isBeforeNow
           ? 'cursor-not-allowed'
-          : 'border border-newTextColor/5 rounded-[8px]'
+          : 'border border-foreground/5 rounded-[8px]'
       )}
       ref={drop as any}
     >
       {display === 'month' && (
-        <div className={clsx('pt-[6px] text-[14px]')}>{getDate.date()}</div>
+        <div className={cn('pt-[6px] text-[14px]')}>{getDate.date()}</div>
       )}
       <div
-        className={clsx(
+        className={cn(
           'relative flex flex-col flex-1 text-white rounded-[8px] min-h-[70px]',
           canDrop && 'border border-[#612BD3]'
         )}
       >
         <div
-          className={clsx(
-            'flex-col text-[12px] pointer w-full flex scrollbar scrollbar-thumb-tableBorder scrollbar-track-secondary',
+          className={cn(
+            'flex-col text-[12px] pointer w-full flex scrollbar scrollbar-thumb-border scrollbar-track-secondary',
             isBeforeNow ? 'flex-1' : 'cursor-pointer',
             isBeforeNow && postList.length === 0 && 'col-calendar'
           )}
         >
           {loading && (
             <div className="h-full w-full p-[5px] animate-pulse absolute left-0 top-0 z-[50]">
-              <div className="h-full w-full bg-newSettings rounded-[10px]" />
+              <div className="h-full w-full bg-card rounded-[10px]" />
             </div>
           )}
           {list.map((post) => (
             <div
               key={post.id}
-              className={clsx(
-                'text-textColor p-[2.5px] relative flex flex-col justify-center items-center'
+              className={cn(
+                'text-foreground p-[2.5px] relative flex flex-col justify-center items-center'
               )}
             >
               <div className="relative w-full flex flex-col items-center p-[2.5px]">
@@ -893,7 +893,7 @@ export const CalendarColumn: FC<{
           ))}
           {!showAll && postList.length > 3 && (
             <div
-              className="text-center hover:underline py-[5px] text-textColor"
+              className="text-center hover:underline py-[5px] text-foreground"
               onClick={showAllFunc}
             >
               {t('show_more', '+ Show more')} ({postList.length - 3})
@@ -914,7 +914,7 @@ export const CalendarColumn: FC<{
             onClick={integrations.length ? addModal : addProvider}
           >
             <div
-              className={clsx(
+              className={cn(
                 display === ('month' as any)
                   ? 'flex-1 min-h-[40px] w-full'
                   : !postList.length
@@ -925,18 +925,18 @@ export const CalendarColumn: FC<{
             >
               {display !== 'day' && (
                 <div
-                  className={clsx(
+                  className={cn(
                     'group hover:before:h-[30px] w-full h-full rounded-[10px] flex justify-center items-center text-white'
                   )}
                 >
                   <div
-                    className={`group-hover:before:content-["+"] pb-[5px] flex justify-center items-center rounded-[8px] transition-all group-hover:bg-btnPrimary w-full h-full max-w-[40px] max-h-[40px]`}
+                    className={`group-hover:before:content-["+"] pb-[5px] flex justify-center items-center rounded-[8px] transition-all group-hover:bg-primary w-full h-full max-w-[40px] max-h-[40px]`}
                   />
                 </div>
               )}
               {display === 'day' && (
                 <div
-                  className={`w-full h-full rounded-[10px] py-[10px] flex-wrap hover:border hover:border-seventh flex justify-center items-center gap-[20px] opacity-30 grayscale hover:grayscale-0 hover:opacity-100`}
+                  className={`w-full h-full rounded-[10px] py-[10px] flex-wrap hover:border hover:border-primary flex justify-center items-center gap-[20px] opacity-30 grayscale hover:grayscale-0 hover:opacity-100`}
                 >
                   {integrations.map((selectedIntegrations) => (
                     <div
@@ -944,7 +944,7 @@ export const CalendarColumn: FC<{
                       key={selectedIntegrations.identifier}
                     >
                       <div
-                        className={clsx(
+                        className={cn(
                           'relative w-[34px] h-[34px] rounded-[8px] flex justify-center items-center filter transition-all duration-500'
                         )}
                       >
@@ -966,7 +966,7 @@ export const CalendarColumn: FC<{
                         ) : (
                           <SafeImage
                             src={`/icons/platforms/${selectedIntegrations.identifier}.png`}
-                            className="rounded-[8px] absolute z-10 -bottom-[5px] -end-[5px] border border-fifth"
+                            className="rounded-[8px] absolute z-10 -bottom-[5px] -end-[5px] border border-border"
                             alt={selectedIntegrations.identifier}
                             width={20}
                             height={20}
@@ -1046,7 +1046,7 @@ const CalendarItem: FC<{
     <div
       // @ts-ignore
       ref={dragRef}
-      className={clsx(
+      className={cn(
         'w-full flex h-full flex-1 flex-col group',
         'relative',
         state === 'ERROR' && 'rounded-[10px] ring-2 ring-red-500'
@@ -1073,15 +1073,15 @@ const CalendarItem: FC<{
         </div>
       )}
       <div
-        className={clsx(
-          'text-white text-[11px] max-h-[24px] h-[24px] min-h-[24px] w-full rounded-tr-[10px] rounded-tl-[10px] flex items-center justify-center gap-[10px] px-[5px] bg-btnPrimary'
+        className={cn(
+          'text-white text-[11px] max-h-[24px] h-[24px] min-h-[24px] w-full rounded-tr-[10px] rounded-tl-[10px] flex items-center justify-center gap-[10px] px-[5px] bg-primary'
         )}
         style={{
           backgroundColor: post?.tags?.[0]?.tag?.color,
         }}
       >
         <div
-          className={clsx(
+          className={cn(
             post?.tags?.[0]?.tag?.color ? 'mix-blend-difference' : '',
             'group-hover:hidden cursor-pointer'
           )}
@@ -1090,7 +1090,7 @@ const CalendarItem: FC<{
         </div>
         {copyDebugJson && (
           <div
-            className={clsx(
+            className={cn(
               'hidden group-hover:block hover:underline cursor-pointer',
               post?.tags?.[0]?.tag?.color && 'mix-blend-difference'
             )}
@@ -1100,7 +1100,7 @@ const CalendarItem: FC<{
           </div>
         )}
         <div
-          className={clsx(
+          className={cn(
             'hidden group-hover:block hover:underline cursor-pointer',
             post?.tags?.[0]?.tag?.color && 'mix-blend-difference'
           )}
@@ -1109,7 +1109,7 @@ const CalendarItem: FC<{
           <Duplicate />
         </div>
         <div
-          className={clsx(
+          className={cn(
             'hidden group-hover:block hover:underline cursor-pointer',
             post?.tags?.[0]?.tag?.color && 'mix-blend-difference'
           )}
@@ -1121,7 +1121,7 @@ const CalendarItem: FC<{
           <></>
         ) : post.releaseId === 'missing' && missingRelease ? (
           <div
-            className={clsx(
+            className={cn(
               'hidden group-hover:block hover:underline cursor-pointer',
               post?.tags?.[0]?.tag?.color && 'mix-blend-difference'
             )}
@@ -1131,7 +1131,7 @@ const CalendarItem: FC<{
           </div>
         ) : post.releaseId !== 'missing' ? (
           <div
-            className={clsx(
+            className={cn(
               'hidden group-hover:block hover:underline cursor-pointer',
               post?.tags?.[0]?.tag?.color && 'mix-blend-difference'
             )}
@@ -1143,7 +1143,7 @@ const CalendarItem: FC<{
           <></>
         )}{' '}
         <div
-          className={clsx(
+          className={cn(
             'hidden group-hover:block hover:underline cursor-pointer',
             post?.tags?.[0]?.tag?.color && 'mix-blend-difference'
           )}
@@ -1154,19 +1154,19 @@ const CalendarItem: FC<{
       </div>
       <div
         onClick={editPost}
-        className={clsx(
-          'gap-[5px] w-full flex h-full flex-1 rounded-br-[10px] rounded-bl-[10px] p-[8px] text-[14px] bg-newColColor',
+        className={cn(
+          'gap-[5px] w-full flex h-full flex-1 rounded-br-[10px] rounded-bl-[10px] p-[8px] text-[14px] bg-muted',
           'relative',
           isBeforeNow && '!grayscale'
         )}
       >
-        <div className={clsx('relative min-w-[20px]')}>
+        <div className={cn('relative min-w-[20px]')}>
           <img
             className="w-[20px] h-[20px] rounded-[8px]"
             src={post.integration.picture! || '/no-picture.jpg'}
           />
           <img
-            className="w-[12px] h-[12px] rounded-[8px] absolute z-10 top-[10px] end-0 border border-fifth"
+            className="w-[12px] h-[12px] rounded-[8px] absolute z-10 top-[10px] end-0 border border-border"
             src={`/icons/platforms/${post.integration?.providerIdentifier}.png`}
           />
         </div>
@@ -1182,7 +1182,7 @@ const CalendarItem: FC<{
             </div>
         </div>
         {showTime && (
-          <div className="text-textColor/50 text-[12px] whitespace-nowrap flex items-center">
+          <div className="text-foreground/50 text-[12px] whitespace-nowrap flex items-center">
             {newDayjs(post.publishDate).local().format(isUSCitizen() ? 'hh:mm A' : 'HH:mm')}
           </div>
         )}
@@ -1226,7 +1226,7 @@ const DebugJsonModal: FC<{ post: any }> = ({ post }) => {
 
   return (
     <div className="flex flex-col gap-[16px] p-[16px]">
-      <div className="text-textColor text-[14px]">
+      <div className="text-foreground text-[14px]">
         {t('debug_choose_copy', 'Choose what you want to copy')}
       </div>
       <div className="flex gap-[10px]">
@@ -1357,7 +1357,7 @@ export const SetSelectionModal: FC<{
           <div
             key={set.id}
             onClick={() => onSelect(set)}
-            className="p-3 border border-tableBorder rounded-lg cursor-pointer hover:transition-colors"
+            className="p-3 border border-border rounded-lg cursor-pointer hover:transition-colors"
           >
             <div className="font-medium">{set.name}</div>
             {set.description && (
@@ -1369,10 +1369,10 @@ export const SetSelectionModal: FC<{
         ))}
       </div>
 
-      <div className="flex gap-2 pt-2 border-t border-tableBorder">
+      <div className="flex gap-2 pt-2 border-t border-border">
         <button
           onClick={onContinueWithoutSet}
-          className="flex-1 px-4 py-2 text-textColor rounded-lg hover:transition-colors"
+          className="flex-1 px-4 py-2 text-foreground rounded-lg hover:transition-colors"
         >
           {t('continue_without_set', 'Continue without set')}
         </button>

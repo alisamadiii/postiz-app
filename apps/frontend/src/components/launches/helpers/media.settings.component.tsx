@@ -237,14 +237,14 @@ export const CreateThumbnail: FC<{
               step="0.1"
               value={currentTime}
               onChange={handleSeek}
-              className="w-full h-2 bg-fifth rounded-lg appearance-none cursor-pointer slider"
+              className="w-full h-2 bg-border rounded-lg appearance-none cursor-pointer slider"
               style={{
                 background: `linear-gradient(to right, #4f46e5 0%, #4f46e5 ${
                   (currentTime / duration) * 100
                 }%, #374151 ${(currentTime / duration) * 100}%, #374151 100%)`,
               }}
             />
-            <div className="flex justify-between text-sm text-textColor">
+            <div className="flex justify-between text-sm text-foreground">
               <span>{formatTime(currentTime)}</span>
               <span>{formatTime(duration)}</span>
             </div>
@@ -254,7 +254,7 @@ export const CreateThumbnail: FC<{
             <button
               onClick={captureFrame}
               disabled={isCapturing}
-              className="bg-forth text-white px-6 py-2 rounded-lg hover:bg-opacity-80 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-opacity-80 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isCapturing ? 'Capturing...' : 'Select This Frame'}
             </button>
@@ -365,7 +365,7 @@ export const MediaComponentInner: FC<{
   return (
     <div className="mt-[10px] flex flex-col gap-[20px]">
       <div className="flex flex-col space-y-2">
-        <label className="text-sm text-textColor font-medium">
+        <label className="text-sm text-foreground font-medium">
           Alt Text (for accessibility)
         </label>
         <input
@@ -373,7 +373,7 @@ export const MediaComponentInner: FC<{
           value={altText}
           onChange={(e) => setAltText(e.target.value)}
           placeholder="Describe the image/video content..."
-          className="w-full px-3 py-2 bg-fifth border border-tableBorder rounded-lg text-textColor placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-forth focus:border-transparent"
+          className="w-full px-3 py-2 bg-border border border-border rounded-lg text-foreground placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
         />
       </div>
       {hasExtension(media?.path, 'mp4') && (
@@ -385,13 +385,13 @@ export const MediaComponentInner: FC<{
                 {/* Show existing thumbnail if it exists */}
                 {(newThumbnail || thumbnail) && (
                   <div className="flex flex-col space-y-2">
-                    <span className="text-sm text-textColor">
+                    <span className="text-sm text-foreground">
                       Current Thumbnail:
                     </span>
                     <img
                       src={newThumbnail || thumbnail}
                       alt="Current thumbnail"
-                      className="max-w-full max-h-[500px] object-contain rounded-lg border border-tableBorder"
+                      className="max-w-full max-h-[500px] object-contain rounded-lg border border-border"
                     />
                   </div>
                 )}
@@ -401,7 +401,7 @@ export const MediaComponentInner: FC<{
                   <button
                     disabled={loading}
                     onClick={() => setIsEditingThumbnail(true)}
-                    className="bg-third text-textColor px-6 py-2 rounded-lg hover:bg-opacity-80 transition-all flex-1 border border-tableBorder"
+                    className="bg-secondary text-foreground px-6 py-2 rounded-lg hover:bg-opacity-80 transition-all flex-1 border border-border"
                   >
                     {media.thumbnail || newThumbnail
                       ? 'Edit Thumbnail'
@@ -427,7 +427,7 @@ export const MediaComponentInner: FC<{
                 <div className="flex justify-start">
                   <button
                     onClick={() => setIsEditingThumbnail(false)}
-                    className="text-textColor hover:text-white transition-colors flex items-center space-x-2"
+                    className="text-foreground hover:text-white transition-colors flex items-center space-x-2"
                   >
                     <svg
                       width="16"
@@ -483,7 +483,7 @@ export const MediaComponentInner: FC<{
           </button>
           <button
             onClick={save}
-            className="flex-1 bg-forth text-white px-6 py-2 rounded-lg hover:bg-opacity-80 transition-all"
+            className="flex-1 bg-primary text-white px-6 py-2 rounded-lg hover:bg-opacity-80 transition-all"
           >
             Save Changes
           </button>

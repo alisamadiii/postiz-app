@@ -223,16 +223,16 @@ const PriceBreakdown: FC = () => {
       <h4 className="mb-[16px] text-[24px] font-[700]">
         {t('billing_order_summary', 'Order Summary')}
       </h4>
-      <div className="rounded-[12px] border border-newColColor p-[20px] flex flex-col gap-[12px]">
+      <div className="rounded-[12px] border border-muted p-[20px] flex flex-col gap-[12px]">
         {/* Plan */}
         <div className="flex justify-between items-center">
           <div className="flex flex-col">
-            <span className="font-[600] text-textColor">{planName}</span>
-            <span className="text-[13px] text-textColor/60">
+            <span className="font-[600] text-foreground">{planName}</span>
+            <span className="text-[13px] text-foreground/60">
               {billingInterval}
             </span>
           </div>
-          <span className="font-[500] text-textColor">{unitAmount}</span>
+          <span className="font-[500] text-foreground">{unitAmount}</span>
         </div>
 
         {/* Discount */}
@@ -268,21 +268,21 @@ const PriceBreakdown: FC = () => {
         )}
 
         {/* Divider */}
-        <div className="border-t border-newColColor my-[4px]" />
+        <div className="border-t border-muted my-[4px]" />
 
         {/* Due today */}
         <div className="flex justify-between items-center">
-          <span className="font-[600] text-textColor">
+          <span className="font-[600] text-foreground">
             {t('billing_due_today', 'Due today')}
           </span>
-          <span className="font-[700] text-[18px] text-textColor">
+          <span className="font-[700] text-[18px] text-foreground">
             {dueToday}
           </span>
         </div>
 
         {/* Next billing info */}
         {nextBillingTotal && nextBillingDate && (
-          <div className="flex justify-between items-center text-[13px] text-textColor/60">
+          <div className="flex justify-between items-center text-[13px] text-foreground/60">
             <span>
               {t('billing_then', 'Then')} {nextBillingTotal}{' '}
               {t('billing_on', 'on')} {nextBillingDate}
@@ -393,7 +393,7 @@ const AppliedCouponDisplay: FC<{
               <polyline points="22 4 12 14.01 9 11.01" />
             </svg>
             <span className="font-[600] text-[#FC69FF]">{appliedCode}</span>
-            <span className="text-[14px] text-textColor/70">
+            <span className="text-[14px] text-foreground/70">
               {t('billing_discount_applied', 'applied')}
               {discountDisplay && ` (${discountDisplay})`}
             </span>
@@ -403,13 +403,13 @@ const AppliedCouponDisplay: FC<{
           type="button"
           onClick={onRemove}
           disabled={isApplying}
-          className="text-[14px] text-textColor/50 hover:text-textColor font-[500] disabled:opacity-50"
+          className="text-[14px] text-foreground/50 hover:text-foreground font-[500] disabled:opacity-50"
         >
           {t('billing_remove', 'Remove')}
         </button>
       </div>
       {expirationDate && (
-        <p className="text-[13px] text-textColor/50 flex items-center gap-[6px]">
+        <p className="text-[13px] text-foreground/50 flex items-center gap-[6px]">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="14"
@@ -525,7 +525,7 @@ export const CouponInput: FC<{ autoApplyCoupon?: string }> = ({
         <button
           type="button"
           onClick={() => setShowInput(true)}
-          className="text-[16px] text-textColor/60 hover:text-textColor font-[500] flex items-center gap-[8px] transition-colors"
+          className="text-[16px] text-foreground/60 hover:text-foreground font-[500] flex items-center gap-[8px] transition-colors"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -550,7 +550,7 @@ export const CouponInput: FC<{ autoApplyCoupon?: string }> = ({
   return (
     <div className="mt-[40px]">
       <div className="flex items-center gap-[12px] mb-[12px]">
-        <h4 className="text-[18px] font-[600] text-textColor">
+        <h4 className="text-[18px] font-[600] text-foreground">
           {t('billing_discount_coupon', 'Discount Coupon')}
         </h4>
         <button
@@ -559,7 +559,7 @@ export const CouponInput: FC<{ autoApplyCoupon?: string }> = ({
             setShowInput(false);
             setCouponCode('');
           }}
-          className="text-[14px] text-textColor/50 hover:text-textColor transition-colors"
+          className="text-[14px] text-foreground/50 hover:text-foreground transition-colors"
         >
           {t('billing_cancel', 'Cancel')}
         </button>
@@ -572,7 +572,7 @@ export const CouponInput: FC<{ autoApplyCoupon?: string }> = ({
           placeholder={t('billing_enter_coupon_code', 'Enter coupon code')}
           disabled={isApplying}
           autoFocus
-          className="flex-1 h-[44px] px-[16px] rounded-[8px] border border-newColColor bg-newBgColor text-textColor placeholder:text-textColor/50 focus:outline-none focus:border-boxFocused disabled:opacity-50"
+          className="flex-1 h-[44px] px-[16px] rounded-[8px] border border-muted bg-background text-foreground placeholder:text-foreground/50 focus:outline-none focus:border-accent disabled:opacity-50"
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               e.preventDefault();
@@ -588,7 +588,7 @@ export const CouponInput: FC<{ autoApplyCoupon?: string }> = ({
           type="button"
           onClick={() => handleApplyCoupon()}
           disabled={isApplying || !couponCode.trim()}
-          className="h-[44px] px-[24px] rounded-[8px] bg-boxFocused text-textItemFocused font-[600] hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+          className="h-[44px] px-[24px] rounded-[8px] bg-accent text-foreground font-[600] hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
         >
           {isApplying
             ? t('billing_applying', 'Applying...')
@@ -607,23 +607,23 @@ const SubmitBar: FC<{ loading: boolean }> = ({ loading }) => {
   }
 
   return (
-    <div className="animate-fadeIn h-[92px] mobile:h-auto fixed bottom-0 w-full px-[12px] pb-[12px] left-0 bg-newBgColor z-[100]">
-      <div className="w-full h-full border-t border-newColColor bg-newBgColorInner px-[80px] tablet:px-[33px] mobile:!px-[16px] flex mobile:flex-col gap-[32px] mobile:gap-[16px] justify-end items-center font-[400] text-[14px] text-[#A3A3A3] mobile:py-[16px]">
+    <div className="animate-fadeIn h-[92px] mobile:h-auto fixed bottom-0 w-full px-[12px] pb-[12px] left-0 bg-background z-[100]">
+      <div className="w-full h-full border-t border-muted bg-card px-[80px] tablet:px-[33px] mobile:!px-[16px] flex mobile:flex-col gap-[32px] mobile:gap-[16px] justify-end items-center font-[400] text-[14px] text-[#A3A3A3] mobile:py-[16px]">
         {checkout.checkout.recurring?.trial?.trialEnd ? (
           <div>
             {t('billing_your_7_day_trial_is', 'Your 7-day trial is')}{' '}
-            <span className="text-textColor font-[600]">
+            <span className="text-foreground font-[600]">
               {t('billing_100_percent_free', '100% free')}
             </span>{' '}
             {t('billing_ending', 'ending')}{' '}
             <br className="hidden mobile:block" />
-            <span className="text-textColor font-[600]">
+            <span className="text-foreground font-[600]">
               {dayjs(
                 checkout.checkout.recurring?.trial?.trialEnd * 1000
               ).format('MMMM D, YYYY')}{' '}
               —{' '}
             </span>
-            <span className="text-textColor font-[600]">
+            <span className="text-foreground font-[600]">
               {t(
                 'billing_cancel_anytime_short',
                 'Cancel anytime from settings'

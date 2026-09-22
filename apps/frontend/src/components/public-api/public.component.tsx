@@ -11,7 +11,7 @@ import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { useDecisionModal } from '@gitroom/frontend/components/layout/new-modal';
 import { DeveloperComponent } from '@gitroom/frontend/components/developer/developer.component';
 import { McpClientIcon } from '@gitroom/frontend/components/public-api/mcp.client.icons';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 
 // Remote clients can't set headers, they get a URL to paste (hint = where)
 export const remoteMcpClients = {
@@ -275,7 +275,7 @@ export const CopyButton = ({
         copy(text);
         toaster.show(`${label} copied to clipboard`, 'success');
       }}
-      className="cursor-pointer px-[16px] h-[36px] bg-btnSimple hover:bg-boxHover transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
+      className="cursor-pointer px-[16px] h-[36px] bg-secondary hover:bg-accent transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
     >
       <svg
         width="14"
@@ -328,13 +328,13 @@ const McpSection = ({
         );
 
   return (
-    <div className="bg-newBgColorInnerInner rounded-[12px] border border-newBorder overflow-hidden">
-      <div className="bg-newBgColorInner px-[20px] py-[14px] border-b border-newBorder flex items-start justify-between gap-[12px]">
+    <div className="bg-newBgColorInnerInner rounded-[12px] border border-border overflow-hidden">
+      <div className="bg-card px-[20px] py-[14px] border-b border-border flex items-start justify-between gap-[12px]">
         <div>
           <div className="text-[15px] font-[600]">
             {t('mcp_client_configuration', 'MCP Client Configuration')}
           </div>
-          <div className="text-[13px] text-customColor18 mt-[2px]">
+          <div className="text-[13px] text-muted-foreground mt-[2px]">
             {t(
               'connect_your_mcp_client_to_postiz_to_schedule_your_posts_faster',
               'Connect Postiz MCP server to your client (Http streaming) to schedule your posts faster.'
@@ -375,7 +375,7 @@ const McpSection = ({
       <div className="p-[20px] flex flex-col gap-[16px]">
         {!chatOnly && (
           <div className="flex flex-col gap-[6px]">
-            <div className="text-[13px] font-[600] text-customColor18">
+            <div className="text-[13px] font-[600] text-muted-foreground">
               {t('auth_method', 'Authentication')}
             </div>
             <div className="flex gap-[6px]">
@@ -383,11 +383,11 @@ const McpSection = ({
                 <button
                   key={m}
                   type="button"
-                  className={clsx(
+                  className={cn(
                     'cursor-pointer px-[14px] h-[36px] text-[13px] font-[500] rounded-[8px] transition-colors',
                     auth === m
                       ? 'bg-[#612BD3] text-white'
-                      : 'bg-btnSimple text-customColor18 hover:bg-boxHover hover:text-textColor'
+                      : 'bg-secondary text-muted-foreground hover:bg-accent hover:text-foreground'
                   )}
                   onClick={() => setAuth(m)}
                 >
@@ -400,7 +400,7 @@ const McpSection = ({
           </div>
         )}
         <div className="flex flex-col gap-[6px]">
-          <div className="text-[13px] font-[600] text-customColor18">
+          <div className="text-[13px] font-[600] text-muted-foreground">
             {t('mcp_client', 'Client')}
           </div>
           <div className="flex flex-wrap gap-[6px]">
@@ -412,11 +412,11 @@ const McpSection = ({
               <button
                 key={client}
                 type="button"
-                className={clsx(
+                className={cn(
                   'cursor-pointer px-[14px] h-[36px] text-[13px] font-[500] rounded-[8px] transition-colors flex items-center gap-[8px]',
                   activeClient === client
                     ? 'bg-[#612BD3] text-white'
-                    : 'bg-btnSimple text-customColor18 hover:bg-boxHover hover:text-textColor'
+                    : 'bg-secondary text-muted-foreground hover:bg-accent hover:text-foreground'
                 )}
                 onClick={() =>
                   setActiveClient(client as AnyMcpClient)
@@ -429,7 +429,7 @@ const McpSection = ({
           </div>
         </div>
         <div className="flex flex-col gap-[8px]">
-          <div className="text-[12px] text-customColor18 font-[500]">
+          <div className="text-[12px] text-muted-foreground font-[500]">
             {hint}
             {auth === 'oauth' &&
               !chatOnly &&
@@ -438,7 +438,7 @@ const McpSection = ({
                 'Your agent will open a browser window to sign in to Postiz.'
               )}`}
           </div>
-          <pre className="bg-newBgColorInner border border-newBorder rounded-[8px] p-[16px] text-[13px] whitespace-pre-wrap break-all overflow-x-auto leading-[1.6]">
+          <pre className="bg-card border border-border rounded-[8px] p-[16px] text-[13px] whitespace-pre-wrap break-all overflow-x-auto leading-[1.6]">
             {maskedConfig}
           </pre>
           <div className="flex gap-[8px]">
@@ -446,7 +446,7 @@ const McpSection = ({
               <button
                 type="button"
                 onClick={() => setRevealed(!revealed)}
-                className="cursor-pointer px-[16px] h-[36px] bg-btnSimple hover:bg-boxHover transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
+                className="cursor-pointer px-[16px] h-[36px] bg-secondary hover:bg-accent transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
               >
                 <svg
                   width="14"
@@ -570,13 +570,13 @@ const CliSection = ({ apiKey }: { apiKey: string }) => {
       : steps;
 
   return (
-    <div className="bg-newBgColorInnerInner rounded-[12px] border border-newBorder overflow-hidden">
-      <div className="bg-newBgColorInner px-[20px] py-[14px] border-b border-newBorder flex items-start justify-between gap-[12px]">
+    <div className="bg-newBgColorInnerInner rounded-[12px] border border-border overflow-hidden">
+      <div className="bg-card px-[20px] py-[14px] border-b border-border flex items-start justify-between gap-[12px]">
         <div>
           <div className="text-[15px] font-[600]">
             {t('cli_and_skills', 'CLI & AI Skills')}
           </div>
-          <div className="text-[13px] text-customColor18 mt-[2px]">
+          <div className="text-[13px] text-muted-foreground mt-[2px]">
             {t(
               'cli_description',
               'Use the Postiz CLI to automate posting from your terminal, or install the skill to let your AI agent schedule posts for you.'
@@ -600,11 +600,11 @@ const CliSection = ({ apiKey }: { apiKey: string }) => {
             <button
               key={m}
               type="button"
-              className={clsx(
+              className={cn(
                 'cursor-pointer px-[14px] h-[36px] text-[13px] font-[500] rounded-[8px] transition-colors',
                 mode === m
                   ? 'bg-[#612BD3] text-white'
-                  : 'bg-btnSimple text-customColor18 hover:bg-boxHover hover:text-textColor'
+                  : 'bg-secondary text-muted-foreground hover:bg-accent hover:text-foreground'
               )}
               onClick={() => setMode(m)}
             >
@@ -616,10 +616,10 @@ const CliSection = ({ apiKey }: { apiKey: string }) => {
         </div>
         {displaySteps.map((step, i) => (
           <div key={i} className="flex flex-col gap-[6px]">
-            <div className="text-[13px] font-[600] text-customColor18">
+            <div className="text-[13px] font-[600] text-muted-foreground">
               {i + 1}. {step.label}
             </div>
-            <pre className="bg-newBgColorInner border border-newBorder rounded-[8px] p-[16px] text-[13px] whitespace-pre-wrap break-all overflow-x-auto leading-[1.6]">
+            <pre className="bg-card border border-border rounded-[8px] p-[16px] text-[13px] whitespace-pre-wrap break-all overflow-x-auto leading-[1.6]">
               {step.code}
             </pre>
           </div>
@@ -629,7 +629,7 @@ const CliSection = ({ apiKey }: { apiKey: string }) => {
             <button
               type="button"
               onClick={() => setRevealed(!revealed)}
-              className="cursor-pointer px-[16px] h-[36px] bg-btnSimple hover:bg-boxHover transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
+              className="cursor-pointer px-[16px] h-[36px] bg-secondary hover:bg-accent transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
             >
               <svg
                 width="14"
@@ -705,7 +705,7 @@ const PublicApiContent = () => {
 
   return (
     <div className="flex flex-col gap-[40px]">
-      <div className="text-[14px] text-textColor leading-[1.7]">
+      <div className="text-[14px] text-foreground leading-[1.7]">
         {t(
           'api_auth_note_line1',
           'Use your API Key to automate your own account.'
@@ -726,13 +726,13 @@ const PublicApiContent = () => {
           'and you will receive a pos_ prefixed token that works with the API, MCP, and CLI — just like an API Key.'
         )}
       </div>
-      <div className="bg-newBgColorInnerInner rounded-[12px] border border-newBorder overflow-hidden">
-        <div className="bg-newBgColorInner px-[20px] py-[14px] border-b border-newBorder flex items-start justify-between gap-[12px]">
+      <div className="bg-newBgColorInnerInner rounded-[12px] border border-border overflow-hidden">
+        <div className="bg-card px-[20px] py-[14px] border-b border-border flex items-start justify-between gap-[12px]">
           <div>
             <div className="text-[15px] font-[600]">
               {t('api_key', 'API Key')}
             </div>
-            <div className="text-[13px] text-customColor18 mt-[2px]">
+            <div className="text-[13px] text-muted-foreground mt-[2px]">
               {t(
                 'use_postiz_api_to_integrate_with_your_tools',
                 'Use Postiz API to integrate with your tools.'
@@ -759,7 +759,7 @@ const PublicApiContent = () => {
           </div>
         </div>
         <div className="p-[20px] flex flex-col gap-[16px]">
-          <div className="bg-newBgColorInner border border-newBorder rounded-[8px] px-[16px] h-[44px] flex items-center overflow-hidden">
+          <div className="bg-card border border-border rounded-[8px] px-[16px] h-[44px] flex items-center overflow-hidden">
             <code className="text-[14px] flex-1 truncate">
               {reveal ? (
                 user.publicApi
@@ -777,7 +777,7 @@ const PublicApiContent = () => {
             <button
               type="button"
               onClick={() => setReveal(!reveal)}
-              className="cursor-pointer px-[16px] h-[36px] bg-btnSimple hover:bg-boxHover transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
+              className="cursor-pointer px-[16px] h-[36px] bg-secondary hover:bg-accent transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
             >
               <svg
                 width="14"
@@ -808,7 +808,7 @@ const PublicApiContent = () => {
             <button
               type="button"
               onClick={rotateKey}
-              className="cursor-pointer px-[16px] h-[36px] bg-btnSimple hover:bg-boxHover transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
+              className="cursor-pointer px-[16px] h-[36px] bg-secondary hover:bg-accent transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
             >
               <svg
                 width="14"
@@ -835,7 +835,7 @@ const PublicApiContent = () => {
               onClick={() =>
                 window.open(`${frontEndUrl}/modal/dark/all`, '_blank')
               }
-              className="cursor-pointer px-[16px] h-[36px] bg-btnSimple hover:bg-boxHover transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
+              className="cursor-pointer px-[16px] h-[36px] bg-secondary hover:bg-accent transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
             >
               <svg
                 width="14"
@@ -894,11 +894,11 @@ export const PublicComponent = () => {
           <button
             key={tab}
             type="button"
-            className={clsx(
+            className={cn(
               'cursor-pointer px-[20px] h-[44px] text-[15px] font-[600] rounded-[8px] transition-colors',
               subTab === tab
                 ? 'bg-[#612BD3] text-white'
-                : 'bg-btnSimple text-customColor18 hover:bg-boxHover hover:text-textColor'
+                : 'bg-secondary text-muted-foreground hover:bg-accent hover:text-foreground'
             )}
             onClick={() => setSubTab(tab)}
           >

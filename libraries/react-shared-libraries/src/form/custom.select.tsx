@@ -6,7 +6,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { clsx } from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { useFormContext } from 'react-hook-form';
 import { TranslatedLabel } from '../translation/translated-label';
 
@@ -80,7 +80,7 @@ export const CustomSelect: FC<{
     }
   }, [value]);
   return (
-    <div className={clsx('flex flex-col gap-[6px] relative', className)}>
+    <div className={cn('flex flex-col gap-[6px] relative', className)}>
       {!!label && (
         <div className={`text-[14px]`}>
           <TranslatedLabel
@@ -91,8 +91,8 @@ export const CustomSelect: FC<{
         </div>
       )}
       <div
-        className={clsx(
-          'bg-input h-[44px] border-fifth border rounded-md text-inputText placeholder-inputText items-center justify-center flex'
+        className={cn(
+          'bg-input h-[44px] border-border border rounded-md text-muted-foreground placeholder-muted-foreground items-center justify-center flex'
         )}
         onClick={changeOpen}
       >
@@ -140,16 +140,16 @@ export const CustomSelect: FC<{
       </div>
       {isOpen && (
         <div
-          className={clsx(
+          className={cn(
             label && !removeError && '-mt-[23px]',
-            'z-[100] absolute w-full top-[100%] start-0 flex items-center rounded-bl-[4px] rounded-br-[4px] flex-col bg-fifth gap-[1px] border-l border-r border-b border-fifth overflow-hidden'
+            'z-[100] absolute w-full top-[100%] start-0 flex items-center rounded-bl-[4px] rounded-br-[4px] flex-col bg-border gap-[1px] border-l border-r border-b border-border overflow-hidden'
           )}
         >
           {options.map((option) => (
             <div
               key={option.value}
               onClick={setOption(option)}
-              className="px-[16px] py-[8px] bg-input w-full flex gap-[8px] hover:bg-customColor3 select-none cursor-pointer"
+              className="px-[16px] py-[8px] bg-input w-full flex gap-[8px] hover:bg-card select-none cursor-pointer"
             >
               {!!option.icon && (
                 <div className="flex justify-center items-center">

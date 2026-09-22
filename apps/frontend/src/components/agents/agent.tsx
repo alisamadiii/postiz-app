@@ -8,7 +8,7 @@ import React, {
   useState,
   ReactNode,
 } from 'react';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import useCookie from 'react-use-cookie';
 import useSWR from 'swr';
 import { orderBy } from 'lodash';
@@ -106,19 +106,19 @@ export const AgentList: FC<{ onChange: (arr: any[]) => void }> = ({
 
   return (
     <div
-      className={clsx(
-        'trz bg-newBgColorInner flex flex-col gap-[15px] transition-all relative',
+      className={cn(
+        'trz bg-card flex flex-col gap-[15px] transition-all relative',
         collapseMenu === '1' ? 'group sidebar w-[100px]' : 'w-[260px]'
       )}
     >
-      <div className="absolute top-0 start-0 w-full h-full p-[20px] overflow-auto scrollbar scrollbar-thumb-fifth scrollbar-track-newBgColor">
+      <div className="absolute top-0 start-0 w-full h-full p-[20px] overflow-auto scrollbar scrollbar-thumb-border scrollbar-track-background">
         <div className="flex items-center">
           <h2 className="group-[.sidebar]:hidden flex-1 text-[20px] font-[500] mb-[15px]">
             {t('select_channels', 'Select Channels')}
           </h2>
           <div
             onClick={() => setCollapseMenu(collapseMenu === '1' ? '0' : '1')}
-            className="-mt-3 group-[.sidebar]:rotate-[180deg] group-[.sidebar]:mx-auto text-btnText bg-btnSimple rounded-[6px] w-[24px] h-[24px] flex items-center justify-center cursor-pointer select-none"
+            className="-mt-3 group-[.sidebar]:rotate-[180deg] group-[.sidebar]:mx-auto text-foreground bg-secondary rounded-[6px] w-[24px] h-[24px] flex items-center justify-center cursor-pointer select-none"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -137,18 +137,18 @@ export const AgentList: FC<{ onChange: (arr: any[]) => void }> = ({
             </svg>
           </div>
         </div>
-        <div className={clsx('flex flex-col gap-[15px]')}>
+        <div className={cn('flex flex-col gap-[15px]')}>
           {sortedIntegrations.map((integration, index) => (
             <div
               onClick={setIntegration(integration)}
               key={integration.id}
-              className={clsx(
-                'flex gap-[12px] items-center group/profile justify-center hover:bg-boxHover rounded-e-[8px] hover:opacity-100 cursor-pointer',
+              className={cn(
+                'flex gap-[12px] items-center group/profile justify-center hover:bg-accent rounded-e-[8px] hover:opacity-100 cursor-pointer',
                 !selected.some((p) => p.id === integration.id) && 'opacity-20'
               )}
             >
               <div
-                className={clsx(
+                className={cn(
                   'relative rounded-full flex justify-center items-center gap-[6px]',
                   integration.disabled && 'opacity-50'
                 )}
@@ -174,14 +174,14 @@ export const AgentList: FC<{ onChange: (arr: any[]) => void }> = ({
                 />
                 <SafeImage
                   src={`/icons/platforms/${integration.identifier}.png`}
-                  className="rounded-[8px] absolute z-10 bottom-[5px] -end-[5px] border border-fifth"
+                  className="rounded-[8px] absolute z-10 bottom-[5px] -end-[5px] border border-border"
                   alt={integration.identifier}
                   width={18.41}
                   height={18.41}
                 />
               </div>
               <div
-                className={clsx(
+                className={cn(
                   'flex-1 whitespace-nowrap text-ellipsis overflow-hidden group-[.sidebar]:hidden',
                   integration.disabled && 'opacity-50'
                 )}
@@ -203,7 +203,7 @@ export const Agent: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <PropertiesContext.Provider value={{ properties }}>
       <AgentList onChange={setProperties} />
-      <div className="bg-newBgColorInner flex flex-1">{children}</div>
+      <div className="bg-card flex flex-1">{children}</div>
       <Threads />
     </PropertiesContext.Provider>
   );
@@ -223,16 +223,16 @@ const Threads: FC = () => {
 
   return (
     <div
-      className={clsx(
-        'trz bg-newBgColorInner flex flex-col gap-[15px] transition-all relative',
+      className={cn(
+        'trz bg-card flex flex-col gap-[15px] transition-all relative',
         'w-[260px]'
       )}
     >
-      <div className="absolute top-0 start-0 w-full h-full p-[20px] overflow-auto scrollbar scrollbar-thumb-fifth scrollbar-track-newBgColor">
+      <div className="absolute top-0 start-0 w-full h-full p-[20px] overflow-auto scrollbar scrollbar-thumb-border scrollbar-track-background">
         <div className="mb-[15px] justify-center flex group-[.sidebar]:pb-[15px]">
           <Link
             href={`/agents`}
-            className="text-white whitespace-nowrap flex-1 pt-[12px] pb-[14px] ps-[16px] pe-[20px] group-[.sidebar]:p-0 min-h-[44px] max-h-[44px] rounded-md bg-btnPrimary flex justify-center items-center gap-[5px] outline-none"
+            className="text-white whitespace-nowrap flex-1 pt-[12px] pb-[14px] ps-[16px] pe-[20px] group-[.sidebar]:p-0 min-h-[44px] max-h-[44px] rounded-md bg-primary flex justify-center items-center gap-[5px] outline-none"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -258,9 +258,9 @@ const Threads: FC = () => {
         <div className="flex flex-col gap-[1px]">
           {data?.threads?.map((p: any) => (
             <Link
-              className={clsx(
-                'overflow-ellipsis overflow-hidden whitespace-nowrap hover:bg-newBgColor px-[10px] py-[6px] rounded-[10px] cursor-pointer',
-                p.id === id && 'bg-newBgColor'
+              className={cn(
+                'overflow-ellipsis overflow-hidden whitespace-nowrap hover:bg-background px-[10px] py-[6px] rounded-[10px] cursor-pointer',
+                p.id === id && 'bg-background'
               )}
               href={`/agents/${p.id}`}
               key={p.id}

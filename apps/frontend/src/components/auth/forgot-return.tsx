@@ -58,7 +58,7 @@ export function ForgotReturn({ token }: { token: string }) {
         </div>
         {!state ? (
           <>
-            <div className="space-y-4 text-textColor">
+            <div className="space-y-4 text-foreground">
               <Input
                 label="New Password"
                 translationKey="label_new_password"

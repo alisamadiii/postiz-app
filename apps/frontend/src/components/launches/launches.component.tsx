@@ -11,7 +11,7 @@ import { CalendarWeekProvider } from '@gitroom/frontend/components/launches/cale
 import { Filters } from '@gitroom/frontend/components/launches/filters';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { LoadingComponent } from '@gitroom/frontend/components/layout/loading';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { useUser } from '../layout/user.context';
 import { Menu } from '@gitroom/frontend/components/launches/menu/menu';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -99,7 +99,7 @@ export const OpenClose: FC<{
       viewBox="0 0 22 12"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={clsx(
+      className={cn(
         'rotate-180 transition-all',
         isOpen ? 'rotate-180' : 'rotate-90'
       )}
@@ -197,7 +197,7 @@ export const MenuGroupComponent: FC<
         </div>
       )}
       <div
-        className={clsx(
+        className={cn(
           'gap-[12px] flex flex-col relative',
           !isOpen && 'hidden'
         )}
@@ -263,13 +263,13 @@ export const MenuComponent: FC<
             'data-tooltip-content': integration.name,
           }
         : {})}
-      className={clsx(
-        'flex gap-[12px] items-center bg-newBgColorInner hover:bg-boxHover group/profile transition-all rounded-e-[8px]',
+      className={cn(
+        'flex gap-[12px] items-center bg-card hover:bg-accent group/profile transition-all rounded-e-[8px]',
         integration.refreshNeeded && 'cursor-pointer'
       )}
     >
       <div
-        className={clsx(
+        className={cn(
           'relative gap-[6px] flex justify-center items-center',
           integration.disabled && 'opacity-50'
         )}
@@ -309,7 +309,7 @@ export const MenuComponent: FC<
         ) : (
           <SafeImage
             src={`/icons/platforms/${integration.identifier}.png`}
-            className="rounded-[8px] absolute z-10 bottom-[5px] -end-[5px] border border-fifth"
+            className="rounded-[8px] absolute z-10 bottom-[5px] -end-[5px] border border-border"
             alt={integration.identifier}
             width={18.41}
             height={18.41}
@@ -330,7 +330,7 @@ export const MenuComponent: FC<
             }
           : {})}
         role="Handle"
-        className={clsx(
+        className={cn(
           'group-[.sidebar]:hidden flex-1 whitespace-nowrap text-ellipsis overflow-hidden cursor-move',
           integration.disabled && 'opacity-50'
         )}
@@ -513,7 +513,7 @@ export const LaunchesComponent = () => {
   }, []);
   if (isLoading || reload) {
     return (
-      <div className="bg-newBgColorInner p-[20px] flex flex-1 flex-col gap-[15px] transition-all items-center justify-center">
+      <div className="bg-card p-[20px] flex flex-1 flex-col gap-[15px] transition-all items-center justify-center">
         <LoadingComponent />
       </div>
     );
@@ -525,14 +525,14 @@ export const LaunchesComponent = () => {
       <Onboarding />
       <CalendarWeekProvider integrations={sortedIntegrations}>
         <div
-          className={clsx(
+          className={cn(
             'flex relative flex-col',
             collapseMenu === '1' ? 'group sidebar w-[100px]' : 'w-[260px]'
           )}
         >
           <div
-            className={clsx(
-              'bg-newBgColorInner p-[20px] flex flex-col gap-[15px] transition-all absolute start-0 top-0 w-full h-full overflow-x-hidden overflow-y-auto scrollbar scrollbar-thumb-fifth scrollbar-track-newBgColor'
+            className={cn(
+              'bg-card p-[20px] flex flex-col gap-[15px] transition-all absolute start-0 top-0 w-full h-full overflow-x-hidden overflow-y-auto scrollbar scrollbar-thumb-border scrollbar-track-background'
             )}
           >
             <div className="flex items-center">
@@ -543,7 +543,7 @@ export const LaunchesComponent = () => {
                 onClick={() =>
                   setCollapseMenu(collapseMenu === '1' ? '0' : '1')
                 }
-                className="group-[.sidebar]:rotate-[180deg] group-[.sidebar]:mx-auto text-btnText bg-btnSimple rounded-[6px] w-[24px] h-[24px] flex items-center justify-center cursor-pointer select-none"
+                className="group-[.sidebar]:rotate-[180deg] group-[.sidebar]:mx-auto text-foreground bg-secondary rounded-[6px] w-[24px] h-[24px] flex items-center justify-center cursor-pointer select-none"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -619,7 +619,7 @@ export const LaunchesComponent = () => {
             </div>
           </div>
         </div>
-        <div className="bg-newBgColorInner flex-1 flex-col flex p-[20px] gap-[12px]">
+        <div className="bg-card flex-1 flex-col flex p-[20px] gap-[12px]">
           <Filters />
           <div className="flex-1 flex">
             <Calendar />

@@ -13,7 +13,7 @@ import dynamic from 'next/dynamic';
 import { LogoTextComponent } from '@gitroom/frontend/components/ui/logo-text.component';
 import { pricing } from '@gitroom/nestjs-libraries/database/prisma/subscriptions/pricing';
 import { capitalize } from 'lodash';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { LoadingComponent } from '@gitroom/frontend/components/layout/loading';
 import { CheckIconComponent } from '@gitroom/frontend/components/ui/check.icon.component';
 import {
@@ -175,24 +175,24 @@ export const FirstBillingComponent = () => {
   };
 
   return (
-    <div className="blurMe flex flex-1 flex-col bg-newBgColorInner pb-[60px] mobile:pb-[100px]">
-      <div className="h-[92px] px-[80px] tablet:px-[32px] mobile:!px-[16px] py-[20px] flex border-b border-newColColor">
-        <div className="flex-1 flex items-center text-textColor">
+    <div className="blurMe flex flex-1 flex-col bg-card pb-[60px] mobile:pb-[100px]">
+      <div className="h-[92px] px-[80px] tablet:px-[32px] mobile:!px-[16px] py-[20px] flex border-b border-muted">
+        <div className="flex-1 flex items-center text-foreground">
           <LogoTextComponent />
         </div>
         <div className="flex items-center">
-          <div className="flex gap-[20px] text-textItemBlur">
+          <div className="flex gap-[20px] text-muted-foreground">
             <OrganizationSelector />
-            <div className="hover:text-newTextColor">
+            <div className="hover:text-foreground">
               <ModeComponent />
             </div>
-            <div className="w-[1px] h-[20px] bg-blockSeparator" />
+            <div className="w-[1px] h-[20px] bg-border" />
             <LanguageComponent />
-            <div className="w-[1px] h-[20px] bg-blockSeparator" />
+            <div className="w-[1px] h-[20px] bg-border" />
             <AttachToFeedbackIcon />
             <DeveloperIconComponent />
             {/*<NotificationComponent />*/}
-            <div className="hover:text-newTextColor">
+            <div className="hover:text-foreground">
               {user?.tier.current === 'FREE' && (
                 <LogoutComponent isIcon={true} />
               )}
@@ -206,7 +206,7 @@ export const FirstBillingComponent = () => {
             <JoinOver />
           </div>
           {data?.blocked ? (
-            <div className="mt-[24px] p-[24px] rounded-[20px] border-[1.5px] border-newColColor text-[16px] font-[500]">
+            <div className="mt-[24px] p-[24px] rounded-[20px] border-[1.5px] border-muted text-[16px] font-[500]">
               {t(
                 'billing_other_account_subscribed',
                 'Another account with this email already has an active subscription. Please log off and sign in to that account to manage your subscription.'
@@ -223,7 +223,7 @@ export const FirstBillingComponent = () => {
             <LoadingComponent />
           )}
         </div>
-        <div className="flex flex-col ps-[40px] tablet:!ps-[0] border-l border-newColColor py-[40px] mobile:!pt-[24px] tablet:border-none tablet:pb-0">
+        <div className="flex flex-col ps-[40px] tablet:!ps-[0] border-l border-muted py-[40px] mobile:!pt-[24px] tablet:border-none tablet:pb-0">
           <div className="top-[20px] sticky">
             <div className="hidden tablet:block">
               <JoinOver />
@@ -232,12 +232,12 @@ export const FirstBillingComponent = () => {
               <div className="flex-1 text-[24px] font-[700]">
                 {t('billing_choose_plan', 'Choose a Plan')}
               </div>
-              <div className="h-[44px] px-[6px] mobile:px-0 flex items-center justify-center mobile:justify-start gap-[12px] border border-newColColor rounded-[12px] select-none">
+              <div className="h-[44px] px-[6px] mobile:px-0 flex items-center justify-center mobile:justify-start gap-[12px] border border-muted rounded-[12px] select-none">
                 <div
-                  className={clsx(
+                  className={cn(
                     'h-[32px] mobile:flex-1 rounded-[6px] text-[16px] px-[12px] flex justify-center items-center',
                     period === 'MONTHLY'
-                      ? 'bg-boxFocused text-textItemFocused'
+                      ? 'bg-accent text-foreground'
                       : 'cursor-pointer'
                   )}
                   onClick={() => setPeriod('MONTHLY')}
@@ -245,10 +245,10 @@ export const FirstBillingComponent = () => {
                   {t('billing_monthly', 'Monthly')}
                 </div>
                 <div
-                  className={clsx(
+                  className={cn(
                     'gap-[10px] h-[32px] mobile:flex-1 rounded-[6px] text-[16px] px-[12px] flex justify-center items-center',
                     period === 'YEARLY'
-                      ? 'bg-boxFocused text-textItemFocused'
+                      ? 'bg-accent text-foreground'
                       : 'cursor-pointer'
                   )}
                   onClick={() => setPeriod('YEARLY')}
@@ -266,11 +266,11 @@ export const FirstBillingComponent = () => {
                   <div
                     onClick={() => setTier(key)}
                     key={key}
-                    className={clsx(
+                    className={cn(
                       'cursor-pointer select-none w-[266px] h-[138px] tablet:w-full tablet:h-[124px] p-[24px] tablet:p-[15px] rounded-[20px] flex flex-col',
                       key === tier
                         ? 'border-[1.5px] border-[#618DFF]'
-                        : 'border-[1.5px] border-newColColor'
+                        : 'border-[1.5px] border-muted'
                     )}
                   >
                     <div className="text-[20px] mobile:text-[18px] font-[500]">

@@ -129,15 +129,15 @@ export const LinkedinCompany: FC<{
     }
   };
   return (
-    <div className="text-textColor fixed start-0 top-0 bg-primary/80 z-[300] w-full h-full p-[60px] animate-fade justify-center flex">
-      <div className="flex flex-col w-[500px] h-[250px] bg-sixth border-tableBorder border-2 rounded-xl pb-[20px] px-[20px] relative">
+    <div className="text-foreground fixed start-0 top-0 bg-primary/80 z-[300] w-full h-full p-[60px] animate-fade justify-center flex">
+      <div className="flex flex-col w-[500px] h-[250px] bg-muted border-border border-2 rounded-xl pb-[20px] px-[20px] relative">
         <div className="flex">
           <div className="flex-1">
             <TopTitle title={'Select Company'} />
           </div>
           <button
             onClick={onClose}
-            className="outline-none absolute end-[20px] top-[20px] mantine-UnstyledButton-root mantine-ActionIcon-root bg-primary hover:bg-tableBorder cursor-pointer mantine-Modal-close mantine-1dcetaa"
+            className="outline-none absolute end-[20px] top-[20px] mantine-UnstyledButton-root mantine-ActionIcon-root bg-primary hover:bg-border cursor-pointer mantine-Modal-close mantine-1dcetaa"
             type="button"
           >
             <svg

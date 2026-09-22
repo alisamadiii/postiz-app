@@ -4,7 +4,7 @@ import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
 import { ReactTags } from 'react-tag-autocomplete';
 import { useIntegration } from '@gitroom/frontend/components/launches/helpers/use.integration';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 
 export const InstagramCollaboratorsTags: FC<{
@@ -71,7 +71,7 @@ export const InstagramCollaboratorsTags: FC<{
   return (
     <div>
       <div>
-        <div className={clsx(`text-[14px] mb-[6px]`)}>{label}</div>
+        <div className={cn(`text-[14px] mb-[6px]`)}>{label}</div>
         <ReactTags
           placeholderText={t('add_a_tag', 'Add a tag')}
           suggestions={suggestionsArray}

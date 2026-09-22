@@ -18,7 +18,7 @@ import countriesEn from 'i18n-iso-countries/langs/en.json';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { ModalWrapperComponent } from '../new-launch/modal.wrapper.component';
 
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 countries.registerLocale(countriesEn);
 
 const getCountryCodeForFlag = (languageCode: string) => {
@@ -96,9 +96,9 @@ export const ChangeLanguageComponent = () => {
       <div className="grid grid-cols-4 gap-2">
         {availableLanguages.map((language) => (
           <div
-            className={clsx(
-              'flex items-center flex-col bg-newTableHeader hover:bg-newTableBorder p-[20px] cursor-pointer gap-2',
-              language === currentLanguage ? 'border border-textColor' : ''
+            className={cn(
+              'flex items-center flex-col bg-muted hover:bg-border p-[20px] cursor-pointer gap-2',
+              language === currentLanguage ? 'border border-foreground' : ''
             )}
             key={language}
             onClick={() => handleLanguageChange(language)}

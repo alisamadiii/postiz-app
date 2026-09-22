@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 import useSWR from 'swr';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import removeMd from 'remove-markdown';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { newDayjs } from '@gitroom/frontend/components/layout/set.timezone';
 const postUrlEmitter = new EventEmitter();
@@ -117,14 +117,14 @@ export const PostSelector: FC<{
           <div
             className={
               !noModal
-                ? 'text-textColor fixed start-0 top-0 bg-primary/80 z-[300] w-full h-full p-[60px] animate-fade'
+                ? 'text-foreground fixed start-0 top-0 bg-primary/80 z-[300] w-full h-full p-[60px] animate-fade'
                 : ''
             }
           >
             <div
               className={
                 !noModal
-                  ? 'flex flex-col w-full max-w-[1200px] mx-auto h-full bg-sixth border-tableBorder border-2 rounded-xl pb-[20px] px-[20px] relative'
+                  ? 'flex flex-col w-full max-w-[1200px] mx-auto h-full bg-muted border-border border-2 rounded-xl pb-[20px] px-[20px] relative'
                   : ''
               }
             >
@@ -140,7 +140,7 @@ export const PostSelector: FC<{
                   </div>
                   <button
                     onClick={onCloseWithEmptyString}
-                    className="outline-none absolute end-[20px] top-[20px] mantine-UnstyledButton-root mantine-ActionIcon-root bg-primary hover:bg-tableBorder cursor-pointer mantine-Modal-close mantine-1dcetaa"
+                    className="outline-none absolute end-[20px] top-[20px] mantine-UnstyledButton-root mantine-ActionIcon-root bg-primary hover:bg-border cursor-pointer mantine-Modal-close mantine-1dcetaa"
                     type="button"
                   >
                     <svg
@@ -166,8 +166,8 @@ export const PostSelector: FC<{
                     {data.map((p: any) => (
                       <div
                         onClick={select(p.id)}
-                        className={clsx(
-                          'cursor-pointer overflow-hidden flex gap-[20px] flex-col w-[200px] h-[200px] text-ellipsis p-3 border border-tableBorder rounded-[8px] hover:bg-primary',
+                        className={cn(
+                          'cursor-pointer overflow-hidden flex gap-[20px] flex-col w-[200px] h-[200px] text-ellipsis p-3 border border-border rounded-[8px] hover:bg-primary',
                           current === p.id ? 'bg-primary' : 'bg-secondary'
                         )}
                         key={p.id}
@@ -179,7 +179,7 @@ export const PostSelector: FC<{
                               className="w-[32px] h-[32px] rounded-full"
                             />
                             <img
-                              className="w-[20px] h-[20px] rounded-full absolute z-10 -bottom-[5px] -end-[5px] border border-fifth"
+                              className="w-[20px] h-[20px] rounded-full absolute z-10 -bottom-[5px] -end-[5px] border border-border"
                               src={
                                 `/icons/platforms/` +
                                 p?.integration?.providerIdentifier +

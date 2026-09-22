@@ -7,7 +7,7 @@ import {
   SelectHTMLAttributes,
   useMemo,
 } from 'react';
-import { clsx } from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { useFormContext } from 'react-hook-form';
 import { RegisterOptions } from 'react-hook-form/dist/types/validator';
 import { TranslatedLabel } from '../translation/translated-label';
@@ -45,7 +45,7 @@ export const Select: FC<
     return form?.formState?.errors?.[props?.name!]?.message! as string;
   }, [form?.formState?.errors?.[props?.name!]?.message, error]);
   return (
-    <div className={clsx('flex flex-col', label ? 'gap-[6px]' : '')}>
+    <div className={cn('flex flex-col', label ? 'gap-[6px]' : '')}>
       <div className={`text-[14px]`}>
         <TranslatedLabel
           label={label}
@@ -56,8 +56,8 @@ export const Select: FC<
       <select
         ref={ref}
         {...(disableForm ? {} : form.register(props.name, extraForm))}
-        className={clsx(
-          'h-[42px] bg-newBgColorInner px-[16px] outline-none border-newTableBorder border rounded-md text-[14px] transition-colors focus:border-ring focus:ring-3 focus:ring-ring/50',
+        className={cn(
+          'h-[42px] bg-card px-[16px] outline-none border-border border rounded-md text-[14px] transition-colors focus:border-ring focus:ring-3 focus:ring-ring/50',
           className
         )}
         {...rest}

@@ -191,14 +191,14 @@ const ApplyCouponModal: FC<{ close: () => void }> = ({ close }) => {
 
   return (
     <div className="flex flex-col gap-[16px]">
-      <div className="text-newTextColor/60 text-[13px]">
+      <div className="text-foreground/60 text-[13px]">
         {t(
           'apply_coupon_subtitle',
           "The coupon applied here is simply a deduction from the user's next billing cycle(s) — one or more, depending on how many months you choose to apply it for. It is NOT a refund; we use Stripe's built-in coupon mechanism and that's how it works."
         )}
       </div>
       {!info ? (
-        <div className="text-center py-[20px] text-newTextColor/60">
+        <div className="text-center py-[20px] text-foreground/60">
           {t('loading', 'Loading...')}
         </div>
       ) : (
@@ -295,7 +295,7 @@ const ApplyCouponModal: FC<{ close: () => void }> = ({ close }) => {
               />
             </div>
           ) : (
-            <div className="text-newTextColor/60 text-[13px]">
+            <div className="text-foreground/60 text-[13px]">
               {t(
                 'apply_coupon_not_supported',
                 "We currently don't support applying a coupon for users either under an annual plan, with a lifetime deal or with another active coupon."
@@ -411,13 +411,13 @@ const ChargesModal: FC<{ close: () => void }> = ({ close }) => {
     <div className="flex flex-col gap-[16px] min-w-[500px]">
       <div className="max-h-[400px] overflow-y-auto">
         {!charges?.length ? (
-          <div className="text-center py-[20px] text-newTextColor/60">
+          <div className="text-center py-[20px] text-foreground/60">
             {t('no_charges', 'No charges found')}
           </div>
         ) : (
           <table className="w-full">
             <thead>
-              <tr className="text-left border-b border-newTableBorder">
+              <tr className="text-left border-b border-border">
                 <th className="p-[8px] w-[40px]" />
                 <th className="p-[8px]">{t('date', 'Date')}</th>
                 <th className="p-[8px]">{t('amount', 'Amount')}</th>
@@ -429,17 +429,17 @@ const ChargesModal: FC<{ close: () => void }> = ({ close }) => {
               {charges.map((charge) => (
                 <tr
                   key={charge.id}
-                  className="border-b border-newTableBorder hover:bg-tableBorder cursor-pointer"
+                  className="border-b border-border hover:bg-border cursor-pointer"
                   onClick={() => !charge.refunded && toggleCharge(charge.id)}
                 >
                   <td className="p-[8px]">
                     <div
                       className={`w-[20px] h-[20px] rounded-[4px] border-2 flex items-center justify-center ${
                         charge.refunded
-                          ? 'border-newTextColor/20 opacity-40'
+                          ? 'border-foreground/20 opacity-40'
                           : selected.has(charge.id)
-                          ? 'bg-forth border-forth'
-                          : 'border-newTextColor/40'
+                          ? 'bg-primary border-primary'
+                          : 'border-foreground/40'
                       }`}
                     >
                       {(selected.has(charge.id) || charge.refunded) && (
@@ -484,7 +484,7 @@ const ChargesModal: FC<{ close: () => void }> = ({ close }) => {
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
-                        className="inline-flex items-center justify-center w-[28px] h-[28px] rounded-[4px] hover:bg-tableBorder transition-colors"
+                        className="inline-flex items-center justify-center w-[28px] h-[28px] rounded-[4px] hover:bg-border transition-colors"
                         title={charge.invoice_pdf ? t('download_invoice', 'Download Invoice') : t('view_receipt', 'View Receipt')}
                       >
                         <svg
@@ -651,7 +651,7 @@ const AddAnnouncementModal: FC<{ close: () => void }> = ({ close }) => {
           {t('announcement_description', 'Description')}
         </label>
         <textarea
-          className="bg-input border border-tableBorder rounded-[8px] p-[10px] text-newTextColor min-h-[120px] outline-none resize-y"
+          className="bg-input border border-border rounded-[8px] p-[10px] text-foreground min-h-[120px] outline-none resize-y"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder={t(
@@ -989,12 +989,12 @@ const SwitchUser = () => {
             className="bg-primary/80 fixed start-0 top-0 w-full h-full z-[998]"
             onClick={() => setName('')}
           />
-          <div className="absolute top-[100%] start-0 w-max min-w-full max-w-[90vw] bg-sixth border border-customColor6 text-textColor z-[999]">
+          <div className="absolute top-[100%] start-0 w-max min-w-full max-w-[90vw] bg-muted border border-border text-foreground z-[999]">
             {mapData.map((item: any) => (
               <div
                 onClick={pick(item)}
                 key={item?.id}
-                className="p-[10px] border-b border-customColor6 hover:bg-tableBorder cursor-pointer whitespace-nowrap truncate"
+                className="p-[10px] border-b border-border hover:bg-border cursor-pointer whitespace-nowrap truncate"
               >
                 {t('user_1', 'user:')}
                 {item?.id?.split('-')?.at(-1)} -{' '}
@@ -1073,7 +1073,7 @@ export const Impersonate = () => {
   }, [data]);
   return (
     <div>
-      <div className="bg-forth h-[52px] flex justify-center items-center border-input border rounded-[8px] text-white">
+      <div className="bg-primary h-[52px] flex justify-center items-center border-input border rounded-[8px] text-white">
         <div
           className={`relative flex flex-col ${
             user?.impersonate ? 'w-full px-[20px]' : 'w-[600px]'
@@ -1125,12 +1125,12 @@ export const Impersonate = () => {
                 className="bg-primary/80 fixed start-0 top-0 w-full h-full z-[998]"
                 onClick={() => setName('')}
               />
-              <div className="absolute top-[100%] w-max min-w-full max-w-[90vw] start-0 bg-sixth border border-customColor6 text-textColor z-[999]">
+              <div className="absolute top-[100%] w-max min-w-full max-w-[90vw] start-0 bg-muted border border-border text-foreground z-[999]">
                 {mapData?.map((user: any) => (
                   <div
                     onClick={setUser(user?.id)}
                     key={user?.id}
-                    className="p-[10px] border-b border-customColor6 hover:bg-tableBorder cursor-pointer whitespace-nowrap truncate"
+                    className="p-[10px] border-b border-border hover:bg-border cursor-pointer whitespace-nowrap truncate"
                   >
                     {t('user_1', 'user:')}
                     {user?.id?.split('-')?.at(-1)} - {user?.name} - {user?.email}{' '}

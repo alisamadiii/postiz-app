@@ -11,7 +11,7 @@ import { MediaComponent } from '@gitroom/frontend/components/media/media.compone
 import { SelectOrganization } from '@gitroom/frontend/components/new-launch/providers/devto/select.organization';
 import { DevtoTags } from '@gitroom/frontend/components/new-launch/providers/devto/devto.tags';
 import { useMediaDirectory } from '@gitroom/react/helpers/use.media.directory';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import { Canonical } from '@gitroom/react/form/canonical';
 import { useIntegration } from '@gitroom/frontend/components/launches/helpers/use.integration';
 import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';

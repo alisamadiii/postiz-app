@@ -4,7 +4,7 @@ import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
 import { useCustomProviderFunction } from '@gitroom/frontend/components/launches/helpers/use.custom.provider.function';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 
 interface MusicResult {
   id: string;
@@ -188,7 +188,7 @@ export const TikTokMusicSelector: FC<{
     <div className="flex flex-col gap-[6px]">
       <div className="text-[14px]">{label}</div>
       {value?.id ? (
-        <div className="flex flex-col gap-[12px] bg-newBgColorInner border-newTableBorder border rounded-[8px] p-[12px]">
+        <div className="flex flex-col gap-[12px] bg-card border-border border rounded-[8px] p-[12px]">
           <div className="flex items-center gap-[12px]">
             {!!value.image && (
               <img
@@ -247,7 +247,7 @@ export const TikTokMusicSelector: FC<{
       ) : !open ? (
         <div>
           <div
-            className="h-[42px] px-[16px] inline-flex items-center cursor-pointer bg-newBgColorInner border-newTableBorder border rounded-[8px] text-[14px]"
+            className="h-[42px] px-[16px] inline-flex items-center cursor-pointer bg-card border-border border rounded-[8px] text-[14px]"
             onClick={() => setOpen(true)}
           >
             {t('tiktok_add_music', 'Add music')}
@@ -256,9 +256,9 @@ export const TikTokMusicSelector: FC<{
       ) : (
         <div className="flex flex-col gap-[6px]">
           <div className="flex gap-[6px]">
-            <div className="flex-1 h-[42px] bg-newBgColorInner border-newTableBorder border rounded-[8px] flex items-center">
+            <div className="flex-1 h-[42px] bg-card border-border border rounded-[8px] flex items-center">
               <input
-                className="h-full w-full bg-transparent outline-none px-[16px] text-[14px] text-textColor placeholder-textColor"
+                className="h-full w-full bg-transparent outline-none px-[16px] text-[14px] text-foreground placeholder-foreground"
                 placeholder={t(
                   'tiktok_search_music',
                   'Filter trending tracks by name or artist'
@@ -268,7 +268,7 @@ export const TikTokMusicSelector: FC<{
               />
             </div>
             <div
-              className="h-[42px] px-[16px] flex items-center cursor-pointer bg-newBgColorInner border-newTableBorder border rounded-[8px] text-[14px]"
+              className="h-[42px] px-[16px] flex items-center cursor-pointer bg-card border-border border rounded-[8px] text-[14px]"
               onClick={() => {
                 stopPreview();
                 setOpen(false);
@@ -277,7 +277,7 @@ export const TikTokMusicSelector: FC<{
               {t('cancel', 'Cancel')}
             </div>
           </div>
-          <div className="max-h-[250px] overflow-y-auto flex flex-col bg-newBgColorInner border-newTableBorder border rounded-[8px]">
+          <div className="max-h-[250px] overflow-y-auto flex flex-col bg-card border-border border rounded-[8px]">
             {loading ? (
               <div className="p-[12px] text-[14px] opacity-70">
                 {t('loading', 'Loading...')}
@@ -290,7 +290,7 @@ export const TikTokMusicSelector: FC<{
               filteredResults.map((track) => (
                 <div
                   key={track.id}
-                  className="flex items-center gap-[12px] p-[8px] hover:bg-newTableBorder cursor-pointer"
+                  className="flex items-center gap-[12px] p-[8px] hover:bg-border cursor-pointer"
                   onClick={() => selectMusic(track)}
                 >
                   {!!track.image && (
@@ -309,7 +309,7 @@ export const TikTokMusicSelector: FC<{
                   </div>
                   {!!track.previewUrl && (
                     <div
-                      className={clsx(
+                      className={cn(
                         'px-[12px] text-[12px] opacity-70 hover:opacity-100',
                         playingId === track.id && 'opacity-100'
                       )}

@@ -2,7 +2,7 @@ import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { Integrations } from '@gitroom/frontend/components/launches/calendar.context';
 import { useMoveToIntegrationListener } from '@gitroom/frontend/components/launches/helpers/use.move.to.integration';
 import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
-import clsx from 'clsx';
+import { cn } from '@gitroom/react/helpers/cn';
 import SafeImage from '@gitroom/react/helpers/safe.image';
 import { useCopilotAction, useCopilotReadable } from '@copilotkit/react-core';
 import { useStateCallback } from '@gitroom/react/helpers/use.state.callback';
@@ -184,7 +184,7 @@ export const PickPlatforms: FC<{
   }
   return (
     <div
-      className={clsx('flex select-none', props.singleSelect && 'gap-[10px]')}
+      className={cn('flex select-none', props.singleSelect && 'gap-[10px]')}
     >
       {props.singleSelect && isLeft && (
         <div className="flex items-center">
@@ -206,13 +206,13 @@ export const PickPlatforms: FC<{
         </div>
       )}
       <div
-        className={clsx(
+        className={cn(
           'flex-1 flex',
           props.singleSelect && 'relative h-[40px]'
         )}
       >
         <div
-          className={clsx(
+          className={cn(
             props.singleSelect
               ? 'absolute w-full h-[40px] flex flex-nowrap overflow-hidden transition-all'
               : 'flex-1 flex'
@@ -235,8 +235,8 @@ export const PickPlatforms: FC<{
                     >
                       <div
                         onClick={addPlatform(integration)}
-                        className={clsx(
-                          'cursor-pointer relative w-[34px] h-[34px] rounded-full flex justify-center items-center bg-fifth filter transition-all duration-500',
+                        className={cn(
+                          'cursor-pointer relative w-[34px] h-[34px] rounded-full flex justify-center items-center bg-border filter transition-all duration-500',
                           selectedAccounts.findIndex(
                             (p) => p.id === integration.id
                           ) === -1
@@ -260,7 +260,7 @@ export const PickPlatforms: FC<{
                         ) : (
                           <SafeImage
                             src={`/icons/platforms/${integration.identifier}.png`}
-                            className="rounded-full absolute z-10 -bottom-[5px] -end-[5px] border border-fifth"
+                            className="rounded-full absolute z-10 -bottom-[5px] -end-[5px] border border-border"
                             alt={integration.identifier}
                             width={20}
                             height={20}
@@ -272,13 +272,13 @@ export const PickPlatforms: FC<{
                     <div key={integration.id} className="">
                       <div
                         onClick={addPlatform(integration)}
-                        className={clsx(
-                          'cursor-pointer rounded-[50px] w-[200px] relative h-[40px] flex justify-center items-center bg-fifth filter transition-all duration-500',
+                        className={cn(
+                          'cursor-pointer rounded-[50px] w-[200px] relative h-[40px] flex justify-center items-center bg-border filter transition-all duration-500',
                           selectedAccounts.findIndex(
                             (p) => p.id === integration.id
                           ) === -1
-                            ? 'bg-third border border-third'
-                            : 'bg-customColor29 border border-customColor30'
+                            ? 'bg-secondary border border-secondary'
+                            : 'bg-muted border border-primary'
                         )}
                       >
                         <div className="flex items-center justify-center gap-[10px]">
@@ -292,7 +292,7 @@ export const PickPlatforms: FC<{
                             />
                             <SafeImage
                               src={`/icons/platforms/${integration.identifier}.png`}
-                              className="rounded-full absolute z-10 -bottom-[5px] -end-[5px] border border-fifth"
+                              className="rounded-full absolute z-10 -bottom-[5px] -end-[5px] border border-border"
                               alt={integration.identifier}
                               width={15}
                               height={15}

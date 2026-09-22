@@ -54,7 +54,7 @@ export default async function Auth(
               <div className="min-w-[55px]">
                 <Link
                   href="/"
-                  className="text-2xl flex items-center justify-center gap-[10px] text-textColor order-1"
+                  className="text-2xl flex items-center justify-center gap-[10px] text-foreground order-1"
                 >
                   <div className="max-w-[55px]">
                     <SafeImage
@@ -114,21 +114,21 @@ export default async function Auth(
             {post.map((p: any, index: number) => (
               <div
                 key={String(p.id)}
-                className="relative px-4 py-4 bg-third border border-tableBorder"
+                className="relative px-4 py-4 bg-secondary border border-border"
               >
                 <div className="flex space-x-3">
                   <div>
                     <div className="flex shrink-0 rounded-full h-30 w-30 relative">
                       <div className="w-[50px] h-[50px] z-[20]">
                         <img
-                          className="w-full h-full relative z-[20] bg-black aspect-square rounded-full border-tableBorder"
+                          className="w-full h-full relative z-[20] bg-black aspect-square rounded-full border-border"
                           alt={post[0].integration.name}
                           src={post[0].integration.picture}
                         />
                       </div>
                       <div className="absolute -end-[5px] -bottom-[5px] w-[30px] h-[30px] z-[20]">
                         <img
-                          className="w-full h-full bg-black aspect-square rounded-full border-tableBorder"
+                          className="w-full h-full bg-black aspect-square rounded-full border-border"
                           alt={post[0].integration.providerIdentifier}
                           src={`/icons/platforms/${post[0].integration.providerIdentifier}.png`}
                         />
