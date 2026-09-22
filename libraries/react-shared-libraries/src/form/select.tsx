@@ -57,13 +57,13 @@ export const Select: FC<
         ref={ref}
         {...(disableForm ? {} : form.register(props.name, extraForm))}
         className={clsx(
-          'h-[42px] bg-newBgColorInner px-[16px] outline-none border-newTableBorder border rounded-[8px] text-[14px]',
+          'h-[42px] bg-newBgColorInner px-[16px] outline-none border-newTableBorder border rounded-md text-[14px] transition-colors focus:border-ring focus:ring-3 focus:ring-ring/50',
           className
         )}
         {...rest}
       />
       {!hideErrors && (
-        <div className="text-red-400 text-[12px]">{err || <>&nbsp;</>}</div>
+        <div className="text-destructive text-[12px]">{err || <>&nbsp;</>}</div>
       )}
     </div>
   );

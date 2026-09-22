@@ -52,7 +52,7 @@ export const Input: FC<
   return (
     <div className="flex flex-col gap-[6px]">
       {!!label && (
-        <div className={`text-[14px]`}>
+        <div className="text-[14px] text-textColor">
           <TranslatedLabel
             label={label}
             translationKey={translationKey}
@@ -62,14 +62,14 @@ export const Input: FC<
       )}
       <div
         className={clsx(
-          'bg-newBgColorInner h-[42px] border-newTableBorder border rounded-[8px] text-textColor placeholder-textColor flex items-center justify-center',
+          'flex items-center h-[42px] rounded-md border border-newTableBorder bg-newBgColorInner text-textColor transition-colors focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50',
           className
         )}
       >
         {icon && <div className="ps-[16px]">{icon}</div>}
         <input
           className={clsx(
-            'h-full bg-transparent outline-none flex-1 text-[14px] text-textColor',
+            'h-full bg-transparent outline-none flex-1 text-[14px] text-textColor placeholder:text-muted-foreground/70',
             icon ? 'pl-[8px] pe-[16px]' : 'px-[16px]'
           )}
           {...(disableForm ? {} : form.register(props.name))}
@@ -77,7 +77,7 @@ export const Input: FC<
         />
       </div>
       {!removeError && (
-        <div className="text-red-400 text-[12px]">{err || <>&nbsp;</>}</div>
+        <div className="text-destructive text-[12px]">{err || <>&nbsp;</>}</div>
       )}
     </div>
   );

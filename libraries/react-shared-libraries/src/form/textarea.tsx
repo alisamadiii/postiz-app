@@ -50,12 +50,12 @@ export const Textarea: FC<
       <textarea
         {...(disableForm ? {} : form.register(props.name))}
         className={clsx(
-          'bg-input min-h-[150px] p-[16px] outline-none border-fifth border rounded-[4px] text-inputText placeholder-inputText',
+          'bg-input min-h-[150px] p-[16px] outline-none border-fifth border rounded-md text-inputText placeholder:text-muted-foreground/70 transition-colors focus:border-ring focus:ring-3 focus:ring-ring/50',
           className
         )}
         {...rest}
       />
-      <div className="text-red-400 text-[12px]">{err || <>&nbsp;</>}</div>
+      <div className="text-destructive text-[12px]">{err || <>&nbsp;</>}</div>
     </div>
   );
 };
