@@ -14,10 +14,8 @@ import { useToaster } from '@gitroom/react/toaster/toaster';
 import { PlugsContext } from '@gitroom/frontend/components/plugs/plugs.context';
 import { Plug } from '@gitroom/frontend/components/plugs/plug';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
-import useCookie from 'react-use-cookie';
 import { SVGLine } from '@gitroom/frontend/components/launches/launches.component';
 import { LoadingComponent } from '@gitroom/frontend/components/layout/loading';
-import { ChevronLeft } from 'lucide-react';
 export const Plugs = () => {
   const fetch = useFetch();
   const router = useRouter();
@@ -52,8 +50,6 @@ export const Plugs = () => {
     refreshWhenOffline: false,
     fallbackData: [],
   });
-
-  const [collapseMenu, setCollapseMenu] = useCookie('collapseMenu', '0');
 
   const t = useT();
 
@@ -124,20 +120,14 @@ export const Plugs = () => {
       <div
         className={cn(
           'bg-card p-[20px] flex flex-col gap-[15px] transition-all',
-          collapseMenu === '1' ? 'group sidebar w-[100px]' : 'w-[260px]'
+          'w-[260px]'
         )}
       >
         <div className="flex gap-[12px] flex-col">
           <div className="flex items-center">
-            <h2 className="group-[.sidebar]:hidden flex-1 text-[20px] font-[500]">
+            <h2 className="flex-1 text-[20px] font-[500]">
               {t('channels')}
             </h2>
-            <div
-              onClick={() => setCollapseMenu(collapseMenu === '1' ? '0' : '1')}
-              className="group-[.sidebar]:rotate-[180deg] group-[.sidebar]:mx-auto text-foreground bg-secondary rounded-[6px] w-[24px] h-[24px] flex items-center justify-center cursor-pointer select-none"
-            >
-              <ChevronLeft width={7} height={13} strokeWidth={1.5} />
-            </div>
           </div>
           {sortedIntegrations.map((integration, index) => (
             <div
@@ -197,7 +187,7 @@ export const Plugs = () => {
               </div>
               <div
                 className={cn(
-                  'flex-1 whitespace-nowrap text-ellipsis overflow-hidden group-[.sidebar]:hidden',
+                  'flex-1 whitespace-nowrap text-ellipsis overflow-hidden',
                   integration.disabled && 'opacity-50'
                 )}
               >

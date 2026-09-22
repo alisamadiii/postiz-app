@@ -1,27 +1,16 @@
 'use client';
 
 import { FC } from 'react';
+import { Spinner as UISpinner } from '@gitroom/react/ui/spinner';
 
 const Spinner: FC<{
   type?: string;
   color?: string;
   width?: number;
   height?: number;
-}> = ({ color = '#612bd3', width = 100, height = 100 }) => {
-  const size = Math.min(width, height);
-  const borderWidth = Math.max(2, Math.round(size / 8));
-
+}> = ({ width = 40, height = 40 }) => {
   return (
-    <div
-      style={{
-        width: size,
-        height: size,
-        border: `${borderWidth}px solid transparent`,
-        borderTopColor: color,
-        borderRadius: '50%',
-        animation: 'spin 0.8s linear infinite',
-      }}
-    />
+    <UISpinner style={{ width, height }} className="text-primary" />
   );
 };
 
@@ -33,11 +22,7 @@ export const LoadingComponent: FC<{
 }> = (props) => {
   return (
     <div className="flex-1 flex justify-center pt-[100px]">
-      <Spinner
-        color="#612bd3"
-        width={props.width || 100}
-        height={props.height || 100}
-      />
+      <Spinner width={props.width || 40} height={props.height || 40} />
     </div>
   );
 };

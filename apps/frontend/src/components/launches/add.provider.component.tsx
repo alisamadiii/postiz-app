@@ -64,7 +64,7 @@ export const AddProviderButton: FC<{
   );
 
   return (
-    <div className="flex group-[.sidebar]:block gap-[8px]">
+    <div className="flex gap-[8px]">
       <UIButton
         variant="secondary"
         onClick={openDialog(false)}
@@ -85,7 +85,7 @@ export const AddProviderButton: FC<{
             strokeLinejoin="round"
           />
         </svg>
-        <span className="text-[14px] group-[.sidebar]:hidden">
+        <span className="text-[14px]">
           {t('add_channel', 'Add Channel')}
         </span>
       </UIButton>

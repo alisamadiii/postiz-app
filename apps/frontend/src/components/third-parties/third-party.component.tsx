@@ -9,9 +9,8 @@ import useSWR from 'swr';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { useToaster } from '@gitroom/react/toaster/toaster';
 import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
-import useCookie from 'react-use-cookie';
 import { SVGLine } from '@gitroom/frontend/components/launches/launches.component';
-import { MoreVertical, Trash2, ChevronLeft } from 'lucide-react';
+import { MoreVertical, Trash2 } from 'lucide-react';
 
 export const ThirdPartyMenuComponent: FC<{
   reload: () => void;
@@ -89,27 +88,20 @@ export const ThirdPartyComponent = () => {
     refreshWhenHidden: false,
     refreshWhenOffline: false,
   });
-  const [collapseMenu, setCollapseMenu] = useCookie('collapseMenu', '0');
 
   return (
     <>
       <div
         className={cn(
           'bg-card p-[20px] flex flex-col gap-[15px] transition-all',
-          collapseMenu === '1' ? 'group sidebar w-[100px]' : 'w-[260px]'
+          'w-[260px]'
         )}
       >
         <div className="flex gap-[12px] flex-col">
           <div className="flex items-center">
-            <h2 className="group-[.sidebar]:hidden flex-1 text-[20px] font-[500]">
+            <h2 className="flex-1 text-[20px] font-[500]">
               {t('integrations')}
             </h2>
-            <div
-              onClick={() => setCollapseMenu(collapseMenu === '1' ? '0' : '1')}
-              className="group-[.sidebar]:rotate-[180deg] group-[.sidebar]:mx-auto text-foreground bg-secondary rounded-[6px] w-[24px] h-[24px] flex items-center justify-center cursor-pointer select-none"
-            >
-              <ChevronLeft width={7} height={13} strokeWidth={1.5} />
-            </div>
           </div>
           <div className="flex flex-col gap-[10px]">
             <div className="flex-1 flex flex-col gap-[14px]">
@@ -149,7 +141,7 @@ export const ThirdPartyComponent = () => {
                         // @ts-ignore
                         role="Handle"
                         className={cn(
-                          'flex-1 whitespace-nowrap text-ellipsis overflow-hidden group-[.sidebar]:hidden'
+                          'flex-1 whitespace-nowrap text-ellipsis overflow-hidden'
                         )}
                         data-tooltip-id="tooltip"
                         data-tooltip-content={p.title}

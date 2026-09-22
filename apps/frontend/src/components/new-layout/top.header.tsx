@@ -24,14 +24,11 @@ export const TopHeader: FC = () => {
       </div>
       <div className="flex items-center gap-[20px] text-muted-foreground">
         <StreakComponent />
-        <div className="w-[1px] h-[20px] bg-border" />
         <OrganizationSelector />
         <div className="hover:text-foreground">
           <ModeComponent />
         </div>
-        <div className="w-[1px] h-[20px] bg-border" />
         <ChromeExtensionComponent />
-        <div className="w-[1px] h-[20px] bg-border" />
         <AttachToFeedbackIcon />
         <NotificationComponent />
       </div>

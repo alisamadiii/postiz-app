@@ -16,7 +16,6 @@ import { useUser } from '../layout/user.context';
 import { Menu } from '@gitroom/frontend/components/launches/menu/menu';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Integration } from '@prisma/client';
-import ImageWithFallback from '@gitroom/react/helpers/image.with.fallback';
 import { useToaster } from '@gitroom/react/toaster/toaster';
 import { useFireEvents } from '@gitroom/helpers/utils/use.fire.events';
 import { Calendar } from './calendar';
@@ -30,8 +29,12 @@ import { useIntegrationList } from '@gitroom/frontend/components/launches/helper
 import useCookie from 'react-use-cookie';
 import { Onboarding } from '@gitroom/frontend/components/onboarding/onboarding';
 import { useModals } from '@gitroom/frontend/components/layout/new-modal';
-import { Button } from '@gitroom/react/ui/button';
-import { ChevronUp, ChevronLeft } from 'lucide-react';
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@gitroom/react/ui/avatar';
+import { ChevronUp } from 'lucide-react';
 
 export const SVGLine = () => {
   return (
@@ -84,7 +87,6 @@ interface MenuComponentInterface {
       identifier: string;
     }
   ) => () => void;
-  collapsed: boolean;
   continueIntegration: (integration: Integration) => () => void;
   totalNonDisabledChannels: number;
   mutate: (shouldReload?: boolean) => void;
@@ -129,7 +131,6 @@ export const MenuGroupComponent: FC<
     totalNonDisabledChannels,
     refreshChannel,
     changeItemGroup,
-    collapsed,
   } = props;
   const [isOpen, setIsOpen] = useState(
     !!+(localStorage.getItem(group.name + '_isOpen') || '1')
@@ -177,17 +178,7 @@ export const MenuGroupComponent: FC<
           <div>
             <OpenClose isOpen={isOpen} />
           </div>
-          <div
-            className="line-clamp-1"
-            {...(collapsed
-              ? {
-                  'data-tooltip-id': 'tooltip',
-                  'data-tooltip-content': group.name,
-                }
-              : {})}
-          >
-            {group.name}
-          </div>
+          <div className="line-clamp-1">{group.name}</div>
         </div>
       )}
       <div
@@ -198,7 +189,6 @@ export const MenuGroupComponent: FC<
       >
         {group.values.map((integration) => (
           <MenuComponent
-            collapsed={collapsed}
             key={integration.id}
             integration={integration}
             mutate={mutate}
@@ -229,7 +219,6 @@ export const MenuComponent: FC<
     mutate,
     update,
     integration,
-    collapsed,
   } = props;
   const user = useUser();
   const t = useT();
@@ -251,12 +240,6 @@ export const MenuComponent: FC<
           'Channel disconnected, click to reconnect.'
         ),
       })}
-      {...(collapsed
-        ? {
-            'data-tooltip-id': 'tooltip',
-            'data-tooltip-content': integration.name,
-          }
-        : {})}
       className={cn(
         'flex gap-[12px] items-center hover:bg-accent group/profile transition-all rounded-[8px]',
         "p-2",
@@ -284,24 +267,25 @@ export const MenuComponent: FC<
             <div className="bg-primary/60 w-[39px] h-[46px] start-0 top-0 absolute rounded-full z-[199]" />
           </div>
         )}
-        <ImageWithFallback
-          fallbackSrc={'/no-picture.jpg'}
-          src={integration.picture || '/no-picture.jpg'}
-          className="rounded-[8px] min-w-[36px] min-h-[36px]"
-          alt={integration.identifier}
-          width={36}
-          height={36}
-        />
+        <Avatar className="size-9">
+          <AvatarImage
+            src={integration.picture || '/no-picture.jpg'}
+            alt={integration.identifier}
+          />
+          <AvatarFallback>
+            {integration.name?.charAt(0) || '?'}
+          </AvatarFallback>
+        </Avatar>
         {integration.identifier === 'youtube' ? (
           <img
             src="/icons/platforms/youtube.svg"
-            className="absolute z-10 bottom-[5px] -end-[5px]"
+            className="absolute z-10 bottom-[-2px] -end-[5px]"
             width={20}
           />
         ) : (
           <SafeImage
             src={`/icons/platforms/${integration.identifier}.png`}
-            className="rounded-[8px] absolute z-10 bottom-[5px] -end-[5px] border border-border"
+            className="rounded-[8px] absolute z-10 bottom-[-2px] -end-[5px] border border-border"
             alt={integration.identifier}
             width={18.41}
             height={18.41}
@@ -323,7 +307,7 @@ export const MenuComponent: FC<
           : {})}
         role="Handle"
         className={cn(
-          'group-[.sidebar]:hidden flex-1 whitespace-nowrap text-ellipsis overflow-hidden cursor-move',
+          'flex-1 whitespace-nowrap text-ellipsis overflow-hidden cursor-move',
           integration.disabled && 'opacity-50'
         )}
       >
@@ -356,7 +340,6 @@ export const LaunchesComponent = () => {
   const t = useT();
   const modal = useModals();
   const [reload, setReload] = useState(false);
-  const [collapseMenu, setCollapseMenu] = useCookie('collapseMenu', '0');
   const [mode] = useCookie('mode', 'dark');
   const { isLoading, data: integrations, mutate } = useIntegrationList();
 
@@ -516,34 +499,20 @@ export const LaunchesComponent = () => {
     <DNDProvider>
       <Onboarding />
       <CalendarWeekProvider integrations={sortedIntegrations}>
-        <div
-          className={cn(
-            'flex relative flex-col',
-            collapseMenu === '1' ? 'group sidebar w-[100px]' : 'w-[260px]'
-          )}
-        >
+        <div className={cn('flex relative flex-col', 'w-[260px]')}>
           <div
             className={cn(
               'p-[20px] flex flex-col gap-[15px] transition-all absolute start-0 top-0 w-full h-full overflow-x-hidden overflow-y-auto scrollbar scrollbar-thumb-border scrollbar-track-background'
             )}
           >
             <div className="flex items-center">
-              <h2 className="group-[.sidebar]:hidden flex-1 text-[20px] font-[500]">
+              <h2 className="flex-1 text-[20px] font-[500]">
                 {t('channels')}
               </h2>
-              <Button
-                variant="secondary"
-                size="icon"
-                onClick={() =>
-                  setCollapseMenu(collapseMenu === '1' ? '0' : '1')
-                }
-              >
-                <ChevronLeft className="size-[13px]" />
-              </Button>
             </div>
-            <div className="flex flex-col gap-[8px] group-[.sidebar]:mx-auto group-[.sidebar]:w-[44px]">
+            <div className="flex flex-col gap-[8px]">
               <AddProviderButton update={() => update(true)} />
-              <div className="flex gap-[8px] group-[.sidebar]:flex-col">
+              <div className="flex gap-[8px]">
                 {sortedIntegrations?.length > 0 && <NewPost />}
                 {sortedIntegrations?.length > 0 &&
                   user?.tier?.ai &&
@@ -551,7 +520,7 @@ export const LaunchesComponent = () => {
               </div>
             </div>
             <div className="gap-[32px] flex flex-col select-none flex-1">
-              {sortedIntegrations.length === 0 && collapseMenu === '0' && (
+              {sortedIntegrations.length === 0 && (
                 <div className="flex-1 max-h-[500px] justify-center items-center flex">
                   <div className="flex flex-col gap-[12px] text-center">
                     <img
@@ -574,7 +543,6 @@ export const LaunchesComponent = () => {
               )}
               {menuIntegrations.map((menu) => (
                 <MenuGroupComponent
-                  collapsed={collapseMenu === '1'}
                   changeItemGroup={changeItemGroup}
                   key={menu.name}
                   group={menu}

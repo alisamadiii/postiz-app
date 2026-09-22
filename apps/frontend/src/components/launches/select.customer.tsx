@@ -59,7 +59,7 @@ export const SelectCustomer: FC<{
         onClick={openClose}
         className={cn(
           'relative z-[20] cursor-pointer h-[42px] rounded-[8px] pl-[16px] pr-[12px] gap-[8px] border flex items-center',
-          open ? 'border-[#612BD3]' : 'border-muted'
+          open ? 'border-primary' : 'border-muted'
         )}
       >
         <div>

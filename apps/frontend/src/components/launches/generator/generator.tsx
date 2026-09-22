@@ -355,7 +355,7 @@ export const GeneratorComponent = () => {
   }, [user, all]);
   return (
     <div
-      className="h-[44px] w-[44px] group-[.sidebar]:w-full bg-primary justify-center items-center flex rounded-[8px] cursor-pointer"
+      className="h-[44px] w-[44px] bg-primary justify-center items-center flex rounded-[8px] cursor-pointer"
       onClick={generate}
     >
       <Sparkles width={20} height={20} className="text-white" />

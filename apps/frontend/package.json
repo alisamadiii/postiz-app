@@ -17,6 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.1.23",
+    "@radix-ui/react-avatar": "^1.2.6",
     "sonner": "^2.0.8"
   }
 }

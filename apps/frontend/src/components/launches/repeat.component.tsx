@@ -77,7 +77,7 @@ export const RepeatComponent: FC<{
       ref={ref}
       className={cn(
         'border rounded-[8px] justify-center flex items-center relative h-[44px] text-[15px] font-[600] select-none',
-        isOpen ? 'border-[#612BD3]' : 'border-foreground/10',
+        isOpen ? 'border-primary' : 'border-foreground/10',
       )}
     >
       <div

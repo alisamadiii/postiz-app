@@ -11,8 +11,6 @@ import {
   Calendar,
   LineChart,
   Image,
-  Plug,
-  Blocks,
   Video,
   Users,
   CreditCard,
@@ -58,16 +56,6 @@ export const useMenuItem = () => {
       name: t('media', 'Media'),
       icon: <Image className="size-5" />,
       path: '/media',
-    },
-    {
-      name: t('plugs', 'Plugs'),
-      icon: <Plug className="size-5" />,
-      path: '/plugs',
-    },
-    {
-      name: t('integrations', 'Integrations'),
-      icon: <Blocks className="size-5" />,
-      path: '/third-party',
     },
   ] satisfies MenuItemInterface[] as MenuItemInterface[];
 

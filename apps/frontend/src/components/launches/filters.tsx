@@ -9,6 +9,8 @@ import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import i18next from 'i18next';
 import { newDayjs } from '@gitroom/frontend/components/layout/set.timezone';
 import { ChevronLeft, ChevronRight, Calendar, List } from 'lucide-react';
+import { Button } from '@gitroom/react/ui/button';
+import { ButtonGroup } from '@gitroom/react/ui/button-group';
 
 // Helper function to get start and end dates based on display type
 function getDateRange(
@@ -291,83 +293,73 @@ export const Filters = () => {
     <div className="text-foreground flex flex-col md:flex-row gap-[8px] items-center select-none">
       {!isListView && (
         <div className="flex flex-grow flex-row items-center gap-[10px]">
-          <div className="border h-[42px] border-border bg-border gap-[1px] flex items-center rounded-[8px] overflow-hidden">
-            <div
+          <ButtonGroup>
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={previous}
-              className="cursor-pointer text-foreground rtl:rotate-180 px-[9px] bg-card h-full flex items-center justify-center hover:text-foreground hover:bg-accent"
+              className="rtl:rotate-180"
             >
-              <ChevronLeft width={8} height={12} />
+              <ChevronLeft className="size-4" />
+            </Button>
+            <div className="flex min-w-[180px] items-center justify-center px-2 text-center text-[14px]">
+              {getDisplayText()}
             </div>
-            <div className="min-w-[200px] text-center bg-card h-full flex items-center justify-center">
-              <div className="py-[3px] px-[9px] rounded-[5px] transition-all text-[14px]">
-                {getDisplayText()}
-              </div>
-            </div>
-            <div
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={next}
-              className="cursor-pointer text-foreground rtl:rotate-180 px-[9px] bg-card h-full flex items-center justify-center hover:text-foreground hover:bg-accent"
+              className="rtl:rotate-180"
             >
-              <ChevronRight width={8} height={12} />
-            </div>
-          </div>
-          <div className="flex-1 text-[14px] font-[500]">
-            <div className="text-center flex h-[42px]">
-              <div
-                onClick={setToday}
-                className="hover:text-foreground hover:bg-accent py-[3px] px-[9px] flex justify-center items-center rounded-[8px] transition-all cursor-pointer text-[14px] bg-card border border-border"
-              >
-                {t('today', 'Today')}
-              </div>
-            </div>
-          </div>
+              <ChevronRight className="size-4" />
+            </Button>
+          </ButtonGroup>
+          <Button variant="outline" onClick={setToday}>
+            {t('today', 'Today')}
+          </Button>
         </div>
       )}
       {isListView && (
         <div className="flex flex-grow flex-row items-center gap-[10px]">
-          <div className="border h-[42px] border-border bg-border gap-[1px] flex items-center rounded-[8px] overflow-hidden">
-            <div
+          <ButtonGroup>
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={previousPage}
-              className={cn(
-                'text-foreground rtl:rotate-180 px-[9px] bg-card h-full flex items-center justify-center',
-                calendar.listPage > 0
-                  ? 'cursor-pointer hover:text-foreground hover:bg-accent'
-                  : 'opacity-50 cursor-not-allowed'
-              )}
+              disabled={calendar.listPage <= 0}
+              className="rtl:rotate-180"
             >
-              <ChevronLeft width={8} height={12} />
+              <ChevronLeft className="size-4" />
+            </Button>
+            <div className="flex min-w-[180px] items-center justify-center px-2 text-center text-[14px]">
+              {t('page', 'Page')} {calendar.listPage + 1} {t('of', 'of')}{' '}
+              {Math.max(1, calendar.listTotalPages)}
             </div>
-            <div className="min-w-[200px] text-center bg-card h-full flex items-center justify-center">
-              <div className="py-[3px] px-[9px] rounded-[5px] transition-all text-[14px]">
-                {t('page', 'Page')} {calendar.listPage + 1} {t('of', 'of')} {Math.max(1, calendar.listTotalPages)}
-              </div>
-            </div>
-            <div
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={nextPage}
-              className={cn(
-                'text-foreground rtl:rotate-180 px-[9px] bg-card h-full flex items-center justify-center',
-                calendar.listPage < calendar.listTotalPages - 1
-                  ? 'cursor-pointer hover:text-foreground hover:bg-accent'
-                  : 'opacity-50 cursor-not-allowed'
-              )}
+              disabled={calendar.listPage >= calendar.listTotalPages - 1}
+              className="rtl:rotate-180"
             >
-              <ChevronRight width={8} height={12} />
-            </div>
-          </div>
-          <div className="flex flex-row p-[4px] border border-border rounded-[8px] text-[14px] font-[500]">
+              <ChevronRight className="size-4" />
+            </Button>
+          </ButtonGroup>
+          <ButtonGroup>
             {listStateOptions.map((option) => (
-              <div
+              <Button
                 key={option.value}
+                variant={
+                  calendar.listState === option.value ? 'secondary' : 'ghost'
+                }
+                size="sm"
                 onClick={setListStateFilter(option.value)}
-                className={cn(
-                  'pt-[6px] pb-[5px] cursor-pointer min-w-[80px] px-[12px] text-center rounded-[6px]',
-                  calendar.listState === option.value &&
-                    'text-foreground bg-accent'
-                )}
+                className="min-w-[80px]"
               >
                 {option.label}
-              </div>
+              </Button>
             ))}
-          </div>
+          </ButtonGroup>
           <div className="flex-1" />
         </div>
       )}
@@ -377,58 +369,49 @@ export const Filters = () => {
         integrations={calendar.integrations}
       />
       {!isListView && (
-        <div className="flex flex-row p-[4px] border border-border rounded-[8px] text-[14px] font-[500]">
-          <div
-            className={cn(
-              'pt-[6px] pb-[5px] cursor-pointer w-[74px] text-center rounded-[6px]',
-              calendar.display === 'day' && 'text-foreground bg-accent'
-            )}
+        <ButtonGroup>
+          <Button
+            variant={calendar.display === 'day' ? 'secondary' : 'ghost'}
+            size="sm"
             onClick={setDay}
+            className="w-[64px]"
           >
             {t('day', 'Day')}
-          </div>
-          <div
-            className={cn(
-              'pt-[6px] pb-[5px] cursor-pointer w-[74px] text-center rounded-[6px]',
-              calendar.display === 'week' && 'text-foreground bg-accent'
-            )}
+          </Button>
+          <Button
+            variant={calendar.display === 'week' ? 'secondary' : 'ghost'}
+            size="sm"
             onClick={setWeek}
+            className="w-[64px]"
           >
             {t('week', 'Week')}
-          </div>
-          <div
-            className={cn(
-              'pt-[6px] pb-[5px] cursor-pointer w-[74px] text-center rounded-[6px]',
-              calendar.display === 'month' && 'text-foreground bg-accent'
-            )}
+          </Button>
+          <Button
+            variant={calendar.display === 'month' ? 'secondary' : 'ghost'}
+            size="sm"
             onClick={setMonth}
+            className="w-[64px]"
           >
             {t('month', 'Month')}
-          </div>
-        </div>
+          </Button>
+        </ButtonGroup>
       )}
-      <div className="flex flex-row p-[4px] border border-border rounded-[8px] text-[14px] font-[500]">
-        <div
+      <ButtonGroup>
+        <Button
+          variant={!isListView ? 'secondary' : 'ghost'}
+          size="icon"
           onClick={setCalendarView}
-          className={cn(
-            'pt-[6px] pb-[5px] cursor-pointer flex justify-center items-center w-[34px] text-center rounded-[6px]',
-            !isListView && 'text-foreground bg-accent'
-          )}
         >
-          {/*calendar*/}
-          <Calendar width={17} height={19} />
-        </div>
-        <div
+          <Calendar className="size-4" />
+        </Button>
+        <Button
+          variant={isListView ? 'secondary' : 'ghost'}
+          size="icon"
           onClick={setList}
-          className={cn(
-            'pt-[6px] pb-[5px] flex justify-center items-center cursor-pointer w-[34px] text-center rounded-[6px]',
-            isListView && 'text-foreground bg-accent'
-          )}
         >
-          {/*list*/}
-          <List width={20} height={20} />
-        </div>
-      </div>
+          <List className="size-4" />
+        </Button>
+      </ButtonGroup>
     </div>
   );
 };

@@ -81,7 +81,7 @@ export const NewPost = () => {
       onClick={createAPost}
     >
       <Plus className="size-5 min-w-[20px]" />
-      <span className="text-[14px] group-[.sidebar]:hidden">
+      <span className="text-[14px]">
         {t('create_new_post', 'Create Post')}
       </span>
     </Button>

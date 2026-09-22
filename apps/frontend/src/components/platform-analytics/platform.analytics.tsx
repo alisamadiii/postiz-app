@@ -14,10 +14,8 @@ import { useRouter } from 'next/navigation';
 import { useToaster } from '@gitroom/react/toaster/toaster';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { useVariables } from '@gitroom/react/helpers/variable.context';
-import useCookie from 'react-use-cookie';
 import { SVGLine } from '@gitroom/frontend/components/launches/launches.component';
 import { LoadingComponent } from '@gitroom/frontend/components/layout/loading';
-import { ChevronLeft } from 'lucide-react';
 const allowedIntegrations = [
   'facebook',
   'instagram',
@@ -40,7 +38,6 @@ export const PlatformAnalytics = () => {
   const [current, setCurrent] = useState(0);
   const [key, setKey] = useState(7);
   const [refresh, setRefresh] = useState(false);
-  const [collapseMenu, setCollapseMenu] = useCookie('collapseMenu', '0');
   const toaster = useToaster();
   const load = useCallback(async () => {
     const int = (
@@ -179,20 +176,14 @@ export const PlatformAnalytics = () => {
       <div
         className={cn(
           'bg-card p-[20px] flex flex-col gap-[15px] transition-all',
-          collapseMenu === '1' ? 'group sidebar w-[100px]' : 'w-[260px]'
+          'w-[260px]'
         )}
       >
         <div className="flex gap-[12px] flex-col">
           <div className="flex items-center">
-            <h2 className="group-[.sidebar]:hidden flex-1 text-[20px] font-[500]">
+            <h2 className="flex-1 text-[20px] font-[500]">
               {t('channels')}
             </h2>
-            <div
-              onClick={() => setCollapseMenu(collapseMenu === '1' ? '0' : '1')}
-              className="group-[.sidebar]:rotate-[180deg] group-[.sidebar]:mx-auto text-foreground bg-secondary rounded-[6px] w-[24px] h-[24px] flex items-center justify-center cursor-pointer select-none"
-            >
-              <ChevronLeft className="w-[7px] h-[13px]" />
-            </div>
           </div>
           {sortedIntegrations.map((integration, index) => (
             <div
@@ -252,7 +243,7 @@ export const PlatformAnalytics = () => {
               </div>
               <div
                 className={cn(
-                  'flex-1 whitespace-nowrap text-ellipsis overflow-hidden group-[.sidebar]:hidden',
+                  'flex-1 whitespace-nowrap text-ellipsis overflow-hidden',
                   integration.disabled && 'opacity-50'
                 )}
               >

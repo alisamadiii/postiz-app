@@ -307,7 +307,7 @@ export const Menu: FC<{
           onClick={(e) => e.stopPropagation()}
           className="flex cursor-pointer select-none outline-none text-muted-foreground group-hover/profile:text-foreground"
         >
-          <MoreVertical width={24} height={24} />
+          <MoreVertical width={16} height={16} />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent

@@ -103,7 +103,7 @@ export const DelayComponent: FC<{
                 key={option.value}
                 className={cn(
                   'h-[32px] flex items-center justify-center rounded-[4px] cursor-pointer hover:bg-background text-[13px]',
-                  currentDelay === option.value && 'bg-[#612BD3] text-white hover:bg-[#612BD3]'
+                  currentDelay === option.value && 'bg-primary text-white hover:bg-primary/90'
                 )}
               >
                 {option.label}
@@ -120,8 +120,8 @@ export const DelayComponent: FC<{
                 onClick={(e) => e.stopPropagation()}
                 placeholder="Custom min"
                 className={cn(
-                  'flex-1 w-full h-[32px] px-[8px] rounded-[4px] bg-background border text-[13px] outline-none focus:border-[#612BD3]',
-                  isCustomDelay ? 'border-[#612BD3]' : 'border-foreground/10'
+                  'flex-1 w-full h-[32px] px-[8px] rounded-[4px] bg-background border text-[13px] outline-none focus:border-primary',
+                  isCustomDelay ? 'border-primary' : 'border-foreground/10'
                 )}
               />
               <button
@@ -133,7 +133,7 @@ export const DelayComponent: FC<{
                     setCustomValue('');
                   }
                 }}
-                className="h-[32px] px-[10px] rounded-[4px] bg-[#612BD3] text-white text-[12px] font-[600] hover:bg-[#612BD3]/80"
+                className="h-[32px] px-[10px] rounded-[4px] bg-primary text-white text-[12px] font-[600] hover:bg-primary/80"
               >
                 Set
               </button>

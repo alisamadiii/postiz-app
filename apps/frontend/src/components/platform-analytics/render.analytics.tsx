@@ -69,7 +69,7 @@ const AnalyticsCard: FC<{
           rounded-[12px]
           overflow-hidden
           transition-all duration-200
-          hover:border-[#612bd3]/50
+          hover:border-primary/50
         `}
       >
         {/* Header */}
@@ -78,7 +78,7 @@ const AnalyticsCard: FC<{
             <div
               className={`
                 w-[8px] h-[8px] rounded-full
-                ${color === 'purple' ? 'bg-[#612bd3]' : ''}
+                ${color === 'purple' ? 'bg-primary' : ''}
                 ${color === 'green' ? 'bg-[#32d583]' : ''}
                 ${color === 'blue' ? 'bg-[#1d9bf0]' : ''}
               `}
@@ -127,8 +127,8 @@ const EmptyState: FC<{ onRefresh: () => void }> = ({ onRefresh }) => {
 
   return (
     <div className="col-span-full flex flex-col items-center justify-center py-[48px] px-[24px] bg-muted border border-border rounded-[12px]">
-      <div className="w-[48px] h-[48px] mb-[16px] rounded-full bg-[#612bd3]/10 flex items-center justify-center">
-        <Clock className="w-[24px] h-[24px] text-[#612bd3]" />
+      <div className="w-[48px] h-[48px] mb-[16px] rounded-full bg-primary/10 flex items-center justify-center">
+        <Clock className="w-[24px] h-[24px] text-primary" />
       </div>
       <p className="text-[15px] text-muted-foreground text-center mb-[12px]">
         {t(
@@ -138,7 +138,7 @@ const EmptyState: FC<{ onRefresh: () => void }> = ({ onRefresh }) => {
       </p>
       <button
         onClick={onRefresh}
-        className="inline-flex items-center gap-[6px] px-[16px] py-[8px] text-[14px] font-medium text-white bg-[#612bd3] hover:bg-[#5023b8] rounded-[8px] transition-colors"
+        className="inline-flex items-center gap-[6px] px-[16px] py-[8px] text-[14px] font-medium text-white bg-primary hover:bg-primary/90 rounded-[8px] transition-colors"
       >
         <RefreshCw className="w-[16px] h-[16px]" />
         {t('refresh_channel', 'Refresh Channel')}

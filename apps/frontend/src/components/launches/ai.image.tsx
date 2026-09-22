@@ -100,7 +100,7 @@ ${style}
               className={cn(
                 'cursor-pointer rounded-[4px] px-[10px] h-[30px] flex items-center text-[12px] border',
                 style === p
-                  ? 'bg-[#612BD3] border-[#612BD3] text-white'
+                  ? 'bg-primary border-primary text-white'
                   : 'bg-muted border-border'
               )}
             >
