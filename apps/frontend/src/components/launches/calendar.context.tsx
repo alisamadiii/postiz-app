@@ -236,7 +236,9 @@ export const CalendarWeekProvider: FC<{
     filters.display === 'list' ? `/posts-list-${listParams}` : null,
     loadListData,
     {
-      refreshInterval: 3600000,
+      // Poll fast only while a post is pending/being published; stop once none are.
+      refreshInterval: (latest) =>
+        latest?.posts?.some((p: any) => p.state === 'QUEUE') ? 10000 : 0,
       refreshWhenOffline: false,
       refreshWhenHidden: false,
       revalidateOnFocus: false,

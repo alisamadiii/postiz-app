@@ -52,5 +52,3 @@ jobs:
 
           docker push "${IMAGE}:${BRANCH_TAG}"
           docker push "${IMAGE}:${BRANCH_TAG}-${GIT_SHA}"
-
-# ci: trigger build

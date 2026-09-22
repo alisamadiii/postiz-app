@@ -236,8 +236,10 @@ export class PostsRepository {
             },
           };
 
-    const orderDirection: 'asc' | 'desc' =
-      stateFilter === 'published' ? 'desc' : 'asc';
+    // Newest publishDate first, so backend pagination matches the desc order the
+    // list table renders in. No tab is date-restricted: All shows every state and
+    // every date, Scheduled/Draft/Published each show their state regardless of date.
+    const orderDirection: 'asc' | 'desc' = 'desc';
 
     const where = {
       AND: [
@@ -250,11 +252,6 @@ export class PostsRepository {
         },
       ],
       ...stateAndDate,
-      // Published posts were already posted (publishDate in the past), so fetch
-      // all of them; everything else stays upcoming. Ordering handles the rest.
-      ...(stateFilter === 'published'
-        ? {}
-        : { publishDate: { gte: dayjs.utc().toDate() } }),
       deletedAt: null as Date | null,
       parentPostId: null as string | null,
       intervalInDays: null as number | null,
