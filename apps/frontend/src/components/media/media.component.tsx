@@ -26,20 +26,29 @@ import { useUppyUploader } from '@gitroom/frontend/components/media/new.uploader
 import { useUser } from '@gitroom/frontend/components/layout/user.context';
 import { AiImage } from '@gitroom/frontend/components/launches/ai.image';
 import { DropFiles } from '@gitroom/frontend/components/layout/drop.files';
-import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { ThirdPartyMedia } from '@gitroom/frontend/components/third-parties/third-party.media';
 import { ReactSortable } from 'react-sortablejs';
 import { MediaComponentInner } from '@gitroom/frontend/components/launches/helpers/media.settings.component';
 import { AiVideo } from '@gitroom/frontend/components/launches/ai.video';
-import { useModals } from '@gitroom/frontend/components/layout/new-modal';
+import {
+  useModals,
+  areYouSure,
+} from '@gitroom/frontend/components/layout/new-modal';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@gitroom/react/ui/dropdown-menu';
+import copy from 'copy-to-clipboard';
+import { Input } from '@gitroom/react/ui/input';
 import { ThirdPartyMediaLibrary } from '@gitroom/frontend/components/third-parties/third-party.media-library';
 import { Dashboard } from '@uppy/react';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
   PlusIcon,
-  DeleteCircleIcon,
   CloseCircleIcon,
   DragHandleIcon,
   MediaSettingsIcon,
@@ -51,7 +60,7 @@ import { useLaunchStore } from '@gitroom/frontend/components/new-launch/store';
 import { useShallow } from 'zustand/react/shallow';
 import { LoadingComponent } from '@gitroom/frontend/components/layout/loading';
 import { useDebounce } from 'use-debounce';
-import { Maximize } from 'lucide-react';
+import { Maximize, MoreVertical, X, Copy, Trash2 } from 'lucide-react';
 const showModalEmitter = new EventEmitter();
 export const Pagination: FC<{
   current: number;
@@ -343,13 +352,23 @@ export const MediaBox: FC<{
   );
 
   const maximize = useCallback(
-    (media: Media) => async (e: any) => {
-      e.stopPropagation();
+    (media: Media) => async (e?: any) => {
+      e?.stopPropagation?.();
       modals.openModal({
         title: '',
-        top: 10,
-        children: (
-          <div className="w-full h-full p-[50px]">
+        removeLayout: true,
+        fullScreen: true,
+        closeOnEscape: true,
+        closeOnClickOutside: true,
+        children: (close: () => void) => (
+          <div className="w-full h-full bg-black flex items-center justify-center relative">
+            <button
+              type="button"
+              onClick={close}
+              className="absolute top-[16px] end-[16px] z-[10] w-[40px] h-[40px] flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition-all"
+            >
+              <X width={20} height={20} />
+            </button>
             {hasExtension(media.path, 'mp4') ? (
               <VideoFrame
                 autoplay={true}
@@ -357,9 +376,7 @@ export const MediaBox: FC<{
               />
             ) : (
               <img
-                width="100%"
-                height="100%"
-                className="w-full h-full max-h-[100%] max-w-[100%] object-cover"
+                className="w-full h-full object-contain"
                 src={mediaDirectory.set(media.path)}
                 alt="media"
               />
@@ -368,19 +385,29 @@ export const MediaBox: FC<{
         ),
       });
     },
-    []
+    [mediaDirectory]
+  );
+
+  const copyUrl = useCallback(
+    (media: Media) => () => {
+      copy(mediaDirectory.set(media.path));
+      toaster.show(t('copied_to_clipboard', 'Copied to clipboard'), 'success');
+    },
+    [mediaDirectory, toaster, t]
   );
 
   const deleteImage = useCallback(
-    (media: Media) => async (e: any) => {
-      e.stopPropagation();
+    (media: Media) => async () => {
       if (
-        !(await deleteDialog(
-          t(
-            'are_you_sure_you_want_to_delete_the_image',
-            'Are you sure you want to delete the image?'
-          )
-        ))
+        !(await areYouSure({
+          title: t('delete_file', 'Delete file?'),
+          description: t(
+            'delete_file_cannot_be_undone',
+            'This cannot be undone.'
+          ),
+          approveLabel: t('delete', 'Delete'),
+          cancelLabel: t('cancel', 'Cancel'),
+        }))
       ) {
         return;
       }
@@ -389,7 +416,7 @@ export const MediaBox: FC<{
       });
       mutate();
     },
-    [mutate]
+    [mutate, t]
   );
 
   const btn = useMemo(() => {
@@ -412,7 +439,11 @@ export const MediaBox: FC<{
   }, [t, loading]);
 
   return (
-    <DropFiles disabled={loading} className="flex flex-col flex-1" onDrop={dragAndDrop}>
+    <DropFiles
+      disabled={loading}
+      className="flex flex-col flex-1 outline-none"
+      onDrop={dragAndDrop}
+    >
       <div className="flex flex-col flex-1">
         <div
           className={cn(
@@ -424,12 +455,12 @@ export const MediaBox: FC<{
           )}
         >
           <div className="flex-1">
-            <input
+            <Input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder={t('search_media_by_name', 'Search by file name')}
-              className="w-full h-[44px] px-[14px] rounded-[8px] bg-card border border-muted text-[14px] outline-none focus:border-primary"
+              className="h-[44px] rounded-[8px]"
             />
           </div>
           <input
@@ -445,7 +476,7 @@ export const MediaBox: FC<{
           </div>
         </div>
         <div className="w-full pointer-events-none relative mt-[5px] mb-[5px]">
-          <div className="w-full h-[46px] overflow-hidden absolute left-0 bg-card uppyChange">
+          <div className="w-full h-[46px] absolute left-0 bg-card uppyChange">
             <Dashboard
               height={46}
               uppy={uppy}
@@ -456,134 +487,141 @@ export const MediaBox: FC<{
               hidePauseResumeButton={true}
               hideCancelButton={true}
               hideProgressAfterFinish={true}
+              proudlyDisplayPoweredByUppy={false}
+              locale={{
+                strings: {
+                  dropPasteFiles: '',
+                  dropPasteImportFiles: '',
+                  dropHint: '',
+                  browseFiles: '',
+                },
+              }}
             />
           </div>
           <div className="w-full h-[46px] uppyChange" />
         </div>
-        <div
-          className={cn(
-            'flex-1 relative',
-            !isLoading &&
-              !data?.results?.length &&
-              'bg-foreground/[0.02] rounded-[12px]'
-          )}
-        >
-          <div
-            className={cn(
-              'absolute -left-[3px] -top-[3px] withp3 h-full overflow-x-hidden overflow-y-auto scrollbar scrollbar-thumb-muted scrollbar-track-card',
-              !isLoading &&
-                !data?.results?.length &&
-                'flex justify-center items-center gap-[20px] flex-col'
-            )}
-          >
-            {!isLoading && !data?.results?.length && (
-              <>
-                <NoMediaIcon />
-                <div className="text-[20px] font-[600]">
-                  {debouncedSearch
-                    ? t(
-                        'no_media_match_search',
-                        'No media matches your search'
-                      )
-                    : t(
-                        'you_dont_have_any_media_yet',
-                        "You don't have any media yet"
-                      )}
-                </div>
-                <div className="whitespace-pre-line text-foreground/[0.6] text-center">
-                  {t(
-                    'select_or_upload_pictures_max_1gb',
-                    'Select or upload pictures (maximum 1 GB per upload).'
-                  )}{' '}
-                  {'\n'}
-                  {t(
-                    'you_can_drag_drop_pictures',
-                    'You can also drag & drop pictures.'
+        {!isLoading && !data?.results?.length ? (
+          <div className="flex-1 flex justify-center items-center gap-[20px] flex-col bg-foreground/[0.02] rounded-[12px] py-[60px]">
+            <NoMediaIcon />
+            <div className="text-[20px] font-[600]">
+              {debouncedSearch
+                ? t('no_media_match_search', 'No media matches your search')
+                : t(
+                    'you_dont_have_any_media_yet',
+                    "You don't have any media yet"
                   )}
-                </div>
-                <div className="forceChange flex gap-[8px]">
-                  {btn}
-                  <ThirdPartyMediaLibrary onImported={() => mutate()} />
-                </div>
-              </>
-            )}
-            {isLoading && (
-              <>
-                {[...new Array(16)].map((_, i) => (
-                  <div
-                    className={cn(
-                      'px-[3px] py-[3px] float-left rounded-[6px] cursor-pointer w8-max aspect-square'
-                    )}
-                    key={i}
-                  >
-                    <div className="w-full h-full bg-border rounded-[6px] animate-pulse" />
+            </div>
+            <div className="whitespace-pre-line text-foreground/[0.6] text-center">
+              {t(
+                'select_or_upload_pictures_max_1gb',
+                'Select or upload pictures (maximum 1 GB per upload).'
+              )}{' '}
+              {'\n'}
+              {t(
+                'you_can_drag_drop_pictures',
+                'You can also drag & drop pictures.'
+              )}
+            </div>
+            <div className="forceChange flex gap-[8px]">
+              {btn}
+              <ThirdPartyMediaLibrary onImported={() => mutate()} />
+            </div>
+          </div>
+        ) : (
+          <>
+            <div
+              className={cn(
+                'grid gap-[12px] grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8',
+                !standalone &&
+                  'max-h-[60vh] overflow-y-auto scrollbar scrollbar-thumb-muted scrollbar-track-card'
+              )}
+            >
+              {isLoading &&
+                [...new Array(16)].map((_, i) => (
+                  <div className="aspect-square rounded-[16px]" key={i}>
+                    <div className="w-full h-full bg-border rounded-[16px] animate-pulse" />
                   </div>
                 ))}
-              </>
-            )}
-            {data?.results
-              ?.filter((f: any) => {
-                if (type === 'video') {
-                  return hasExtension(f.path, 'mp4');
-                } else if (type === 'image') {
-                  return !hasExtension(f.path, 'mp4');
-                }
-                return true;
-              })
-              .map((media: any) => (
-                <div
-                  className={cn(
-                    'group px-[3px] py-[3px] float-left rounded-[6px] w8-max aspect-square',
-                    !standalone && 'cursor-pointer'
-                  )}
-                  key={media.id}
-                >
-                  <div
-                    className={cn(
-                      'w-full h-full rounded-[6px] border-[4px] relative',
-                      !!selected.find((p) => p.id === media.id)
-                        ? 'border-primary'
-                        : 'border-transparent'
-                    )}
-                    onClick={addRemoveSelected(media)}
-                  >
-                    {!!selected.find((p: any) => p.id === media.id) ? (
-                      <div className="text-white flex z-[101] justify-center items-center text-[14px] font-[500] w-[24px] h-[24px] rounded-full bg-primary absolute -bottom-[10px] -end-[10px]">
-                        {selected.findIndex((z: any) => z.id === media.id) + 1}
-                      </div>
-                    ) : (
-                      <DeleteCircleIcon
-                        className="cursor-pointer hidden z-[100] group-hover:block absolute -top-[5px] -end-[5px]"
-                        onClick={deleteImage(media)}
-                      />
-                    )}
-                    <div className="absolute bottom-[10px] end-[10px] z-[100]">{media.originalName}</div>
-                    <div className="w-full h-full rounded-[6px] overflow-hidden relative">
-                      <div className="absolute z-[20] left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%]">
-                        <div
-                          onClick={maximize(media)}
-                          className="cursor-pointer p-[4px] bg-black/40 hidden group-hover:block hover:scale-150 transition-all"
-                        >
-                          <Maximize width={30} height={30} className="text-[#F1F5F9]" />
+              {data?.results
+                ?.filter((f: any) => {
+                  if (type === 'video') {
+                    return hasExtension(f.path, 'mp4');
+                  } else if (type === 'image') {
+                    return !hasExtension(f.path, 'mp4');
+                  }
+                  return true;
+                })
+                .map((media: any) => {
+                  const isSelected = !!selected.find(
+                    (p: any) => p.id === media.id
+                  );
+                  return (
+                    <div className="group relative aspect-square" key={media.id}>
+                      <div
+                        className={cn(
+                          'w-full h-full rounded-[16px] border-[3px] relative cursor-pointer',
+                          isSelected ? 'border-primary' : 'border-transparent'
+                        )}
+                        onClick={
+                          standalone
+                            ? maximize(media)
+                            : addRemoveSelected(media)
+                        }
+                      >
+                        {hasExtension(media.path, 'mp4') ? (
+                          <VideoFrame url={mediaDirectory.set(media.path)} />
+                        ) : (
+                          <img
+                            width="100%"
+                            height="100%"
+                            className="w-full h-full object-cover rounded-[13px]"
+                            src={mediaDirectory.set(media.path)}
+                            alt="media"
+                          />
+                        )}
+                        <div className="absolute bottom-0 left-0 right-0 px-[8px] py-[6px] rounded-b-[13px] bg-gradient-to-t from-black/70 to-transparent text-white text-[11px] truncate opacity-0 group-hover:opacity-100 transition-opacity">
+                          {media.originalName}
                         </div>
                       </div>
-                      {hasExtension(media.path, 'mp4') ? (
-                        <VideoFrame url={mediaDirectory.set(media.path)} />
-                      ) : (
-                        <img
-                          width="100%"
-                          height="100%"
-                          className="w-full h-full object-cover"
-                          src={mediaDirectory.set(media.path)}
-                          alt="media"
-                        />
+                      {isSelected && (
+                        <div className="text-white flex z-[20] justify-center items-center text-[14px] font-[500] w-[24px] h-[24px] rounded-full bg-primary absolute -bottom-[8px] -end-[8px] pointer-events-none">
+                          {selected.findIndex((z: any) => z.id === media.id) + 1}
+                        </div>
                       )}
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <button
+                            type="button"
+                            onClick={(e) => e.stopPropagation()}
+                            className="absolute top-[6px] end-[6px] z-[20] w-[28px] h-[28px] flex items-center justify-center rounded-[6px] bg-black/50 text-white opacity-0 group-hover:opacity-100 hover:bg-black/70 transition-all"
+                          >
+                            <MoreVertical width={16} height={16} />
+                          </button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="min-w-[180px]">
+                          <DropdownMenuItem onClick={maximize(media)}>
+                            <Maximize width={16} height={16} />
+                            {t('preview', 'Preview')}
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={copyUrl(media)}>
+                            <Copy width={16} height={16} />
+                            {t('copy_cdn_url', 'Copy CDN URL')}
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={deleteImage(media)}
+                            className="text-destructive focus:text-destructive"
+                          >
+                            <Trash2 width={16} height={16} />
+                            {t('delete', 'Delete')}
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
-                  </div>
-                </div>
-              ))}
-          </div>
-        </div>
+                  );
+                })}
+            </div>
+          </>
+        )}
         {(data?.pages || 0) > 1 && (
           <Pagination
             current={page}

@@ -14,7 +14,7 @@ import { useToaster } from '@gitroom/react/toaster/toaster';
 import { PlugsContext } from '@gitroom/frontend/components/plugs/plugs.context';
 import { Plug } from '@gitroom/frontend/components/plugs/plug';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
-import { SVGLine } from '@gitroom/frontend/components/launches/launches.component';
+import { SVGLine } from '@gitroom/frontend/components/launches/svg.line';
 import { LoadingComponent } from '@gitroom/frontend/components/layout/loading';
 export const Plugs = () => {
   const fetch = useFetch();

@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import { useCalendar } from '@gitroom/frontend/components/launches/calendar.context';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
-import { SetSelectionModal } from '@gitroom/frontend/components/launches/calendar';
+import { SetSelectionModal } from '@gitroom/frontend/components/launches/set.selection.modal';
 import { AddEditModal } from '@gitroom/frontend/components/new-launch/add.edit.modal';
 import { ModalWrapperComponent } from '@gitroom/frontend/components/new-launch/modal.wrapper.component';
 import { Button } from '@gitroom/react/ui/button';

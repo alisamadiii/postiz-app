@@ -15,6 +15,7 @@ import {
   Users,
   CreditCard,
   Settings,
+  Share2,
 } from 'lucide-react';
 
 interface MenuItemInterface {
@@ -46,6 +47,11 @@ export const useMenuItem = () => {
       name: isGeneral ? t('calendar', 'Calendar') : t('launches', 'Launches'),
       icon: <Calendar className="size-5" />,
       path: '/launches',
+    },
+    {
+      name: t('platforms', 'Platforms'),
+      icon: <Share2 className="size-5" />,
+      path: '/platforms',
     },
     {
       name: t('analytics', 'Analytics'),

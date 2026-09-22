@@ -145,8 +145,9 @@ export const CalendarWeekProvider: FC<{
   const [internalData, setInternalData] = useState([] as any[]);
   const [trendings] = useState<string[]>([]);
   const searchParams = useSearchParams();
-  const [displaySaved, setDisplaySaved] = useCookie('calendar-display', 'week');
-  const display = searchParams.get('display') || displaySaved;
+  const [displaySaved, setDisplaySaved] = useCookie('calendar-display', 'list');
+  // Calendar grid views were removed — the app is table/list-only.
+  const display = 'list';
 
   // List view state
   const [listPage, setListPage] = useState(0);

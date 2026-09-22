@@ -9,7 +9,7 @@ import useSWR from 'swr';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { useToaster } from '@gitroom/react/toaster/toaster';
 import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
-import { SVGLine } from '@gitroom/frontend/components/launches/launches.component';
+import { SVGLine } from '@gitroom/frontend/components/launches/svg.line';
 import { MoreVertical, Trash2 } from 'lucide-react';
 
 export const ThirdPartyMenuComponent: FC<{

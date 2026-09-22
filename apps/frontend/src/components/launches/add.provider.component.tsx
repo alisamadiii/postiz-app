@@ -90,7 +90,7 @@ export const AddProviderButton: FC<{
         </span>
       </UIButton>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-[600px]">
+        <DialogContent className="md:max-w-[900px]">
           <DialogHeader>
             <DialogTitle>
               {invite
