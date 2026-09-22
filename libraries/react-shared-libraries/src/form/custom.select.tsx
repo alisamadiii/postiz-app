@@ -92,7 +92,7 @@ export const CustomSelect: FC<{
       )}
       <div
         className={clsx(
-          'bg-input h-[44px] border-fifth border rounded-[4px] text-inputText placeholder-inputText items-center justify-center flex'
+          'bg-input h-[44px] border-fifth border rounded-md text-inputText placeholder-inputText items-center justify-center flex'
         )}
         onClick={changeOpen}
       >
@@ -162,7 +162,7 @@ export const CustomSelect: FC<{
         </div>
       )}
       {!removeError && (
-        <div className="text-red-400 text-[12px]">
+        <div className="text-destructive text-[12px]">
           {(err as any) || <>&nbsp;</>}
         </div>
       )}

@@ -66,7 +66,7 @@ export const MultiSelect: FC<{
       </div>
       <div
         className={clsx(
-          'bg-newBgColorInner border border-newTableBorder rounded-[8px] max-h-[160px] overflow-auto p-[12px] flex flex-col gap-[8px]',
+          'bg-newBgColorInner border border-newTableBorder rounded-md max-h-[160px] overflow-auto p-[12px] flex flex-col gap-[8px]',
           className
         )}
       >
@@ -85,7 +85,7 @@ export const MultiSelect: FC<{
         ))}
       </div>
       {!hideErrors && (
-        <div className="text-red-400 text-[12px]">{err || <>&nbsp;</>}</div>
+        <div className="text-destructive text-[12px]">{err || <>&nbsp;</>}</div>
       )}
     </div>
   );

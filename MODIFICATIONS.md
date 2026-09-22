@@ -22,12 +22,19 @@ When merging `upstream/main`, expect conflicts only in the files below. Everythi
 - `libraries/react-shared-libraries/src/helpers/cn.ts` — `cn()` helper (alt path).
 - `libraries/react-shared-libraries/src/ui/*.tsx` — vendored shadcn components (button, spinner, input, textarea, label, select, dialog, dropdown-menu, tabs, tooltip, popover, switch, separator, card, badge, skeleton) from `@usesend/ui`.
 
-### Primitive swaps (keep original API, render shadcn underneath)
-- `libraries/react-shared-libraries/src/form/button.tsx` — renders shadcn `Button`; original props (`secondary`/`loading`/`innerClassName`) preserved. (66 call sites, unchanged.)
-- _TODO: input, select, textarea, checkbox, custom.select, multi.select, slider._
+### Primitive swaps / reskin (keep original API + all logic; presentation only)
+- `libraries/react-shared-libraries/src/form/button.tsx` — renders shadcn `Button` (66 call sites, props preserved).
+- `form/input.tsx`, `form/textarea.tsx`, `form/select.tsx`, `form/custom.select.tsx`, `form/multi.select.tsx` — `rounded-md` + orange focus ring (`ring-ring`), `text-destructive` errors. All react-hook-form logic untouched.
+- `form/checkbox.tsx`, `form/slider.tsx` — orange checked/on state (`sdprimary`), `rounded-md`.
+
+### App-wide palette (the "shadcn variables everywhere" move)
+- `apps/frontend/src/app/colors.css` — flattened `:root { .dark {} }` nesting to top-level `.dark`/`.light` (nested form wasn't applying), then remapped Postiz structural tokens to shadcn vars: `--new-bgColor→--background`, `--new-bgColorInner→--card`, `--new-border/sep/table-border→--border`, `--new-btn-text→--foreground`, `--pz-primary→--background`, `--pz-forth/--new-btn-primary→--primary`, etc. → all components adopt the agency-orange design system with no per-component edits.
+
+### Animation
+- Covered by built-ins: Postiz modals keep `animate-fadeIn`; shadcn dialogs/dropdowns/tooltips/popovers animate via `tailwindcss-animate`; button `active:scale-95`; `transition-colors` on fields. `framer-motion` installed for future targeted motion.
 
 ### Declutter
-- `apps/frontend/src/components/layout/top.menu.tsx` — `hide: true` on Agent, Analytics, Plugs, third-party(Integrations), UGC, Affiliate, Billing (posting-only nav).
+- Reverted — nav kept intact per "don't remove anything". All routes/pages/buttons present.
 
 ## Token rename map (if you see broken colors after a merge)
 Postiz value vars `--color-X` were renamed to `--pz-X` in `colors.css`, and Tailwind utilities remapped in `global.css` `@theme`. shadcn owns `primary`/`secondary`/`gray`/`input` (now orange/neutral); all other Postiz utilities map to `--pz-*`/`--new-*`.
