@@ -1,103 +1,54 @@
----
-name: "Build Containers"
+name: Publish Docker
+
+# One image tag per branch, so every client instance stays isolated.
+#   agency branch          -> ghcr.io/alisamadiii/postiz:agency
+#   client/empowerher      -> ghcr.io/alisamadiii/postiz:client-empowerher
+# Each Coolify instance pins its own branch tag. Push the branch -> image rebuilds
+# under that same tag -> Redeploy in Coolify. No :latest, so builds never clobber.
 
 on:
-  workflow_dispatch:
   push:
-    tags:
-      - '*'
+    branches:
+      - agency
+      - "client/**"
+  workflow_dispatch:
 
 jobs:
-  build-containers-common:
+  build_and_publish:
+    name: Build and publish image
     runs-on: ubuntu-latest
-    outputs:
-      containerver: ${{ steps.getcontainerver.outputs.containerver }}
-    steps:
-      - name: Get Container Version
-        id: getcontainerver
-        run: |
-          echo "containerver=${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
+    permissions:
+      packages: write
+      contents: read
 
-  build-containers:
-    needs: build-containers-common
-    strategy:
-      matrix:
-        include:
-          - runnertags: ubuntu-latest
-            arch: amd64
-          - runnertags: ubuntu-24.04-arm
-            arch: arm64
-    runs-on: ${{ matrix.runnertags }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Login to ghcr
+      - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ github.token }}
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and Push Image
-        env:
-          CONTAINERVER: ${{ needs.build-containers-common.outputs.containerver }}
-          NEXT_PUBLIC_VERSION: ${{ github.ref_name }}
+      - name: Build and push the docker image
         run: |
-          docker buildx build --platform linux/${{ matrix.arch }} \
-            -f Dockerfile.dev \
-            -t ghcr.io/gitroomhq/postiz-app:${{ env.CONTAINERVER }}-${{ matrix.arch }} \
-            --build-arg NEXT_PUBLIC_VERSION=${{ env.NEXT_PUBLIC_VERSION }} \
-            --pull \
-            --no-cache \
-            --provenance=false --sbom=false \
-            --output "type=registry,name=ghcr.io/gitroomhq/postiz-app:${{ env.CONTAINERVER }}-${{ matrix.arch }}" .
+          # Branch name -> a safe docker tag (client/empowerher -> client-empowerher)
+          BRANCH_TAG="$(echo "${GITHUB_REF_NAME}" | tr '/' '-')"
+          GIT_SHA="$(git rev-parse --short HEAD)"
+          IMAGE="ghcr.io/alisamadiii/postiz"
 
-  build-container-manifest:
-    needs: [build-containers, build-containers-common]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Login to ghcr
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ github.token }}
+          echo "Building ${IMAGE}:${BRANCH_TAG} (sha ${GIT_SHA})"
 
-      - name: Create Docker Manifest
-        env:
-          CONTAINERVER: ${{ needs.build-containers-common.outputs.containerver }}
-        run: |
-          # Verify the architecture images
-          echo "Verifying AMD64 image:"
-          docker buildx imagetools inspect ghcr.io/gitroomhq/postiz-app:${{ env.CONTAINERVER }}-amd64
-          
-          echo "Verifying ARM64 image:"
-          docker buildx imagetools inspect ghcr.io/gitroomhq/postiz-app:${{ env.CONTAINERVER }}-arm64
-          
-          # Try to remove any existing manifests first
-          docker manifest rm ghcr.io/gitroomhq/postiz-app:${{ env.CONTAINERVER }} || true
-          docker manifest rm ghcr.io/gitroomhq/postiz-app:latest || true
-          
-          # Create and push the version-specific manifest
-          docker manifest create ghcr.io/gitroomhq/postiz-app:${{ env.CONTAINERVER }} \
-            --amend ghcr.io/gitroomhq/postiz-app:${{ env.CONTAINERVER }}-amd64 \
-            --amend ghcr.io/gitroomhq/postiz-app:${{ env.CONTAINERVER }}-arm64
+          docker build \
+            -f ./Dockerfile.dev \
+            --progress=plain \
+            --build-arg NEXT_PUBLIC_VERSION="${BRANCH_TAG}" \
+            -t "${IMAGE}:${BRANCH_TAG}" \
+            -t "${IMAGE}:${BRANCH_TAG}-${GIT_SHA}" \
+            .
 
-          docker manifest push ghcr.io/gitroomhq/postiz-app:${{ env.CONTAINERVER }}
-
-          # Create and push the latest manifest
-          docker manifest create ghcr.io/gitroomhq/postiz-app:latest \
-            --amend ghcr.io/gitroomhq/postiz-app:${{ env.CONTAINERVER }}-amd64 \
-            --amend ghcr.io/gitroomhq/postiz-app:${{ env.CONTAINERVER }}-arm64
-
-          docker manifest push ghcr.io/gitroomhq/postiz-app:latest
-
-      - name: Verify Manifest
-        run: |
-          docker manifest inspect ghcr.io/gitroomhq/postiz-app:latest
+          docker push "${IMAGE}:${BRANCH_TAG}"
+          docker push "${IMAGE}:${BRANCH_TAG}-${GIT_SHA}"
