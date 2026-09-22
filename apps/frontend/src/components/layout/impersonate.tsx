@@ -16,6 +16,7 @@ import { ImportDebugPostModal } from '@gitroom/frontend/components/launches/impo
 import { useForm, FormProvider } from 'react-hook-form';
 import { classValidatorResolver } from '@hookform/resolvers/class-validator';
 import { AdminAddTeamMemberDto } from '@gitroom/nestjs-libraries/dtos/settings/admin.add.team.member.dto';
+import { Check, Download } from 'lucide-react';
 
 interface Charge {
   id: string;
@@ -443,19 +444,7 @@ const ChargesModal: FC<{ close: () => void }> = ({ close }) => {
                       }`}
                     >
                       {(selected.has(charge.id) || charge.refunded) && (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          width="14"
-                          height="14"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="3"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <polyline points="20 6 9 17 4 12" />
-                        </svg>
+                        <Check width={14} height={14} strokeWidth={3} />
                       )}
                     </div>
                   </td>
@@ -487,21 +476,7 @@ const ChargesModal: FC<{ close: () => void }> = ({ close }) => {
                         className="inline-flex items-center justify-center w-[28px] h-[28px] rounded-[4px] hover:bg-border transition-colors"
                         title={charge.invoice_pdf ? t('download_invoice', 'Download Invoice') : t('view_receipt', 'View Receipt')}
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          width="16"
-                          height="16"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                          <polyline points="7 10 12 15 17 10" />
-                          <line x1="12" y1="15" x2="12" y2="3" />
-                        </svg>
+                        <Download width={16} height={16} />
                       </a>
                     )}
                   </td>

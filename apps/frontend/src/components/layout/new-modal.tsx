@@ -10,11 +10,24 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  useRef,
+  useState,
 } from 'react';
 import { Button } from '@gitroom/react/form/button';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@gitroom/react/ui/alert-dialog';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { cn } from '@gitroom/react/helpers/cn';
 import { EventEmitter } from 'events';
+import { X } from 'lucide-react';
 
 interface OpenModalInterface {
   title?: any;
@@ -222,20 +235,7 @@ export const Component: FC<{
                       type="button"
                       onClick={closeModalFunction}
                     >
-                      <svg
-                        viewBox="0 0 15 15"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                      >
-                        <path
-                          d="M11.7816 4.03157C12.0062 3.80702 12.0062 3.44295 11.7816 3.2184C11.5571 2.99385 11.193 2.99385 10.9685 3.2184L7.50005 6.68682L4.03164 3.2184C3.80708 2.99385 3.44301 2.99385 3.21846 3.2184C2.99391 3.44295 2.99391 3.80702 3.21846 4.03157L6.68688 7.49999L3.21846 10.9684C2.99391 11.193 2.99391 11.557 3.21846 11.7816C3.44301 12.0061 3.80708 12.0061 4.03164 11.7816L7.50005 8.31316L10.9685 11.7816C11.193 12.0061 11.5571 12.0061 11.7816 11.7816C12.0062 11.557 12.0062 11.193 11.7816 10.9684L8.31322 7.49999L11.7816 4.03157Z"
-                          fill="currentColor"
-                          fillRule="evenodd"
-                          clipRule="evenodd"
-                        ></path>
-                      </svg>
+                      <X width={16} height={16} />
                     </button>
                   </div>
                 ) : null}
@@ -386,15 +386,85 @@ export const areYouSure = ({
 };
 
 export const DecisionEverywhere: FC = () => {
-  const decision = useDecisionModal();
+  const [open, setOpen] = useState(false);
+  const [content, setContent] = useState({
+    title: 'Are you sure?',
+    description: '' as any,
+    approveLabel: 'Yes',
+    cancelLabel: 'No',
+    onlyApprove: false,
+  });
+  const resolverRef = useRef<((value: boolean) => void) | undefined>(undefined);
+  const resolvedRef = useRef(true);
+
   useEffect(() => {
-    decisionModalEmitter.on('open', decision.open);
+    const handler = (params: any) => {
+      resolverRef.current = params.newRes;
+      resolvedRef.current = false;
+      setContent({
+        title: 'Are you sure?',
+        description: '',
+        approveLabel: 'Yes',
+        cancelLabel: 'No',
+        onlyApprove: false,
+        ...params,
+      });
+      setOpen(true);
+    };
+    decisionModalEmitter.on('open', handler);
+    return () => {
+      decisionModalEmitter.off('open', handler);
+    };
   }, []);
-  return null;
+
+  const resolve = useCallback((value: boolean) => {
+    if (!resolvedRef.current) {
+      resolvedRef.current = true;
+      resolverRef.current?.(value);
+    }
+    setOpen(false);
+  }, []);
+
+  return (
+    <AlertDialog
+      open={open}
+      onOpenChange={(next) => {
+        if (!next) {
+          resolve(false);
+        }
+      }}
+    >
+      <AlertDialogContent className="max-w-[360px]">
+        <AlertDialogHeader>
+          <AlertDialogTitle>{content.title}</AlertDialogTitle>
+          {content.description ? (
+            <AlertDialogDescription>
+              {content.description}
+            </AlertDialogDescription>
+          ) : null}
+        </AlertDialogHeader>
+        <AlertDialogFooter className="flex-col gap-2 sm:flex-col sm:justify-stretch sm:space-x-0">
+          <AlertDialogAction
+            onClick={() => resolve(true)}
+            className="h-11 w-full text-base"
+          >
+            {content.approveLabel}
+          </AlertDialogAction>
+          {!content.onlyApprove && (
+            <AlertDialogCancel
+              onClick={() => resolve(false)}
+              className="mt-0 h-11 w-full text-base"
+            >
+              {content.cancelLabel}
+            </AlertDialogCancel>
+          )}
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
 };
 
 export const useDecisionModal = () => {
-  const modals = useModals();
   const open = useCallback(
     ({
       title = 'Are you sure?',
@@ -405,23 +475,17 @@ export const useDecisionModal = () => {
       newRes = undefined as any,
     } = {}) => {
       return new Promise<boolean>((res) => {
-        modals.openModal({
+        decisionModalEmitter.emit('open', {
           title,
-          askClose: false,
-          onClose: () => res(false),
-          children: (
-            <DecisionModal
-              onlyApprove={onlyApprove}
-              resolution={(value) => (newRes ? newRes(value) : res(value))}
-              description={description}
-              approveLabel={approveLabel}
-              cancelLabel={cancelLabel}
-            />
-          ),
+          description,
+          onlyApprove,
+          approveLabel,
+          cancelLabel,
+          newRes: newRes || res,
         });
       });
     },
-    [modals]
+    []
   );
 
   return { open };

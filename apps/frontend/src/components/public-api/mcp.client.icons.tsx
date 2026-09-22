@@ -1,6 +1,7 @@
 'use client';
 
 import { FC } from 'react';
+import { Code } from 'lucide-react';
 
 // Logos for the MCP clients shown in Settings > Developers and in onboarding.
 // Monochrome marks use currentColor so they follow the button text color,
@@ -512,21 +513,7 @@ const icons: Record<string, FC<{ size: number }>> = {
     </svg>
   ),
   // Not a client: the onboarding "API" tab
-  API: ({ size }) => (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <polyline points="16 18 22 12 16 6" />
-      <polyline points="8 6 2 12 8 18" />
-    </svg>
-  ),
+  API: ({ size }) => <Code size={size} />,
 };
 
 export const McpClientIcon: FC<{ client: string; size?: number }> = ({

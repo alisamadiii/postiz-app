@@ -51,6 +51,7 @@ import { useLaunchStore } from '@gitroom/frontend/components/new-launch/store';
 import { useShallow } from 'zustand/react/shallow';
 import { LoadingComponent } from '@gitroom/frontend/components/layout/loading';
 import { useDebounce } from 'use-debounce';
+import { Maximize } from 'lucide-react';
 const showModalEmitter = new EventEmitter();
 export const Pagination: FC<{
   current: number;
@@ -563,18 +564,7 @@ export const MediaBox: FC<{
                           onClick={maximize(media)}
                           className="cursor-pointer p-[4px] bg-black/40 hidden group-hover:block hover:scale-150 transition-all"
                         >
-                          <svg
-                            width="30"
-                            height="30"
-                            viewBox="0 0 14 14"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M2 9H0V14H5V12H2V9ZM0 5H2V2H5V0H0V5ZM12 12H9V14H14V9H12V12ZM9 0V2H12V5H14V0H9Z"
-                              fill="#F1F5F9"
-                            />
-                          </svg>
+                          <Maximize width={30} height={30} className="text-[#F1F5F9]" />
                         </div>
                       </div>
                       {hasExtension(media.path, 'mp4') ? (

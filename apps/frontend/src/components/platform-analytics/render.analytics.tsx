@@ -5,6 +5,7 @@ import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { ChartSocial } from '@gitroom/frontend/components/analytics/chart-social';
 import { LoadingComponent } from '@gitroom/frontend/components/layout/loading';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
+import { Clock, RefreshCw } from 'lucide-react';
 
 interface AnalyticsDataItem {
   label: string;
@@ -127,18 +128,7 @@ const EmptyState: FC<{ onRefresh: () => void }> = ({ onRefresh }) => {
   return (
     <div className="col-span-full flex flex-col items-center justify-center py-[48px] px-[24px] bg-muted border border-border rounded-[12px]">
       <div className="w-[48px] h-[48px] mb-[16px] rounded-full bg-[#612bd3]/10 flex items-center justify-center">
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          className="text-[#612bd3]"
-        >
-          <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          <path d="M12 8v4l2 2" />
-        </svg>
+        <Clock className="w-[24px] h-[24px] text-[#612bd3]" />
       </div>
       <p className="text-[15px] text-muted-foreground text-center mb-[12px]">
         {t(
@@ -150,17 +140,7 @@ const EmptyState: FC<{ onRefresh: () => void }> = ({ onRefresh }) => {
         onClick={onRefresh}
         className="inline-flex items-center gap-[6px] px-[16px] py-[8px] text-[14px] font-medium text-white bg-[#612bd3] hover:bg-[#5023b8] rounded-[8px] transition-colors"
       >
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <path d="M23 4v6h-6M1 20v-6h6" />
-          <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
-        </svg>
+        <RefreshCw className="w-[16px] h-[16px]" />
         {t('refresh_channel', 'Refresh Channel')}
       </button>
     </div>

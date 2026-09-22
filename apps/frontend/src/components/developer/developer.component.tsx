@@ -1,6 +1,7 @@
 'use client';
 
 import { FC, useCallback, useState } from 'react';
+import { Copy, ExternalLink, Pencil, RotateCw, Trash2 } from 'lucide-react';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import useSWR from 'swr';
 import { useToaster } from '@gitroom/react/toaster/toaster';
@@ -43,19 +44,7 @@ const CopyButton = ({
       }}
       className="cursor-pointer px-[16px] h-[36px] bg-secondary hover:bg-accent transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
     >
-      <svg
-        width="14"
-        height="14"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-        <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
-      </svg>
+      <Copy width={14} height={14} />
       {label}
     </button>
   );
@@ -247,7 +236,7 @@ export const DeveloperComponent: FC = () => {
                 href="https://docs.postiz.com/public-api/oauth"
                 target="_blank"
               >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
+                <ExternalLink width={13} height={13} />
                 {t('read_the_docs', 'Docs')}
               </a>
             </div>
@@ -410,7 +399,7 @@ export const DeveloperComponent: FC = () => {
               href="https://docs.postiz.com/public-api/oauth"
               target="_blank"
             >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
+              <ExternalLink width={13} height={13} />
               {t('read_the_docs', 'Docs')}
             </a>
           </div>
@@ -530,7 +519,7 @@ export const DeveloperComponent: FC = () => {
                 onClick={startEditing}
                 className="cursor-pointer px-[16px] h-[36px] bg-secondary hover:bg-accent transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
               >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>
+                <Pencil width={14} height={14} />
                 {t('edit_app', 'Edit App')}
               </button>
             </div>
@@ -586,7 +575,7 @@ export const DeveloperComponent: FC = () => {
               onClick={rotateSecret}
               className="cursor-pointer px-[16px] h-[36px] bg-secondary hover:bg-accent transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.5 2v6h-6" /><path d="M21.34 15.57a10 10 0 11-.57-8.38L21.5 8" /></svg>
+              <RotateCw width={14} height={14} />
               {t('rotate_secret', 'Rotate Secret')}
             </button>
             <button
@@ -594,7 +583,7 @@ export const DeveloperComponent: FC = () => {
               onClick={deleteApp}
               className="cursor-pointer px-[16px] h-[36px] bg-red-600 hover:bg-red-700 text-white transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" /></svg>
+              <Trash2 width={14} height={14} />
               {t('delete_app', 'Delete App')}
             </button>
           </div>

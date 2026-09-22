@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useMemo } from 'react';
+import { Copy, ExternalLink, Eye, EyeOff, RotateCw } from 'lucide-react';
 import useSWR, { useSWRConfig } from 'swr';
 import { useUser } from '../layout/user.context';
 import copy from 'copy-to-clipboard';
@@ -277,19 +278,7 @@ export const CopyButton = ({
       }}
       className="cursor-pointer px-[16px] h-[36px] bg-secondary hover:bg-accent transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
     >
-      <svg
-        width="14"
-        height="14"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-        <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
-      </svg>
+      <Copy width={14} height={14} />
       {label}
     </button>
   );
@@ -349,7 +338,7 @@ const McpSection = ({
                 href={mcpConnectorUrls.Claude}
                 target="_blank"
               >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
+                <ExternalLink width={13} height={13} />
                 {t('add_to_claude', 'Add to Claude')}
               </a>
               <a
@@ -357,7 +346,7 @@ const McpSection = ({
                 href={mcpConnectorUrls.ChatGPT}
                 target="_blank"
               >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
+                <ExternalLink width={13} height={13} />
                 {t('add_to_chatgpt', 'Add to ChatGPT')}
               </a>
             </>
@@ -367,7 +356,7 @@ const McpSection = ({
             href="https://docs.postiz.com/mcp/introduction"
             target="_blank"
           >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
+            <ExternalLink width={13} height={13} />
             {t('read_the_docs', 'Docs')}
           </a>
         </div>
@@ -448,29 +437,11 @@ const McpSection = ({
                 onClick={() => setRevealed(!revealed)}
                 className="cursor-pointer px-[16px] h-[36px] bg-secondary hover:bg-accent transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
               >
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  {revealed ? (
-                    <>
-                      <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94" />
-                      <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19" />
-                      <line x1="1" y1="1" x2="23" y2="23" />
-                    </>
-                  ) : (
-                    <>
-                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                      <circle cx="12" cy="12" r="3" />
-                    </>
-                  )}
-                </svg>
+                {revealed ? (
+                  <EyeOff width={14} height={14} />
+                ) : (
+                  <Eye width={14} height={14} />
+                )}
                 {revealed ? t('hide', 'Hide') : t('reveal', 'Reveal')}
               </button>
             )}
@@ -484,7 +455,7 @@ const McpSection = ({
                 href={mcpConnectorUrls.Claude}
                 target="_blank"
               >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
+                <ExternalLink width={13} height={13} />
                 {t('add_to_claude', 'Add to Claude')}
               </a>
             )}
@@ -494,7 +465,7 @@ const McpSection = ({
                 href={mcpConnectorUrls.ChatGPT}
                 target="_blank"
               >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
+                <ExternalLink width={13} height={13} />
                 {t('add_to_chatgpt', 'Add to ChatGPT')}
               </a>
             )}
@@ -504,7 +475,7 @@ const McpSection = ({
                 href={mcpConnectorUrls['Grok Bot']}
                 target="_blank"
               >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
+                <ExternalLink width={13} height={13} />
                 {t('add_to_grok_bot', 'Add to Grok Bot')}
               </a>
             )}
@@ -589,7 +560,7 @@ const CliSection = ({ apiKey }: { apiKey: string }) => {
             href="https://docs.postiz.com/cli/introduction"
             target="_blank"
           >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
+            <ExternalLink width={13} height={13} />
             {t('read_the_docs', 'Docs')}
           </a>
         </div>
@@ -631,29 +602,11 @@ const CliSection = ({ apiKey }: { apiKey: string }) => {
               onClick={() => setRevealed(!revealed)}
               className="cursor-pointer px-[16px] h-[36px] bg-secondary hover:bg-accent transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
             >
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                {revealed ? (
-                  <>
-                    <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94" />
-                    <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19" />
-                    <line x1="1" y1="1" x2="23" y2="23" />
-                  </>
-                ) : (
-                  <>
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                    <circle cx="12" cy="12" r="3" />
-                  </>
-                )}
-              </svg>
+              {revealed ? (
+                <EyeOff width={14} height={14} />
+              ) : (
+                <Eye width={14} height={14} />
+              )}
               {revealed ? t('hide', 'Hide') : t('reveal', 'Reveal')}
             </button>
           )}
@@ -745,7 +698,7 @@ const PublicApiContent = () => {
               href="https://docs.postiz.com/public-api"
               target="_blank"
             >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
+              <ExternalLink width={13} height={13} />
             {t('read_the_docs', 'Docs')}
             </a>
             <a
@@ -753,7 +706,7 @@ const PublicApiContent = () => {
               href="https://www.npmjs.com/package/n8n-nodes-postiz"
               target="_blank"
             >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
+              <ExternalLink width={13} height={13} />
               {t('n8n_node', 'N8N Node')}
             </a>
           </div>
@@ -779,29 +732,11 @@ const PublicApiContent = () => {
               onClick={() => setReveal(!reveal)}
               className="cursor-pointer px-[16px] h-[36px] bg-secondary hover:bg-accent transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
             >
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                {reveal ? (
-                  <>
-                    <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94" />
-                    <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19" />
-                    <line x1="1" y1="1" x2="23" y2="23" />
-                  </>
-                ) : (
-                  <>
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                    <circle cx="12" cy="12" r="3" />
-                  </>
-                )}
-              </svg>
+              {reveal ? (
+                <EyeOff width={14} height={14} />
+              ) : (
+                <Eye width={14} height={14} />
+              )}
               {reveal ? t('hide', 'Hide') : t('reveal', 'Reveal')}
             </button>
             <CopyButton text={user.publicApi} label={t('copy', 'Copy')} />
@@ -810,19 +745,7 @@ const PublicApiContent = () => {
               onClick={rotateKey}
               className="cursor-pointer px-[16px] h-[36px] bg-secondary hover:bg-accent transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
             >
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M21.5 2v6h-6" />
-                <path d="M21.34 15.57a10 10 0 11-.57-8.38L21.5 8" />
-              </svg>
+              <RotateCw width={14} height={14} />
               {t('rotate_key', 'Rotate Key')}
             </button>
             <button
@@ -837,20 +760,7 @@ const PublicApiContent = () => {
               }
               className="cursor-pointer px-[16px] h-[36px] bg-secondary hover:bg-accent transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
             >
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
-                <polyline points="15 3 21 3 21 9" />
-                <line x1="10" y1="14" x2="21" y2="3" />
-              </svg>
+              <ExternalLink width={14} height={14} />
               {t('open_wizard', 'Open Wizard')}
             </button>
           </div>

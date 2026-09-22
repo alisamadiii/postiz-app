@@ -17,6 +17,7 @@ import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import useCookie from 'react-use-cookie';
 import { SVGLine } from '@gitroom/frontend/components/launches/launches.component';
 import { LoadingComponent } from '@gitroom/frontend/components/layout/loading';
+import { ChevronLeft } from 'lucide-react';
 export const Plugs = () => {
   const fetch = useFetch();
   const router = useRouter();
@@ -135,21 +136,7 @@ export const Plugs = () => {
               onClick={() => setCollapseMenu(collapseMenu === '1' ? '0' : '1')}
               className="group-[.sidebar]:rotate-[180deg] group-[.sidebar]:mx-auto text-foreground bg-secondary rounded-[6px] w-[24px] h-[24px] flex items-center justify-center cursor-pointer select-none"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="7"
-                height="13"
-                viewBox="0 0 7 13"
-                fill="none"
-              >
-                <path
-                  d="M6 11.5L1 6.5L6 1.5"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              <ChevronLeft width={7} height={13} strokeWidth={1.5} />
             </div>
           </div>
           {sortedIntegrations.map((integration, index) => (

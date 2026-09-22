@@ -1,5 +1,3 @@
-import { SentryComponent } from '@gitroom/frontend/components/layout/sentry.component';
-
 export const dynamic = 'force-dynamic';
 import '../globals.css';
 import 'react-tooltip/dist/react-tooltip.css';
@@ -7,11 +5,8 @@ import '@copilotkit/react-ui/styles.css';
 import LayoutContext from '@gitroom/frontend/components/layout/layout.context';
 import { ReactNode } from 'react';
 import { Inter, JetBrains_Mono } from 'next/font/google';
-import PlausibleProvider from 'next-plausible';
 import { cn } from '@gitroom/react/helpers/cn';
 import { VariableContextComponent } from '@gitroom/react/helpers/variable.context';
-import { Fragment } from 'react';
-import { PHProvider } from '@gitroom/react/helpers/posthog';
 import UtmSaver from '@gitroom/helpers/utils/utm.saver';
 import { DubAnalytics } from '@gitroom/frontend/components/layout/dubAnalytics';
 import { FacebookComponent } from '@gitroom/frontend/components/layout/facebook.component';
@@ -22,7 +17,6 @@ import {
   fallbackLng,
 } from '@gitroom/react/translation/i18n.config';
 import { HtmlComponent } from '@gitroom/frontend/components/layout/html.component';
-import Script from 'next/script';
 import { ChangeDirClient } from '@gitroom/frontend/components/new-layout/change.dir.client';
 import { ThemeProviderClient } from '@gitroom/frontend/components/layout/theme.provider';
 
@@ -39,29 +33,14 @@ const jetbrainsMono = JetBrains_Mono({
 export default async function AppLayout({ children }: { children: ReactNode }) {
   const cookieStore = await cookies();
   const language = cookieStore.get(cookieName)?.value || fallbackLng;
-  const Plausible = !!process.env.STRIPE_PUBLISHABLE_KEY
-    ? PlausibleProvider
-    : Fragment;
   return (
     <html suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
-        {!!process.env.DATAFAST_WEBSITE_ID && (
-          <Script
-            data-website-id={process.env.DATAFAST_WEBSITE_ID}
-            data-domain="postiz.com"
-            src="https://datafa.st/js/script.js"
-            strategy="afterInteractive"
-          />
-        )}
       </head>
       <ChangeDirClient />
       <body
-        className={cn(
-          'font-sans',
-          inter.variable,
-          jetbrainsMono.variable
-        )}
+        className={cn('font-sans', inter.variable, jetbrainsMono.variable)}
       >
         <VariableContextComponent
           storageProvider={
@@ -91,7 +70,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
           isSecured={!process.env.NOT_SECURED}
           disableImageCompression={!!process.env.DISABLE_IMAGE_COMPRESSION}
           disableXAnalytics={!!process.env.DISABLE_X_ANALYTICS}
-          sentryDsn={process.env.NEXT_PUBLIC_SENTRY_DSN!}
+          sentryDsn={''}
           extensionId={process.env.EXTENSION_ID || ''}
           googleAdsId={process.env.NEXT_PUBLIC_GTM_ID}
           googleAdsTrialTracking={process.env.NEXT_PUBLIC_TRACKING_TRIAL}
@@ -110,28 +89,16 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
               : []
           }
         >
-          <SentryComponent>
-            {/*<SetTimezone />*/}
-            <ThemeProviderClient>
+          <ThemeProviderClient>
             <HtmlComponent />
             <DubAnalytics />
             <FacebookComponent />
             <GoogleTagManagerComponent gtmId={process.env.NEXT_PUBLIC_GTM_ID} />
-            <Plausible
-              domain={!!process.env.IS_GENERAL ? 'postiz.com' : 'gitroom.com'}
-            >
-              <PHProvider
-                phkey={process.env.NEXT_PUBLIC_POSTHOG_KEY}
-                host={process.env.NEXT_PUBLIC_POSTHOG_HOST}
-              >
-                <LayoutContext>
-                  <UtmSaver />
-                  {children}
-                </LayoutContext>
-              </PHProvider>
-            </Plausible>
-            </ThemeProviderClient>
-          </SentryComponent>
+            <LayoutContext>
+              <UtmSaver />
+              {children}
+            </LayoutContext>
+          </ThemeProviderClient>
         </VariableContextComponent>
       </body>
     </html>

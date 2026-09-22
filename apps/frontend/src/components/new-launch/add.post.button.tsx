@@ -2,6 +2,7 @@
 
 import { Button } from '@gitroom/react/form/button';
 import React, { FC } from 'react';
+import { Plus } from 'lucide-react';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { PostComment } from '@gitroom/frontend/components/new-launch/providers/high.order.provider';
 export const AddPostButton: FC<{
@@ -19,21 +20,7 @@ export const AddPostButton: FC<{
         className="select-none cursor-pointer h-[34px] rounded-[6px] flex bg-[#D82D7E] gap-[8px] justify-center items-center pl-[16px] pr-[20px] text-[13px] font-[600] mt-[12px]"
       >
         <div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 16 16"
-            fill="none"
-          >
-            <path
-              d="M8.00065 3.33301V12.6663M3.33398 7.99967H12.6673"
-              stroke="white"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <Plus className="size-4 text-white" />
         </div>
         <div className="!text-white">
           {t(

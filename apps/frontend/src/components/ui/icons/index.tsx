@@ -1,4 +1,20 @@
 import React, { FC, SVGProps, useEffect } from 'react';
+import {
+  X,
+  ChevronDown,
+  ChevronUp,
+  ChevronLeft,
+  ChevronRight,
+  Trash2,
+  Plus,
+  User,
+  Globe,
+  Repeat,
+  Lock,
+  RotateCcw,
+  Smile,
+  Clock,
+} from 'lucide-react';
 import { cn } from '@gitroom/react/helpers/cn';
 import useCookie from 'react-use-cookie';
 import { modeEmitter } from '@gitroom/frontend/components/layout/mode.component';
@@ -48,23 +64,12 @@ export const ChevronDownIcon: FC<IconProps & { rotated?: boolean }> = ({
   rotated,
   ...props
 }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 20 20"
-    fill="none"
+  <ChevronDown
+    size={size}
+    strokeWidth={1.5}
     className={cn(rotated && 'rotate-180', 'transition-transform', className)}
     {...props}
-  >
-    <path
-      d="M5 7.5L10 12.5L15 7.5"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
+  />
 );
 
 // Chevron Up Icon
@@ -73,23 +78,12 @@ export const ChevronUpIcon: FC<IconProps> = ({
   className,
   ...props
 }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 20 20"
-    fill="none"
+  <ChevronUp
+    size={size}
+    strokeWidth={1.5}
     className={className}
     {...props}
-  >
-    <path
-      d="M15 12.5L10 7.5L5 12.5"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
+  />
 );
 
 // Close/X Icon
@@ -98,23 +92,7 @@ export const CloseIcon: FC<IconProps> = ({
   className,
   ...props
 }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 20 20"
-    fill="none"
-    className={className}
-    {...props}
-  >
-    <path
-      d="M16 4L4 16M4 4L16 16"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
+  <X size={size} strokeWidth={1.5} className={className} {...props} />
 );
 
 // Small Close Icon (10x11 variant)
@@ -145,23 +123,7 @@ export const TrashIcon: FC<IconProps> = ({
   className,
   ...props
 }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 20 20"
-    fill="none"
-    className={className}
-    {...props}
-  >
-    <path
-      d="M7.5 2.5H12.5M2.5 5H17.5M15.8333 5L15.2489 13.7661C15.1612 15.0813 15.1174 15.7389 14.8333 16.2375C14.5833 16.6765 14.206 17.0294 13.7514 17.2497C13.235 17.5 12.5759 17.5 11.2578 17.5H8.74221C7.42409 17.5 6.76503 17.5 6.24861 17.2497C5.79396 17.0294 5.41674 16.6765 5.16665 16.2375C4.88259 15.7389 4.83875 15.0813 4.75107 13.7661L4.16667 5M8.33333 8.75V12.9167M11.6667 8.75V12.9167"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
+  <Trash2 size={size} strokeWidth={1.5} className={className} {...props} />
 );
 
 export const DelayIcon: FC<IconProps> = ({
@@ -169,20 +131,7 @@ export const DelayIcon: FC<IconProps> = ({
   className,
   ...props
 }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 32 32"
-    fill="red"
-    xmlns="http://www.w3.org/2000/svg"
-    className={className}
-    {...props}
-  >
-    <path
-      d="M16 3C13.4288 3 10.9154 3.76244 8.77759 5.1909C6.63975 6.61935 4.97351 8.64968 3.98957 11.0251C3.00563 13.4006 2.74819 16.0144 3.2498 18.5362C3.75141 21.0579 4.98953 23.3743 6.80762 25.1924C8.6257 27.0105 10.9421 28.2486 13.4638 28.7502C15.9856 29.2518 18.5995 28.9944 20.9749 28.0104C23.3503 27.0265 25.3807 25.3603 26.8091 23.2224C28.2376 21.0846 29 18.5712 29 16C28.9964 12.5533 27.6256 9.24882 25.1884 6.81163C22.7512 4.37445 19.4467 3.00364 16 3ZM16 27C13.8244 27 11.6977 26.3549 9.88873 25.1462C8.07979 23.9375 6.66989 22.2195 5.83733 20.2095C5.00477 18.1995 4.78693 15.9878 5.21137 13.854C5.63581 11.7202 6.68345 9.7602 8.22183 8.22183C9.76021 6.68345 11.7202 5.6358 13.854 5.21136C15.9878 4.78692 18.1995 5.00476 20.2095 5.83733C22.2195 6.66989 23.9375 8.07979 25.1462 9.88873C26.3549 11.6977 27 13.8244 27 16C26.9967 18.9164 25.8367 21.7123 23.7745 23.7745C21.7123 25.8367 18.9164 26.9967 16 27ZM24 16C24 16.2652 23.8946 16.5196 23.7071 16.7071C23.5196 16.8946 23.2652 17 23 17H16C15.7348 17 15.4804 16.8946 15.2929 16.7071C15.1054 16.5196 15 16.2652 15 16V9C15 8.73478 15.1054 8.48043 15.2929 8.29289C15.4804 8.10536 15.7348 8 16 8C16.2652 8 16.5196 8.10536 16.7071 8.29289C16.8946 8.48043 17 8.73478 17 9V15H23C23.2652 15 23.5196 15.1054 23.7071 15.2929C23.8946 15.4804 24 15.7348 24 16Z"
-      fill="currentColor"
-    />
-  </svg>
+  <Clock size={size} className={className} {...props} />
 );
 
 // Dropdown Arrow (filled triangle)
@@ -257,30 +206,7 @@ export const RepeatIcon: FC<IconProps> = ({
   className,
   ...props
 }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 20 20"
-    fill="none"
-    className={className}
-    {...props}
-  >
-    <g clipPath="url(#clip0_repeat)">
-      <path
-        d="M14.1667 1.66602L17.5 4.99935M17.5 4.99935L14.1667 8.33268M17.5 4.99935H6.5C5.09987 4.99935 4.3998 4.99935 3.86502 5.27183C3.39462 5.51152 3.01217 5.89397 2.77248 6.36437C2.5 6.89915 2.5 7.59922 2.5 8.99935V9.16602M2.5 14.9993H13.5C14.9001 14.9993 15.6002 14.9993 16.135 14.7269C16.6054 14.4872 16.9878 14.1047 17.2275 13.6343C17.5 13.0995 17.5 12.3995 17.5 10.9993V10.8327M2.5 14.9993L5.83333 18.3327M2.5 14.9993L5.83333 11.666"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </g>
-    <defs>
-      <clipPath id="clip0_repeat">
-        <rect width="20" height="20" fill="currentColor" />
-      </clipPath>
-    </defs>
-  </svg>
+  <Repeat size={size} strokeWidth={1.5} className={className} {...props} />
 );
 
 // Tag Icon
@@ -306,23 +232,7 @@ export const TagIcon: FC<IconProps> = ({ className, ...props }) => (
 
 // Plus Icon
 export const PlusIcon: FC<IconProps> = ({ size = 16, className, ...props }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 16 16"
-    fill="none"
-    className={className}
-    {...props}
-  >
-    <path
-      d="M8.00065 3.33301V12.6663M3.33398 7.99967H12.6673"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
+  <Plus size={size} strokeWidth={1.5} className={className} {...props} />
 );
 
 // Checkmark Icon
@@ -351,44 +261,12 @@ export const GlobalIcon: FC<IconProps> = ({
   className,
   ...props
 }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 20 20"
-    fill="none"
-    className={className}
-    {...props}
-  >
-    <path
-      d="M2.56267 6.23601L6.13604 8.78837C6.32197 8.92118 6.41494 8.98759 6.51225 9.00289C6.59786 9.01635 6.68554 9.00278 6.76309 8.96407C6.85121 8.92008 6.91976 8.82868 7.05686 8.64588L7.81194 7.63909C7.85071 7.5874 7.8701 7.56155 7.89288 7.53925C7.91311 7.51945 7.93531 7.50177 7.95913 7.48647C7.98595 7.46924 8.01547 7.45612 8.07452 7.42988L11.2983 5.99707C11.432 5.93767 11.4988 5.90798 11.5492 5.8616C11.5938 5.82057 11.6288 5.77033 11.652 5.71436C11.6782 5.65108 11.6831 5.57812 11.6928 5.4322L11.9288 1.8915M11.2493 11.2503L13.4294 12.1846C13.6823 12.293 13.8088 12.3472 13.8757 12.4372C13.9345 12.5162 13.9634 12.6135 13.9573 12.7117C13.9504 12.8237 13.8741 12.9382 13.7214 13.1672L12.6973 14.7035C12.6249 14.812 12.5887 14.8663 12.5409 14.9056C12.4986 14.9403 12.4498 14.9664 12.3974 14.9824C12.3382 15.0003 12.273 15.0003 12.1426 15.0003H10.4799C10.3071 15.0003 10.2207 15.0003 10.1472 14.9714C10.0822 14.9459 10.0248 14.9045 9.98003 14.851C9.92936 14.7904 9.90204 14.7084 9.8474 14.5445L9.25334 12.7623C9.22111 12.6656 9.205 12.6173 9.20076 12.5681C9.19699 12.5246 9.20011 12.4807 9.21 12.4381C9.22114 12.3901 9.24393 12.3445 9.28951 12.2533L9.74077 11.3508C9.83246 11.1674 9.8783 11.0758 9.94891 11.0188C10.0111 10.9687 10.0865 10.9375 10.166 10.9289C10.2561 10.9193 10.3534 10.9517 10.5479 11.0165L11.2493 11.2503ZM18.3327 10.0003C18.3327 14.6027 14.6017 18.3337 9.99935 18.3337C5.39698 18.3337 1.66602 14.6027 1.66602 10.0003C1.66602 5.39795 5.39698 1.66699 9.99935 1.66699C14.6017 1.66699 18.3327 5.39795 18.3327 10.0003Z"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
+  <Globe size={size} strokeWidth={1.5} className={className} {...props} />
 );
 
 // User Icon
 export const UserIcon: FC<IconProps> = ({ size = 20, className, ...props }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 20 20"
-    fill="none"
-    className={className}
-    {...props}
-  >
-    <path
-      d="M16.6673 17.5C16.6673 16.337 16.6673 15.7555 16.5238 15.2824C16.2006 14.217 15.3669 13.3834 14.3016 13.0602C13.8284 12.9167 13.247 12.9167 12.084 12.9167H7.91732C6.75435 12.9167 6.17286 12.9167 5.6997 13.0602C4.63436 13.3834 3.80068 14.217 3.47752 15.2824C3.33398 15.7555 3.33398 16.337 3.33398 17.5M13.7507 6.25C13.7507 8.32107 12.0717 10 10.0007 10C7.92958 10 6.25065 8.32107 6.25065 6.25C6.25065 4.17893 7.92958 2.5 10.0007 2.5C12.0717 2.5 13.7507 4.17893 13.7507 6.25Z"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
+  <User size={size} strokeWidth={1.5} className={className} {...props} />
 );
 
 // Expand Icon
@@ -437,23 +315,7 @@ export const CollapseIcon: FC<IconProps> = ({
 
 // Lock Icon
 export const LockIcon: FC<IconProps> = ({ size = 32, className, ...props }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 32 32"
-    fill="none"
-    className={className}
-    {...props}
-  >
-    <path
-      d="M22.6673 13.3333V10.6667C22.6673 6.98477 19.6825 4 16.0007 4C12.3188 4 9.33398 6.98477 9.33398 10.6667V13.3333M16.0007 19.3333V22M11.734 28H20.2673C22.5075 28 23.6276 28 24.4833 27.564C25.2359 27.1805 25.8479 26.5686 26.2313 25.816C26.6673 24.9603 26.6673 23.8402 26.6673 21.6V19.7333C26.6673 17.4931 26.6673 16.373 26.2313 15.5174C25.8479 14.7647 25.2359 14.1528 24.4833 13.7693C23.6276 13.3333 22.5075 13.3333 20.2673 13.3333H11.734C9.49377 13.3333 8.37367 13.3333 7.51802 13.7693C6.76537 14.1528 6.15345 14.7647 5.76996 15.5174C5.33398 16.373 5.33398 17.4931 5.33398 19.7333V21.6C5.33398 23.8402 5.33398 24.9603 5.76996 25.816C6.15345 26.5686 6.76537 27.1805 7.51802 27.564C8.37367 28 9.49377 28 11.734 28Z"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
+  <Lock size={size} strokeWidth={1.5} className={className} {...props} />
 );
 
 // Connection Line Icon (for thread/comment indication)
@@ -482,23 +344,7 @@ export const ResetIcon: FC<IconProps> = ({
   className,
   ...props
 }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 16 16"
-    fill="none"
-    className={className}
-    {...props}
-  >
-    <path
-      d="M1.33398 6.66667C1.33398 6.66667 2.67064 4.84548 3.75654 3.75883C4.84244 2.67218 6.34305 2 8.00065 2C11.3144 2 14.0007 4.68629 14.0007 8C14.0007 11.3137 11.3144 14 8.00065 14C5.26526 14 2.95739 12.1695 2.23516 9.66667M1.33398 6.66667V2.66667M1.33398 6.66667H5.33398"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
+  <RotateCcw size={size} strokeWidth={1.5} className={className} {...props} />
 );
 
 // Emoji Icon
@@ -507,46 +353,7 @@ export const EmojiIcon: FC<IconProps> = ({
   className,
   ...props
 }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 16 16"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className={className}
-    {...props}
-  >
-    <path
-      d="M7.97917 14.6663C11.6611 14.6663 14.6458 11.6816 14.6458 7.99967C14.6458 4.31778 11.6611 1.33301 7.97917 1.33301C4.29727 1.33301 1.3125 4.31778 1.3125 7.99967C1.3125 11.6816 4.29727 14.6663 7.97917 14.6663Z"
-      stroke="currentColor"
-      strokeWidth="1.2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M4.80664 10C5.50664 11.0067 6.67997 11.6667 7.99997 11.6667C9.31997 11.6667 10.4866 11.0067 11.1933 10"
-      stroke="currentColor"
-      strokeWidth="1.2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M4.66602 6.16699C5.33268 6.83366 6.41935 6.83366 7.09268 6.16699"
-      stroke="currentColor"
-      strokeWidth="1.2"
-      strokeMiterlimit="10"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M8.90625 6.16699C9.57292 6.83366 10.6596 6.83366 11.3329 6.16699"
-      stroke="currentColor"
-      strokeWidth="1.2"
-      strokeMiterlimit="10"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
+  <Smile size={size} strokeWidth={1.2} className={className} {...props} />
 );
 
 // Chevron Left Icon
@@ -555,21 +362,7 @@ export const ChevronLeftIcon: FC<IconProps> = ({
   className,
   ...props
 }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth={2}
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-    {...props}
-  >
-    <path d="m15 18-6-6 6-6" />
-  </svg>
+  <ChevronLeft size={size} className={className} {...props} />
 );
 
 // Chevron Right Icon
@@ -578,21 +371,7 @@ export const ChevronRightIcon: FC<IconProps> = ({
   className,
   ...props
 }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth={2}
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-    {...props}
-  >
-    <path d="m9 18 6-6-6-6" />
-  </svg>
+  <ChevronRight size={size} className={className} {...props} />
 );
 
 // Delete Circle Icon (for media delete)
