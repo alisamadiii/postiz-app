@@ -5,7 +5,14 @@ import {
   withProvider,
 } from '@gitroom/frontend/components/new-launch/providers/high.order.provider';
 import { Checkbox } from '@gitroom/react/form/checkbox';
-import { Input } from '@gitroom/react/form/input';
+import { Input } from '@gitroom/react/ui/input';
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@gitroom/react/ui/form';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
 import { LinkedinDto } from '@gitroom/nestjs-libraries/dtos/posts/providers-settings/linkedin.dto';
@@ -27,10 +34,20 @@ const LinkedInSettings = () => {
       />
       {isCarousel && (
         <div className="mt-[10px]">
-          <Input
-            label={t('carousel_name', 'Carousel slide name')}
-            placeholder="slides"
-            {...register('carousel_name')}
+          <FormField
+            control={control}
+            name="carousel_name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  {t('carousel_name', 'Carousel slide name')}
+                </FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder="slides" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
         </div>
       )}

@@ -1,11 +1,11 @@
 'use client';
 
 import SafeImage from '@gitroom/react/helpers/safe.image';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 import { FC, Fragment, useCallback, useEffect, useState } from 'react';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
-import { Input } from '@gitroom/react/form/input';
+import { Input } from '@gitroom/react/ui/input';
 import { useToaster } from '@gitroom/react/toaster/toaster';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 const ConnectedComponent: FC<{
@@ -40,7 +40,9 @@ const ConnectedComponent: FC<{
         <div className="flex-1">
           <strong>{t('connected', 'Connected:')}</strong> {login}
         </div>
-        <Button onClick={disconnect}>{t('disconnect', 'Disconnect')}</Button>
+        <Button type="button" size="lg" onClick={disconnect}>
+          {t('disconnect', 'Disconnect')}
+        </Button>
       </div>
     </div>
   );
@@ -96,6 +98,8 @@ const ConnectComponent: FC<{
           {t('connect_your_repository', 'Connect your repository')}
         </div>
         <Button
+          type="button"
+          size="lg"
           className="bg-transparent border-0 text-gray mt-[7px]"
           onClick={cancelConnection}
         >
@@ -103,14 +107,13 @@ const ConnectComponent: FC<{
         </Button>
         <Input
           value={url}
-          disableForm={true}
-          removeError={true}
           onChange={(e) => setUrl(e.target.value)}
           name="github"
-          label=""
           placeholder="Full GitHub URL"
         />
         <Button
+          type="button"
+          size="lg"
           className="h-[44px] mt-[7px]"
           disabled={
             !url.match(
@@ -207,7 +210,9 @@ export const GithubComponent: FC<{
             <div className="flex-1">
               {t('connect_your_repository', 'Connect your repository')}
             </div>
-            <Button onClick={connect}>{t('connect', 'Connect')}</Button>
+            <Button type="button" size="lg" onClick={connect}>
+              {t('connect', 'Connect')}
+            </Button>
           </div>
         </div>
       )}

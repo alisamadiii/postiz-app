@@ -3,7 +3,13 @@
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
 import { useCustomProviderFunction } from '@gitroom/frontend/components/launches/helpers/use.custom.provider.function';
-import { Select } from '@gitroom/react/form/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@gitroom/react/ui/select';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { cn } from '@gitroom/react/helpers/cn';
 
@@ -261,19 +267,22 @@ export const InstagramAudioSelector: FC<{
         <div className="flex flex-col gap-[6px]">
           <div className="flex gap-[6px]">
             <Select
-              label=""
-              name="instagram_audio_type"
-              disableForm={true}
-              hideErrors={true}
               value={audioType}
-              onChange={(e) =>
-                setAudioType(e.target.value as 'music' | 'original_sound')
+              onValueChange={(value) =>
+                setAudioType(value as 'music' | 'original_sound')
               }
             >
-              <option value="music">{t('instagram_music', 'Music')}</option>
-              <option value="original_sound">
-                {t('instagram_original_sound', 'Original sound')}
-              </option>
+              <SelectTrigger className="h-[42px] w-auto">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="music">
+                  {t('instagram_music', 'Music')}
+                </SelectItem>
+                <SelectItem value="original_sound">
+                  {t('instagram_original_sound', 'Original sound')}
+                </SelectItem>
+              </SelectContent>
             </Select>
             <div className="flex-1 h-[42px] bg-card border-border border rounded-[8px] flex items-center">
               <input

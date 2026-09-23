@@ -2,7 +2,7 @@ import { TopTitle } from '@gitroom/frontend/components/launches/helpers/top.titl
 import { useModals } from '@gitroom/frontend/components/layout/new-modal';
 import React, { FC } from 'react';
 import { X } from 'lucide-react';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 import copy from 'copy-to-clipboard';
 import { useToaster } from '@gitroom/react/toaster/toaster';
 
@@ -14,7 +14,9 @@ export const DummyCodeComponent: FC<{ code: any }> = ({ code }) => {
     <div className="rounded-[4px] border border-border bg-muted px-[16px] pb-[16px] relative w-full">
       <TopTitle title={`Output`}>
         <Button
-          className="mr-[50px]"
+          type="button"
+          size="lg"
+          className="cursor-pointer mr-[50px]"
           onClick={() => {
             copy(JSON.stringify(code, null, 2));
             toaster.show('Code copied to clipboard', 'success');

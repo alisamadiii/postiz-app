@@ -3,7 +3,13 @@ import useSWR, { useSWRConfig } from 'swr';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { ChartSocial } from '@gitroom/frontend/components/analytics/chart-social';
-import { Select } from '@gitroom/react/form/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@gitroom/react/ui/select';
 import { LoadingComponent } from '@gitroom/frontend/components/layout/loading';
 import { MissingReleaseModal } from '@gitroom/frontend/components/launches/missing-release.modal';
 
@@ -92,18 +98,19 @@ export const StatisticsModal: FC<{
                 </h3>
                 <div className="max-w-[150px]">
                   <Select
-                    label=""
-                    name="date"
-                    disableForm={true}
-                    hideErrors={true}
-                    value={dateRange}
-                    onChange={(e) => setDateRange(+e.target.value)}
+                    value={String(dateRange)}
+                    onValueChange={(v) => setDateRange(+v)}
                   >
-                    {dateOptions.map((option) => (
-                      <option key={option.key} value={option.key}>
-                        {option.value}
-                      </option>
-                    ))}
+                    <SelectTrigger className="h-[42px]">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {dateOptions.map((option) => (
+                        <SelectItem key={option.key} value={String(option.key)}>
+                          {option.value}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
                   </Select>
                 </div>
               </div>

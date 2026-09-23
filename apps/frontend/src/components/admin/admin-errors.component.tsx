@@ -8,7 +8,7 @@ import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { useUser } from '@gitroom/frontend/components/layout/user.context';
 import { useToaster } from '@gitroom/react/toaster/toaster';
 import { useModals } from '@gitroom/frontend/components/layout/new-modal';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 import { LoadingComponent } from '@gitroom/frontend/components/layout/loading';
 
 interface ErrorRow {
@@ -64,7 +64,9 @@ const ErrorDetailsModal: FC<{ row: ErrorRow }> = ({ row }) => {
       <div className="sticky top-0 bg-card py-[16px] flex items-center justify-between gap-[12px] z-10 border-b border-border mb-[12px]">
         <div className="text-[16px] font-[600]">Error Details</div>
         <div className="flex gap-[8px] items-center">
-          <Button onClick={copyAll}>Copy Debug Code</Button>
+          <Button type="button" size="lg" onClick={copyAll}>
+            Copy Debug Code
+          </Button>
           <button
             className="outline-none w-[28px] h-[28px] flex items-center justify-center hover:bg-border cursor-pointer rounded"
             type="button"
@@ -269,7 +271,9 @@ export const AdminErrorsComponent: FC = () => {
               placeholder="user@example.com"
               className="bg-card h-[38px] border border-border rounded-[8px] px-[10px] text-[14px] text-foreground min-w-[240px]"
             />
-            <Button onClick={onApplyEmail}>Apply</Button>
+            <Button type="button" size="lg" onClick={onApplyEmail}>
+              Apply
+            </Button>
           </div>
         </div>
 
@@ -303,7 +307,7 @@ export const AdminErrorsComponent: FC = () => {
           </select>
         </div>
 
-        <Button secondary onClick={onClear}>
+        <Button type="button" size="lg" variant="secondary" onClick={onClear}>
           Clear filters
         </Button>
       </div>
@@ -363,10 +367,17 @@ export const AdminErrorsComponent: FC = () => {
                   {preview}
                 </div>
                 <div className="flex gap-[8px] justify-end">
-                  <Button secondary onClick={() => openDetails(row)}>
+                  <Button
+                    type="button"
+                    size="lg"
+                    variant="secondary"
+                    onClick={() => openDetails(row)}
+                  >
                     View
                   </Button>
-                  <Button onClick={() => copyRow(row)}>Copy</Button>
+                  <Button type="button" size="lg" onClick={() => copyRow(row)}>
+                    Copy
+                  </Button>
                 </div>
               </div>
             );
@@ -380,13 +391,17 @@ export const AdminErrorsComponent: FC = () => {
         </div>
         <div className="flex gap-[8px]">
           <Button
-            secondary
+            type="button"
+            size="lg"
+            variant="secondary"
             disabled={page === 0}
             onClick={() => setPage((p) => Math.max(0, p - 1))}
           >
             Previous
           </Button>
           <Button
+            type="button"
+            size="lg"
             disabled={!data?.hasMore}
             onClick={() => setPage((p) => p + 1)}
           >

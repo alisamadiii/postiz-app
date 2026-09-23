@@ -5,7 +5,20 @@ import {
   withProvider,
 } from '@gitroom/frontend/components/new-launch/providers/high.order.provider';
 import { FC } from 'react';
-import { Select } from '@gitroom/react/form/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@gitroom/react/ui/select';
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@gitroom/react/ui/form';
 import { Checkbox } from '@gitroom/react/form/checkbox';
 import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
 import { InstagramDto } from '@gitroom/nestjs-libraries/dtos/posts/providers-settings/instagram.dto';
@@ -47,19 +60,37 @@ const InstagramCollaborators: FC<{
   const supportsAudio = integration?.identifier === 'instagram';
   return (
     <>
-      <Select
-        label="Post Type"
-        {...register('post_type', {
-          value: 'post',
-        })}
-      >
-        <option value="">{t('select_post_type', 'Select Post Type...')}</option>
-        {postType.map((item) => (
-          <option key={item.value} value={item.value}>
-            {item.label}
-          </option>
-        ))}
-      </Select>
+      <FormField
+        control={control}
+        name="post_type"
+        defaultValue="post"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Post Type</FormLabel>
+            <Select
+              onValueChange={field.onChange}
+              value={field.value ?? undefined}
+              defaultValue={field.value}
+            >
+              <FormControl>
+                <SelectTrigger className="h-[42px]">
+                  <SelectValue
+                    placeholder={t('select_post_type', 'Select Post Type...')}
+                  />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {postType.map((item) => (
+                  <SelectItem key={item.value} value={item.value}>
+                    {item.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
 
       {postCurrentType !== 'story' && (
         <InstagramCollaboratorsTags
@@ -93,18 +124,35 @@ const InstagramCollaborators: FC<{
           />
 
           {isTrialReel && (
-            <Select
-              label="Graduation Strategy"
-              {...register('graduation_strategy', {
-                value: 'MANUAL',
-              })}
-            >
-              {graduationStrategies.map((item) => (
-                <option key={item.value} value={item.value}>
-                  {item.label}
-                </option>
-              ))}
-            </Select>
+            <FormField
+              control={control}
+              name="graduation_strategy"
+              defaultValue="MANUAL"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Graduation Strategy</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value ?? undefined}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="h-[42px]">
+                        <SelectValue />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {graduationStrategies.map((item) => (
+                        <SelectItem key={item.value} value={item.value}>
+                          {item.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           )}
         </div>
       )}

@@ -4,8 +4,8 @@ import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { Web3ProviderInterface } from '@gitroom/frontend/components/launches/web3/web3.provider.interface';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { timer } from '@gitroom/helpers/utils/timer';
-import { Input } from '@gitroom/react/form/input';
-import { Button } from '@gitroom/react/form/button';
+import { Input } from '@gitroom/react/ui/input';
+import { Button } from '@gitroom/react/ui/button';
 import copy from 'copy-to-clipboard';
 import { useToaster } from '@gitroom/react/toaster/toaster';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
@@ -99,23 +99,29 @@ export const MoltbookProvider: FC<Web3ProviderInterface> = (props) => {
             {t('moltbook_register_description', 'Register your Moltbook agent to connect:')}
           </div>
           <div className="w-full space-y-[12px]">
-            <Input
-              label={t('agent_name', 'Agent Name')}
-              value={agentName}
-              name="agentName"
-              disableForm={true}
-              onChange={(e) => setAgentName(e.target.value)}
-              placeholder="MyPostizAgent"
-            />
-            <Input
-              label={t('description_optional', 'Description (optional)')}
-              value={agentDescription}
-              name="agentDescription"
-              disableForm={true}
-              onChange={(e) => setAgentDescription(e.target.value)}
-              placeholder="Social media scheduler"
-            />
-            <Button className="w-full" onClick={register}>
+            <div className="flex flex-col gap-[6px]">
+              <div className="text-[14px] text-foreground">
+                {t('agent_name', 'Agent Name')}
+              </div>
+              <Input
+                className="h-[42px]"
+                value={agentName}
+                onChange={(e) => setAgentName(e.target.value)}
+                placeholder="MyPostizAgent"
+              />
+            </div>
+            <div className="flex flex-col gap-[6px]">
+              <div className="text-[14px] text-foreground">
+                {t('description_optional', 'Description (optional)')}
+              </div>
+              <Input
+                className="h-[42px]"
+                value={agentDescription}
+                onChange={(e) => setAgentDescription(e.target.value)}
+                placeholder="Social media scheduler"
+              />
+            </div>
+            <Button type="button" size="lg" className="w-full" onClick={register}>
               {t('register_agent', 'Register Agent')}
             </Button>
           </div>
@@ -135,15 +141,11 @@ export const MoltbookProvider: FC<Web3ProviderInterface> = (props) => {
           </div>
           <div className="flex gap-[8px]">
             <div className="flex-1">
-              <Input
-                label=""
-                value={claimUrl}
-                name="claimUrl"
-                disableForm={true}
-                readOnly
-              />
+              <Input className="h-[42px]" value={claimUrl} readOnly />
             </div>
-            <Button onClick={copyClaimUrl}>{t('copy', 'Copy')}</Button>
+            <Button type="button" size="lg" onClick={copyClaimUrl}>
+              {t('copy', 'Copy')}
+            </Button>
           </div>
           <div className="mt-[16px] text-sm opacity-70">
             {t('waiting_for_claim', 'Waiting for you to claim your agent...')}
@@ -164,7 +166,7 @@ export const MoltbookProvider: FC<Web3ProviderInterface> = (props) => {
       {step === 'error' && (
         <div className="w-full text-center">
           <div className="text-red-500 mb-[16px]">{error}</div>
-          <Button onClick={() => setStep('init')}>
+          <Button type="button" size="lg" onClick={() => setStep('init')}>
             {t('try_again', 'Try Again')}
           </Button>
         </div>

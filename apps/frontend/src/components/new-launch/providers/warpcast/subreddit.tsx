@@ -2,7 +2,7 @@
 
 import { FC, FormEvent, useCallback, useState } from 'react';
 import { useCustomProviderFunction } from '@gitroom/frontend/components/launches/helpers/use.custom.provider.function';
-import { Input } from '@gitroom/react/form/input';
+import { Input } from '@gitroom/react/ui/input';
 import { useDebouncedCallback } from 'use-debounce';
 import { useWatch } from 'react-hook-form';
 import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
@@ -101,31 +101,37 @@ export const Subreddit: FC<{
     <div className="bg-primary p-[20px]">
       {value?.subreddit ? (
         <>
-          <Input
-            error={errors?.subreddit?.message}
-            disableForm={true}
-            value={value.subreddit}
-            readOnly={true}
-            label="Channel"
-            name="subreddit"
-          />
+          <div className="flex flex-col gap-[6px]">
+            <div className="text-[14px] text-foreground">Channel</div>
+            <Input value={value.subreddit} readOnly={true} name="subreddit" />
+            {errors?.subreddit?.message && (
+              <div className="text-destructive text-[12px]">
+                {errors?.subreddit?.message}
+              </div>
+            )}
+          </div>
         </>
       ) : (
         <div className="relative">
-          <Input
-            placeholder="Channel"
-            name="search"
-            label="Search Channel"
-            readOnly={loading}
-            value={searchValue}
-            error={errors?.message}
-            disableForm={true}
-            onInput={async (e) => {
-              // @ts-ignore
-              setSearchValue(e.target.value);
-              await search(e);
-            }}
-          />
+          <div className="flex flex-col gap-[6px]">
+            <div className="text-[14px] text-foreground">Search Channel</div>
+            <Input
+              placeholder="Channel"
+              name="search"
+              readOnly={loading}
+              value={searchValue}
+              onInput={async (e) => {
+                // @ts-ignore
+                setSearchValue(e.target.value);
+                await search(e);
+              }}
+            />
+            {errors?.message && (
+              <div className="text-destructive text-[12px]">
+                {errors?.message}
+              </div>
+            )}
+          </div>
           {!!results.length && !loading && (
             <div className="z-[400] w-full absolute bg-input -mt-[20px] outline-none border-border border cursor-pointer">
               {results.map((r: { id: string; name: string }) => (

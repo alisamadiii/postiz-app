@@ -7,7 +7,7 @@ import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { useModals } from '@gitroom/frontend/components/layout/new-modal';
 import { LoadingComponent } from '@gitroom/frontend/components/layout/loading';
 import { useToaster } from '@gitroom/react/toaster/toaster';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 import { StatisticsModal } from '@gitroom/frontend/components/launches/statistics';
 
 export const MissingReleaseModal: FC<{
@@ -110,6 +110,7 @@ export const MissingReleaseModal: FC<{
       <div className="flex justify-end gap-[10px] pt-[8px] border-t border-border">
         <Button
           type="button"
+          size="lg"
           onClick={() => modal.closeAll()}
           className="bg-transparent border border-border text-foreground"
         >
@@ -117,9 +118,11 @@ export const MissingReleaseModal: FC<{
         </Button>
         <Button
           type="button"
+          size="lg"
           onClick={handleSave}
           disabled={!selected || saving}
-          loading={saving}
+          isLoading={saving}
+          showSpinner={saving}
         >
           {t('connect_post', 'Connect Post')}
         </Button>

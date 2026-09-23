@@ -10,7 +10,7 @@ import {
   useCheckout,
 } from '@stripe/react-stripe-js/checkout';
 import { useTheme } from 'next-themes';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 import dayjs from 'dayjs';
 import { useToaster } from '@gitroom/react/toaster/toaster';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
@@ -568,7 +568,8 @@ const SubmitBar: FC<{ loading: boolean }> = ({ loading }) => {
           <Button
             className="h-[42px] rounded-[10px] mobile:w-full"
             type="submit"
-            loading={loading}
+            isLoading={loading}
+            showSpinner={loading}
           >
             {checkout.checkout.recurring?.trial?.trialEnd
               ? t(

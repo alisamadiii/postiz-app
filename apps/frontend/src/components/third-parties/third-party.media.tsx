@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 import { cn } from '@gitroom/react/helpers/cn';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import React, {
@@ -117,7 +117,9 @@ export const ThirdPartyPopup: FC<{
                 {p.description}
               </div>
               <div className="w-full flex">
-                <Button className="w-full">Use</Button>
+                <Button type="button" size="lg" className="w-full">
+                  Use
+                </Button>
               </div>
             </div>
           ))}

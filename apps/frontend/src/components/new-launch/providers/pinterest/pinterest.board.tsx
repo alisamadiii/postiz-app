@@ -2,7 +2,14 @@
 
 import { FC, useEffect, useState } from 'react';
 import { useCustomProviderFunction } from '@gitroom/frontend/components/launches/helpers/use.custom.provider.function';
-import { Select } from '@gitroom/react/form/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@gitroom/react/ui/select';
+import { TranslatedLabel } from '@gitroom/react/translation/translated-label';
 import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 export const PinterestBoard: FC<{
@@ -44,18 +51,25 @@ export const PinterestBoard: FC<{
     return 'No boards found, you have to create a board first';
   }
   return (
-    <Select
-      name={name}
-      label="Select board"
-      onChange={onChangeInner}
-      value={currentMedia}
-    >
-      <option value="">{t('select_1', '--Select--')}</option>
-      {orgs.map((org: any) => (
-        <option key={org.id} value={org.id}>
-          {org.name}
-        </option>
-      ))}
-    </Select>
+    <div className="flex flex-col gap-[6px]">
+      <div className="text-[14px]">
+        <TranslatedLabel label="Select board" />
+      </div>
+      <Select
+        value={currentMedia != null ? String(currentMedia) : undefined}
+        onValueChange={(value) => onChangeInner({ target: { value, name } })}
+      >
+        <SelectTrigger className="h-[42px]">
+          <SelectValue placeholder={t('select_1', '--Select--')} />
+        </SelectTrigger>
+        <SelectContent>
+          {orgs.map((org: any) => (
+            <SelectItem key={org.id} value={String(org.id)}>
+              {org.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   );
 };

@@ -1,7 +1,7 @@
 import { FC, useCallback, useState } from 'react';
 import { HexColorPicker } from 'react-colorful';
 import { useFormContext } from 'react-hook-form';
-import { Button } from './button';
+import { Button } from '../ui/button';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { TranslatedLabel } from '../translation/translated-label';
 
@@ -62,7 +62,7 @@ export const ColorPicker: FC<{
   if (!enabledState) {
     return (
       <div>
-        <Button onClick={enable}>
+        <Button type="button" size="lg" onClick={enable}>
           {t('enable_color_picker', 'Enable color picker')}
         </Button>
       </div>
@@ -83,7 +83,7 @@ export const ColorPicker: FC<{
       </div>
       {canBeCancelled && (
         <div>
-          <Button onClick={cancel}>
+          <Button type="button" size="lg" onClick={cancel}>
             {t('cancel_the_color_picker', 'Cancel the color picker')}
           </Button>
         </div>

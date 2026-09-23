@@ -6,7 +6,7 @@ import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { useUser } from '@gitroom/frontend/components/layout/user.context';
 import { useModals } from '@gitroom/frontend/components/layout/new-modal';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
 
 type AnnouncementColor = 'INFO' | 'WARNING' | 'ERROR';
@@ -79,9 +79,12 @@ const AnnouncementDetailModal: FC<{
       {isAdmin && (
         <div className="flex justify-end">
           <Button
+            type="button"
+            size="lg"
             onClick={handleDelete}
-            loading={deleting}
-            className="!bg-red-700 rounded-[4px]"
+            isLoading={deleting}
+            showSpinner={deleting}
+            className="cursor-pointer !bg-red-700 rounded-[4px]"
           >
             {t('delete_announcement', 'Delete Announcement')}
           </Button>

@@ -4,9 +4,8 @@ import { FC, useCallback, useMemo, useState } from 'react';
 import { ReactTags } from 'react-tag-autocomplete';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import useSWR from 'swr';
-import { Input } from '@gitroom/react/form/input';
+import { Input } from '@gitroom/react/ui/input';
 import { ColorPicker } from '@gitroom/react/form/color.picker';
-import { Button } from '@gitroom/react/form/button';
 import { Button as UIButton } from '@gitroom/react/ui/button';
 import {
   Popover,
@@ -475,15 +474,19 @@ const ConfirmDeleteModal: FC<{
         )}
       </p>
       <div className="flex gap-[8px] justify-end">
-        <Button
+        <UIButton
+          type="button"
+          size="lg"
           onClick={() => {
             resolve(false);
             close();
           }}
         >
           {t('cancel', 'Cancel')}
-        </Button>
-        <Button
+        </UIButton>
+        <UIButton
+          type="button"
+          size="lg"
           onClick={() => {
             resolve(true);
             close();
@@ -491,7 +494,7 @@ const ConfirmDeleteModal: FC<{
           className="bg-red-500 hover:bg-red-600"
         >
           {t('delete', 'Delete')}
-        </Button>
+        </UIButton>
       </div>
     </div>
   );
@@ -523,13 +526,16 @@ const ShowModal: FC<{
   }, [tagName, color, id]);
   return (
     <div>
-      <Input
-        name="name"
-        disableForm={true}
-        label={t('tag_name', 'Name')}
-        value={tagName}
-        onChange={(e) => setTagName(e.target.value)}
-      />
+      <div className="flex flex-col gap-[6px]">
+        <div className="text-[14px] text-foreground">
+          {t('tag_name', 'Name')}
+        </div>
+        <Input
+          className="h-[42px]"
+          value={tagName}
+          onChange={(e) => setTagName(e.target.value)}
+        />
+      </div>
       <ColorPicker
         onChange={(e) => setColor(e.target.value)}
         label={t('label_tag_color', 'Tag Color')}
@@ -538,9 +544,9 @@ const ShowModal: FC<{
         enabled={true}
         canBeCancelled={false}
       />
-      <Button onClick={save} className="mt-[16px]">
+      <UIButton type="button" size="lg" onClick={save} className="mt-[16px]">
         {t('save', 'Save')}
-      </Button>
+      </UIButton>
     </div>
   );
 };

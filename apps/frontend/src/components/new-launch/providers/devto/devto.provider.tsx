@@ -6,7 +6,14 @@ import {
   withProvider,
 } from '@gitroom/frontend/components/new-launch/providers/high.order.provider';
 import { DevToSettingsDto } from '@gitroom/nestjs-libraries/dtos/posts/providers-settings/dev.to.settings.dto';
-import { Input } from '@gitroom/react/form/input';
+import { Input } from '@gitroom/react/ui/input';
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@gitroom/react/ui/form';
 import { MediaComponent } from '@gitroom/frontend/components/media/media.component';
 import { SelectOrganization } from '@gitroom/frontend/components/new-launch/providers/devto/select.organization';
 import { DevtoTags } from '@gitroom/frontend/components/new-launch/providers/devto/devto.tags';
@@ -21,7 +28,19 @@ const DevtoSettings: FC = () => {
   const { date } = useIntegration();
   return (
     <>
-      <Input label="Title" {...form.register('title')} />
+      <FormField
+        control={form.control}
+        name="title"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Title</FormLabel>
+            <FormControl>
+              <Input {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
       <Canonical
         date={date}
         label="Canonical Link"

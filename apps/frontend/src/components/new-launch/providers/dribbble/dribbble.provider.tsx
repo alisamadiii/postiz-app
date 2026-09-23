@@ -6,14 +6,33 @@ import {
   withProvider,
 } from '@gitroom/frontend/components/new-launch/providers/high.order.provider';
 import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
-import { Input } from '@gitroom/react/form/input';
+import { Input } from '@gitroom/react/ui/input';
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@gitroom/react/ui/form';
 import { DribbbleTeams } from '@gitroom/frontend/components/new-launch/providers/dribbble/dribbble.teams';
 import { DribbbleDto } from '@gitroom/nestjs-libraries/dtos/posts/providers-settings/dribbble.dto';
 const DribbbleSettings: FC = () => {
   const { register, control } = useSettings();
   return (
     <div className="flex flex-col">
-      <Input label={'Title'} {...register('title')} />
+      <FormField
+        control={control}
+        name="title"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Title</FormLabel>
+            <FormControl>
+              <Input {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
       <DribbbleTeams {...register('team')} />
     </div>
   );

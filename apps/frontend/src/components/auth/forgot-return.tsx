@@ -1,9 +1,17 @@
 'use client';
-import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import Link from 'next/link';
-import { Button } from '@gitroom/react/form/button';
-import { Input } from '@gitroom/react/form/input';
+import { Button } from '@gitroom/react/ui/button';
+import { Input } from '@gitroom/react/ui/input';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@gitroom/react/ui/form';
 import { useMemo, useState } from 'react';
 import { classValidatorResolver } from '@hookform/resolvers/class-validator';
 import { ForgotReturnPasswordDto } from '@gitroom/nestjs-libraries/dtos/auth/forgot-return.password.dto';
@@ -49,7 +57,7 @@ export function ForgotReturn({ token }: { token: string }) {
     setLoading(false);
   };
   return (
-    <FormProvider {...form}>
+    <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div>
           <h1 className="text-3xl font-bold text-start mb-4 cursor-pointer">
@@ -59,24 +67,53 @@ export function ForgotReturn({ token }: { token: string }) {
         {!state ? (
           <>
             <div className="space-y-4 text-foreground">
-              <Input
-                label="New Password"
-                translationKey="label_new_password"
-                {...form.register('password')}
-                type="password"
-                placeholder={t('label_password', 'Password')}
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      {t('label_new_password', 'New Password')}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="password"
+                        placeholder={t('label_password', 'Password')}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-              <Input
-                label="Repeat Password"
-                translationKey="label_repeat_password"
-                {...form.register('repeatPassword')}
-                type="password"
-                placeholder={t('label_repeat_password', 'Repeat Password')}
+              <FormField
+                control={form.control}
+                name="repeatPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      {t('label_repeat_password', 'Repeat Password')}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="password"
+                        placeholder={t('label_repeat_password', 'Repeat Password')}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
             </div>
             <div className="text-center mt-6">
               <div className="w-full flex">
-                <Button type="submit" className="flex-1" loading={loading}>
+                <Button
+                  type="submit"
+                  className="flex-1"
+                  isLoading={loading}
+                  showSpinner={loading}
+                >
                   {t('change_password', 'Change Password')}
                 </Button>
               </div>
@@ -103,6 +140,6 @@ export function ForgotReturn({ token }: { token: string }) {
           </>
         )}
       </form>
-    </FormProvider>
+    </Form>
   );
 }

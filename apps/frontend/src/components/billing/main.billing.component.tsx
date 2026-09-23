@@ -2,7 +2,7 @@
 
 import { Slider } from '@gitroom/react/form/slider';
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { Subscription } from '@prisma/client';
 import { useDebouncedCallback } from 'use-debounce';
@@ -18,7 +18,7 @@ import { useUser } from '@gitroom/frontend/components/layout/user.context';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useVariables } from '@gitroom/react/helpers/variable.context';
 import { useModals } from '@gitroom/frontend/components/layout/new-modal';
-import { Textarea } from '@gitroom/react/form/textarea';
+import { Textarea } from '@gitroom/react/ui/textarea';
 import { useFireEvents } from '@gitroom/helpers/utils/use.fire.events';
 import { useUtmUrl } from '@gitroom/helpers/utils/utm.saver';
 import { useTrack } from '@gitroom/react/helpers/use.track';
@@ -155,10 +155,21 @@ const Accept: FC<{ resolve: (res: boolean) => void }> = ({ resolve }) => {
         Would you accept 50% discount for 3 months instead? 🙏🏻
       </div>
       <div className="flex gap-[10px]">
-        <Button loading={loading} onClick={apply}>
+        <Button
+          type="button"
+          size="lg"
+          isLoading={loading}
+          showSpinner={loading}
+          onClick={apply}
+        >
           Apply 50% discount for 3 months
         </Button>
-        <Button onClick={() => resolve(false)} className="!bg-red-800">
+        <Button
+          type="button"
+          size="lg"
+          onClick={() => resolve(false)}
+          className="!bg-red-800"
+        >
           Cancel my subscription
         </Button>
       </div>
@@ -188,17 +199,17 @@ const Info: FC<{
         )}
       </div>
       <div>
-        <Textarea
-          className="bg-card"
-          label={'Feedback'}
-          name="feedback"
-          disableForm={true}
-          value={feedback}
-          onChange={(e) => setFeedback(e.target.value)}
-        />
+        <div className="flex flex-col gap-[6px]">
+          <div className="text-[14px]">{t('label_feedback', 'Feedback')}</div>
+          <Textarea
+            className="min-h-[150px] bg-card"
+            value={feedback}
+            onChange={(e) => setFeedback(e.target.value)}
+          />
+        </div>
       </div>
       <div>
-        <Button disabled={feedback.length < 20} onClick={cancel}>
+        <Button type="button" size="lg" disabled={feedback.length < 20} onClick={cancel}>
           {feedback.length < 20
             ? t('please_add_at_least', 'Please add at least 20 chars')
             : t('cancel_subscription', 'Cancel Subscription')}
@@ -512,8 +523,11 @@ export const MainBillingComponent: FC<{
                   <div className="gap-[3px] flex flex-col">
                     <div>
                       <Button
+                        type="button"
+                        size="lg"
                         onClick={moveToCheckout('FREE', true)}
-                        loading={loading}
+                        isLoading={loading}
+                        showSpinner={loading}
                       >
                         {t(
                           'reactivate_subscription',
@@ -524,7 +538,10 @@ export const MainBillingComponent: FC<{
                   </div>
                 ) : (
                   <Button
-                    loading={loading}
+                    type="button"
+                    size="lg"
+                    isLoading={loading}
+                    showSpinner={loading}
                     disabled={
                       (!!subscription?.cancelAt &&
                         name.toUpperCase() === 'FREE') ||
@@ -574,7 +591,7 @@ export const MainBillingComponent: FC<{
       </div>
       {!!subscription?.id && (
         <div className="flex justify-center mt-[20px] gap-[10px]">
-          <Button onClick={updatePayment}>
+          <Button type="button" size="lg" onClick={updatePayment}>
             {t(
               'update_payment_method_invoices_history',
               'Update Payment Method / Invoices History'
@@ -582,8 +599,11 @@ export const MainBillingComponent: FC<{
           </Button>
           {isGeneral && !subscription?.cancelAt && (
             <Button
+              type="button"
+              size="lg"
               className="bg-red-500"
-              loading={loading}
+              isLoading={loading}
+              showSpinner={loading}
               onClick={moveToCheckout('FREE')}
             >
               {t('cancel_subscription_1', 'Cancel subscription')}

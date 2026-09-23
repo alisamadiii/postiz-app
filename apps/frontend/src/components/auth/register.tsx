@@ -1,35 +1,39 @@
 'use client';
 
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
-import Link from 'next/link';
-import { Button } from '@gitroom/react/form/button';
-import { Input } from '@gitroom/react/form/input';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { classValidatorResolver } from '@hookform/resolvers/class-validator';
-import { CreateOrgUserDto } from '@gitroom/nestjs-libraries/dtos/auth/create.org.user.dto';
-import { GithubProvider } from '@gitroom/frontend/components/auth/providers/github.provider';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { LoadingComponent } from '@gitroom/frontend/components/layout/loading';
-import { cn } from '@gitroom/react/helpers/cn';
-import { GoogleProvider } from '@gitroom/frontend/components/auth/providers/google.provider';
-import { AppleProvider } from '@gitroom/frontend/components/auth/providers/apple.provider';
-import { OauthProvider } from '@gitroom/frontend/components/auth/providers/oauth.provider';
-import { useFireEvents } from '@gitroom/helpers/utils/use.fire.events';
-import { useVariables } from '@gitroom/react/helpers/variable.context';
-import { useTrack } from '@gitroom/react/helpers/use.track';
-import { TrackEnum } from '@gitroom/nestjs-libraries/user/track.enum';
-import { FarcasterProvider } from '@gitroom/frontend/components/auth/providers/farcaster.provider';
 import dynamic from 'next/dynamic';
-import { WalletUiProvider } from '@gitroom/frontend/components/auth/providers/placeholder/wallet.ui.provider';
-import { useT } from '@gitroom/react/translation/get.transation.service.client';
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { classValidatorResolver } from '@hookform/resolvers/class-validator';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import useCookie from 'react-use-cookie';
+
+import { CreateOrgUserDto } from '@gitroom/nestjs-libraries/dtos/auth/create.org.user.dto';
+import { TrackEnum } from '@gitroom/nestjs-libraries/user/track.enum';
+import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
+import { useFireEvents } from '@gitroom/helpers/utils/use.fire.events';
+import { cn } from '@gitroom/react/helpers/cn';
+import { useTrack } from '@gitroom/react/helpers/use.track';
+import { useVariables } from '@gitroom/react/helpers/variable.context';
+import { useT } from '@gitroom/react/translation/get.transation.service.client';
+import { Button } from '@gitroom/react/ui/button';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '@gitroom/react/ui/form';
+import { Input } from '@gitroom/react/ui/input';
+import { WalletUiProvider } from '@gitroom/frontend/components/auth/providers/placeholder/wallet.ui.provider';
+import { LoadingComponent } from '@gitroom/frontend/components/layout/loading';
+
 const WalletProvider = dynamic(
   () => import('@gitroom/frontend/components/auth/providers/wallet.provider'),
   {
     ssr: false,
     loading: () => <WalletUiProvider />,
-  }
+  },
 );
 type Inputs = {
   email: string;
@@ -154,7 +158,7 @@ export function RegisterAfter({
       });
   };
   return (
-    <FormProvider {...form}>
+    <Form {...form}>
       <form
         className="flex w-full flex-col gap-6"
         onSubmit={form.handleSubmit(onSubmit)}
@@ -175,39 +179,66 @@ export function RegisterAfter({
         <div className="flex flex-col gap-2">
           {!isAfterProvider && (
             <>
-              <Input
-                label=""
-                translationKey="label_email"
-                {...form.register('email')}
-                type="email"
-                className="!h-[48px] !rounded-full !bg-background !border-border"
-                placeholder={t('email_address', 'Email Address')}
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="email"
+                        className="!h-[48px] !rounded-full px-5 text-base"
+                        placeholder={t('email_address', 'Email Address')}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-              <Input
-                label=""
-                translationKey="label_password"
-                {...form.register('password')}
-                autoComplete="off"
-                type="password"
-                className="!h-[48px] !rounded-full !bg-background !border-border"
-                placeholder={t('label_password', 'Password')}
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        autoComplete="off"
+                        type="password"
+                        className="!h-[48px] !rounded-full px-5 text-base"
+                        placeholder={t('label_password', 'Password')}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
             </>
           )}
-          <Input
-            label=""
-            translationKey="label_company"
-            {...form.register('company')}
-            autoComplete="off"
-            type="text"
-            className="!h-[48px] !rounded-full !bg-background !border-border"
-            placeholder={t('label_company', 'Company')}
+          <FormField
+            control={form.control}
+            name="company"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    {...field}
+                    autoComplete="off"
+                    type="text"
+                    className="!h-[48px] !rounded-full px-5 text-base"
+                    placeholder={t('label_company', 'Company')}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
 
-          <div className={cn('text-[12px] text-muted-foreground')}>
+          <div className={cn('text-muted-foreground text-[12px]')}>
             {t(
               'by_registering_you_agree_to_our',
-              'By registering you agree to our'
+              'By registering you agree to our',
             )}
             &nbsp;
             <a
@@ -231,39 +262,13 @@ export function RegisterAfter({
           <Button
             type="submit"
             className="mt-2 !h-[48px] w-full rounded-full text-base"
-            loading={loading}
+            isLoading={loading}
+            showSpinner={loading}
           >
             {t('create_account', 'Create Account')}
           </Button>
         </div>
-
-        {!isAfterProvider && (
-          <>
-            <div className="flex items-center">
-              <div className="flex-1 border-t border-border" />
-              <span className="text-muted-foreground px-3 text-xs">
-                {t('or_continue_with', 'Or continue with')}
-              </span>
-              <div className="flex-1 border-t border-border" />
-            </div>
-
-            {!isGeneral ? (
-              <GithubProvider />
-            ) : (
-              <div className="gap-[8px] flex">
-                {genericOauth && isGeneral ? (
-                  <OauthProvider />
-                ) : (
-                  <GoogleProvider />
-                )}
-                {!!appleClientId && <AppleProvider />}
-                {!!neynarClientId && <FarcasterProvider />}
-                {billingEnabled && <WalletProvider />}
-              </div>
-            )}
-          </>
-        )}
       </form>
-    </FormProvider>
+    </Form>
   );
 }

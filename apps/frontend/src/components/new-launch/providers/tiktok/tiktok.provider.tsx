@@ -11,12 +11,25 @@ import {
 } from '@gitroom/frontend/components/new-launch/providers/high.order.provider';
 import { TikTokDto } from '@gitroom/nestjs-libraries/dtos/posts/providers-settings/tiktok.dto';
 import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
-import { Select } from '@gitroom/react/form/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@gitroom/react/ui/select';
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@gitroom/react/ui/form';
 import { Checkbox } from '@gitroom/react/form/checkbox';
 import { cn } from '@gitroom/react/helpers/cn';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { useIntegration } from '@gitroom/frontend/components/launches/helpers/use.integration';
-import { Input } from '@gitroom/react/form/input';
+import { Input } from '@gitroom/react/ui/input';
 import { TiktokPreview } from '@gitroom/frontend/components/new-launch/providers/tiktok/tiktok.preview';
 import { TikTokMusicSelector } from '@gitroom/frontend/components/new-launch/providers/tiktok/tiktok.music';
 import { TikTokLocationSelector } from '@gitroom/frontend/components/new-launch/providers/tiktok/tiktok.location';
@@ -24,7 +37,7 @@ import { TikTokLocationSelector } from '@gitroom/frontend/components/new-launch/
 const TikTokSettings: FC<{
   values?: any;
 }> = (props) => {
-  const { watch, register } = useSettings();
+  const { watch, register, control } = useSettings();
   const { value, integration } = useIntegration();
   const t = useT();
 
@@ -122,22 +135,54 @@ const TikTokSettings: FC<{
           <div>{tiktokRestrictionNotice}</div>
         </div>
       )}
-      {isTitle && <Input label="Title" {...register('title')} maxLength={89} />}
+      {isTitle && (
+        <FormField
+          control={control}
+          name="title"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Title</FormLabel>
+              <FormControl>
+                <Input {...field} maxLength={89} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      )}
       <div className={directPostOnly}>
-        <Select
-          label={t('label_who_can_see_this_video', 'Who can see this video?')}
-          disabled={isUploadMode}
-          {...register('privacy_level', {
-            value: 'PUBLIC_TO_EVERYONE',
-          })}
-        >
-          <option value="">{t('select', 'Select')}</option>
-          {privacyLevel.map((item) => (
-            <option key={item.value} value={item.value}>
-              {item.label}
-            </option>
-          ))}
-        </Select>
+        <FormField
+          control={control}
+          name="privacy_level"
+          defaultValue="PUBLIC_TO_EVERYONE"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                {t('label_who_can_see_this_video', 'Who can see this video?')}
+              </FormLabel>
+              <Select
+                onValueChange={field.onChange}
+                value={field.value ?? undefined}
+                defaultValue={field.value}
+                disabled={isUploadMode}
+              >
+                <FormControl>
+                  <SelectTrigger className="h-[42px]">
+                    <SelectValue placeholder={t('select', 'Select')} />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {privacyLevel.map((item) => (
+                    <SelectItem key={item.value} value={item.value}>
+                      {item.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </div>
       <div className="text-[14px] mt-[10px] mb-[18px] text-balance">
         {t(
@@ -146,39 +191,73 @@ const TikTokSettings: FC<{
         This gives you access to TikTok's built-in editing tools and lets you make final adjustments before posting. The additional settings are only available when posting directly to TikTok.`
         )}
       </div>
-      <Select
-        label={t('label_content_posting_method', 'Content posting method')}
-        {...register('content_posting_method', {
-          value: 'DIRECT_POST',
-        })}
-      >
-        <option value="">{t('select', 'Select')}</option>
-        {contentPostingMethod.map((item) => (
-          <option key={item.value} value={item.value}>
-            {item.label}
-          </option>
-        ))}
-      </Select>
+      <FormField
+        control={control}
+        name="content_posting_method"
+        defaultValue="DIRECT_POST"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>
+              {t('label_content_posting_method', 'Content posting method')}
+            </FormLabel>
+            <Select
+              onValueChange={field.onChange}
+              value={field.value ?? undefined}
+              defaultValue={field.value}
+            >
+              <FormControl>
+                <SelectTrigger className="h-[42px]">
+                  <SelectValue placeholder={t('select', 'Select')} />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {contentPostingMethod.map((item) => (
+                  <SelectItem key={item.value} value={item.value}>
+                    {item.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
       {isUploadMode && <div className="-mt-[23px] mb-[23px] text-red-600">After posting you fill find a notification inside your Inbox about your post (not content studio)</div>}
       <div className={cn('flex flex-col', directPostOnly)}>
-        <Select
-          label={
-            isBusiness
-              ? t('label_add_random_music', 'Add random music')
-              : t('label_auto_add_music', 'Auto add music')
-          }
-          disabled={isUploadMode}
-          {...register('autoAddMusic', {
-            value: 'no',
-          })}
-        >
-          <option value="">{t('select', 'Select')}</option>
-          {yesNo.map((item) => (
-            <option key={item.value} value={item.value}>
-              {item.label}
-            </option>
-          ))}
-        </Select>
+        <FormField
+          control={control}
+          name="autoAddMusic"
+          defaultValue="no"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                {isBusiness
+                  ? t('label_add_random_music', 'Add random music')
+                  : t('label_auto_add_music', 'Auto add music')}
+              </FormLabel>
+              <Select
+                onValueChange={field.onChange}
+                value={field.value ?? undefined}
+                defaultValue={field.value}
+                disabled={isUploadMode}
+              >
+                <FormControl>
+                  <SelectTrigger className="h-[42px]">
+                    <SelectValue placeholder={t('select', 'Select')} />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {yesNo.map((item) => (
+                    <SelectItem key={item.value} value={item.value}>
+                      {item.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <div className="text-[14px] mt-[10px] mb-[24px] text-balance">
           {isBusiness
             ? t(

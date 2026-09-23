@@ -4,8 +4,8 @@ import { EventEmitter } from 'events';
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { TopTitle } from '@gitroom/frontend/components/launches/helpers/top.title.component';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
-import { Input } from '@gitroom/react/form/input';
-import { Button } from '@gitroom/react/form/button';
+import { Input } from '@gitroom/react/ui/input';
+import { Button } from '@gitroom/react/ui/button';
 import { useToaster } from '@gitroom/react/toaster/toaster';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { useLaunchStore } from '@gitroom/frontend/components/new-launch/store';
@@ -145,15 +145,18 @@ export const LinkedinCompany: FC<{
           </button>
         </div>
         <div className="mt-[10px]">
-          <Input
-            name="url"
-            disableForm={true}
-            label="URL"
-            value={company}
-            onChange={(e) => setCompany(e.target.value)}
-            placeholder="https://www.linkedin.com/company/gitroom"
-          />
-          <Button onClick={getCompany}>{t('add', 'Add')}</Button>
+          <div className="flex flex-col gap-[6px]">
+            <div className="text-[14px] text-foreground">URL</div>
+            <Input
+              name="url"
+              value={company}
+              onChange={(e) => setCompany(e.target.value)}
+              placeholder="https://www.linkedin.com/company/gitroom"
+            />
+          </div>
+          <Button type="button" size="lg" onClick={getCompany}>
+            {t('add', 'Add')}
+          </Button>
         </div>
       </div>
     </div>

@@ -4,11 +4,24 @@ import React, { FC, useCallback, useState } from 'react';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import useSWR from 'swr';
 import { useModals } from '@gitroom/frontend/components/layout/new-modal';
-import { Input } from '@gitroom/react/form/input';
+import { Input } from '@gitroom/react/ui/input';
 import { FormProvider, useForm } from 'react-hook-form';
 import { array, boolean, object, string } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Select } from '@gitroom/react/form/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@gitroom/react/ui/select';
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@gitroom/react/ui/form';
 import { PickPlatforms } from '@gitroom/frontend/components/launches/helpers/pick.platform.component';
 import { useToaster } from '@gitroom/react/toaster/toaster';
 import { cn } from '@gitroom/react/helpers/cn';
@@ -259,18 +272,13 @@ export const AddOrEditWebhook: FC<{
   const integration = useCallback(async () => {
     return (await fetch('/integrations/list')).json();
   }, []);
-  const changeIntegration = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const findValue = options.find(
-        (option) => option.value === e.target.value
-      )!;
-      setAllIntegrations(findValue);
-      if (findValue.value === 'all') {
-        form.setValue('integrations', []);
-      }
-    },
-    []
-  );
+  const changeIntegration = useCallback((value: string) => {
+    const findValue = options.find((option) => option.value === value)!;
+    setAllIntegrations(findValue);
+    if (findValue.value === 'all') {
+      form.setValue('integrations', []);
+    }
+  }, []);
   const { data: dataList, isLoading } = useSWR('integrations', integration, {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
@@ -339,57 +347,131 @@ export const AddOrEditWebhook: FC<{
       <form onSubmit={form.handleSubmit(callBack)}>
         <div className="relative flex gap-[20px] flex-col flex-1 rounded-[4px] border border-border pt-0">
           <div>
-            <Input
-              label="Title"
-              translationKey="label_title"
-              {...form.register('title')}
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('label_title', 'Title')}</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            <Input
-              label="URL"
-              translationKey="label_url"
-              {...form.register('url')}
+            <FormField
+              control={form.control}
+              name="url"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('label_url', 'URL')}</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            <Select
-              label="Should we sync the current last post?"
-              translationKey="label_should_sync_last_post"
-              {...form.register('syncLast', {
-                setValueAs: (value) => {
-                  return value === 'true' || value === true;
-                },
-              })}
-            >
-              {optionsChoose.map((option) => (
-                <option key={String(option.value)} value={String(option.value)}>
-                  {option.label}
-                </option>
-              ))}
-            </Select>
-            <Select
-              label="When should we post it?"
-              translationKey="label_when_post"
-              {...form.register('onSlot', {
-                setValueAs: (value) => value === 'true' || value === true,
-              })}
-            >
-              {postImmediately.map((option) => (
-                <option key={String(option.value)} value={String(option.value)}>
-                  {option.label}
-                </option>
-              ))}
-            </Select>
-            <Select
-              label="Autogenerate content"
-              translationKey="label_autogenerate_content"
-              {...form.register('generateContent', {
-                setValueAs: (value) => value === 'true' || value === true,
-              })}
-            >
-              {optionsChoose.map((option) => (
-                <option key={String(option.value)} value={String(option.value)}>
-                  {option.label}
-                </option>
-              ))}
-            </Select>
+            <FormField
+              control={form.control}
+              name="syncLast"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    {t(
+                      'label_should_sync_last_post',
+                      'Should we sync the current last post?'
+                    )}
+                  </FormLabel>
+                  <Select
+                    onValueChange={(value) => field.onChange(value === 'true')}
+                    value={String(field.value)}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {optionsChoose.map((option) => (
+                        <SelectItem
+                          key={String(option.value)}
+                          value={String(option.value)}
+                        >
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="onSlot"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    {t('label_when_post', 'When should we post it?')}
+                  </FormLabel>
+                  <Select
+                    onValueChange={(value) => field.onChange(value === 'true')}
+                    value={String(field.value)}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {postImmediately.map((option) => (
+                        <SelectItem
+                          key={String(option.value)}
+                          value={String(option.value)}
+                        >
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="generateContent"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    {t('label_autogenerate_content', 'Autogenerate content')}
+                  </FormLabel>
+                  <Select
+                    onValueChange={(value) => field.onChange(value === 'true')}
+                    value={String(field.value)}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {optionsChoose.map((option) => (
+                        <SelectItem
+                          key={String(option.value)}
+                          value={String(option.value)}
+                        >
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             {!generateContent && (
               <>
                 <div className={`text-[14px] mb-[6px]`}>
@@ -412,33 +494,58 @@ export const AddOrEditWebhook: FC<{
                 />
               </>
             )}
-            <Select
-              label="Generate Picture?"
-              translationKey="label_generate_picture"
-              {...form.register('addPicture', {
-                setValueAs: (value) => value === 'true' || value === true,
-              })}
-            >
-              {optionsChoose.map((option) => (
-                <option key={String(option.value)} value={String(option.value)}>
-                  {option.label}
-                </option>
-              ))}
-            </Select>
-            <Select
-              value={allIntegrations.value}
-              name="integrations"
-              label="Integrations"
-              translationKey="label_integrations"
-              disableForm={true}
-              onChange={changeIntegration}
-            >
-              {options.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </Select>
+            <FormField
+              control={form.control}
+              name="addPicture"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    {t('label_generate_picture', 'Generate Picture?')}
+                  </FormLabel>
+                  <Select
+                    onValueChange={(value) => field.onChange(value === 'true')}
+                    value={String(field.value)}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {optionsChoose.map((option) => (
+                        <SelectItem
+                          key={String(option.value)}
+                          value={String(option.value)}
+                        >
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex flex-col gap-[6px]">
+              <div className="text-[14px]">
+                {t('label_integrations', 'Integrations')}
+              </div>
+              <Select
+                value={allIntegrations.value}
+                onValueChange={changeIntegration}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {options.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
             {allIntegrations.value === 'specific' && dataList && !isLoading && (
               <PickPlatforms
                 integrations={dataList.integrations}

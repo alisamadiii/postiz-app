@@ -5,8 +5,8 @@ import { Web3ProviderInterface } from '@gitroom/frontend/components/launches/web
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { timer } from '@gitroom/helpers/utils/timer';
 import { makeId } from '@gitroom/nestjs-libraries/services/make.is';
-import { Input } from '@gitroom/react/form/input';
-import { Button } from '@gitroom/react/form/button';
+import { Input } from '@gitroom/react/ui/input';
+import { Button } from '@gitroom/react/ui/button';
 import copy from 'copy-to-clipboard';
 import { useToaster } from '@gitroom/react/toaster/toaster';
 import { useVariables } from '@gitroom/react/helpers/variable.context';
@@ -108,13 +108,14 @@ export const TelegramProvider: FC<Web3ProviderInterface> = (props) => {
             <div className="mt-[16px] flex">
               <div className="flex-1">
                 <Input
-                  label=""
+                  className="h-[42px]"
                   value={`/connect ${word.current}`}
-                  name=""
-                  disableForm={true}
+                  readOnly
                 />
               </div>
-              <Button>{t('copy', 'Copy')}</Button>
+              <Button type="button" size="lg">
+                {t('copy', 'Copy')}
+              </Button>
             </div>
           </div>
         )}

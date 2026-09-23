@@ -7,7 +7,20 @@ import {
 } from '@gitroom/frontend/components/new-launch/providers/high.order.provider';
 import { TwitchDto } from '@gitroom/nestjs-libraries/dtos/posts/providers-settings/twitch.dto';
 import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
-import { Select } from '@gitroom/react/form/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@gitroom/react/ui/select';
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@gitroom/react/ui/form';
 import { useWatch } from 'react-hook-form';
 
 const messageTypes = [
@@ -45,7 +58,7 @@ const announcementColors = [
 ];
 
 const TwitchSettings: FC = () => {
-  const { register, control } = useSettings();
+  const { control } = useSettings();
   const messageType = useWatch({
     control,
     name: 'messageType',
@@ -53,31 +66,65 @@ const TwitchSettings: FC = () => {
 
   return (
     <div className="flex flex-col">
-      <Select
-        label="Message Type"
-        {...register('messageType', {
-          value: 'message',
-        })}
-      >
-        {messageTypes.map((t) => (
-          <option key={t.value} value={t.value}>
-            {t.label}
-          </option>
-        ))}
-      </Select>
+      <FormField
+        control={control}
+        name="messageType"
+        defaultValue="message"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Message Type</FormLabel>
+            <Select
+              onValueChange={field.onChange}
+              value={field.value ?? undefined}
+              defaultValue={field.value}
+            >
+              <FormControl>
+                <SelectTrigger className="h-[42px]">
+                  <SelectValue />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {messageTypes.map((t) => (
+                  <SelectItem key={t.value} value={t.value}>
+                    {t.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
       {messageType === 'announcement' && (
-        <Select
-          label="Announcement Color"
-          {...register('announcementColor', {
-            value: 'primary',
-          })}
-        >
-          {announcementColors.map((c) => (
-            <option key={c.value} value={c.value}>
-              {c.label}
-            </option>
-          ))}
-        </Select>
+        <FormField
+          control={control}
+          name="announcementColor"
+          defaultValue="primary"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Announcement Color</FormLabel>
+              <Select
+                onValueChange={field.onChange}
+                value={field.value ?? undefined}
+                defaultValue={field.value}
+              >
+                <FormControl>
+                  <SelectTrigger className="h-[42px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {announcementColors.map((c) => (
+                    <SelectItem key={c.value} value={c.value}>
+                      {c.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       )}
     </div>
   );

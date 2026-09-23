@@ -2,7 +2,14 @@
 
 import { FC, useEffect, useState } from 'react';
 import { useCustomProviderFunction } from '@gitroom/frontend/components/launches/helpers/use.custom.provider.function';
-import { Select } from '@gitroom/react/form/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@gitroom/react/ui/select';
+import { TranslatedLabel } from '@gitroom/react/translation/translated-label';
 import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 export const SkoolLabelSelect: FC<{
@@ -48,18 +55,25 @@ export const SkoolLabelSelect: FC<{
     return null;
   }
   return (
-    <Select
-      name={name}
-      label="Select Label"
-      onChange={onChangeInner}
-      value={currentLabel}
-    >
-      <option value="">{t('select_1', '--Select--')}</option>
-      {labels.map((label: any) => (
-        <option key={label.id} value={label.id}>
-          {label.name}
-        </option>
-      ))}
-    </Select>
+    <div className="flex flex-col gap-[6px]">
+      <div className="text-[14px]">
+        <TranslatedLabel label="Select Label" />
+      </div>
+      <Select
+        value={currentLabel != null ? String(currentLabel) : undefined}
+        onValueChange={(value) => onChangeInner({ target: { value, name } })}
+      >
+        <SelectTrigger className="h-[42px]">
+          <SelectValue placeholder={t('select_1', '--Select--')} />
+        </SelectTrigger>
+        <SelectContent>
+          {labels.map((label: any) => (
+            <SelectItem key={label.id} value={String(label.id)}>
+              {label.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   );
 };

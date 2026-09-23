@@ -4,7 +4,7 @@ import React, { FC, useCallback, useState } from 'react';
 import useSWR from 'swr';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { useUser } from '@gitroom/frontend/components/layout/user.context';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 import { LoadingComponent } from '@gitroom/frontend/components/layout/loading';
 
 interface PerSocial {
@@ -205,6 +205,8 @@ export const AdminStatsComponent: FC = () => {
           />
         </div>
         <Button
+          type="button"
+          size="lg"
           onClick={() => setRange({ from: fromInput, to: toInput })}
           disabled={!fromInput || !toInput || fromInput > toInput}
         >

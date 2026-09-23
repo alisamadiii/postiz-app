@@ -1,4 +1,4 @@
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
 import { FC, useCallback } from 'react';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
@@ -38,7 +38,11 @@ export const SeparatePost: FC<{
   }, [len, posts]);
 
   return (
-    <Button className="!h-[30px] !text-sm !bg-red-800" onClick={notReversible}>
+    <Button
+      type="button"
+      className="!h-[30px] !text-sm !bg-red-800"
+      onClick={notReversible}
+    >
       {t('separate_post', 'Separate post to multiple posts')}
     </Button>
   );

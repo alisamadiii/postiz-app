@@ -5,11 +5,24 @@ import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import useSWR from 'swr';
 import { useUser } from '@gitroom/frontend/components/layout/user.context';
 import { useModals } from '@gitroom/frontend/components/layout/new-modal';
-import { Input } from '@gitroom/react/form/input';
+import { Input } from '@gitroom/react/ui/input';
 import { FormProvider, useForm } from 'react-hook-form';
 import { array, object, string } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Select } from '@gitroom/react/form/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@gitroom/react/ui/select';
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from '@gitroom/react/ui/form';
 import { PickPlatforms } from '@gitroom/frontend/components/launches/helpers/pick.platform.component';
 import { useToaster } from '@gitroom/react/toaster/toaster';
 import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
@@ -192,10 +205,8 @@ export const AddOrEditWebhook: FC<{
     return (await fetch('/integrations/list')).json();
   }, []);
   const changeIntegration = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const findValue = options.find(
-        (option) => option.value === e.target.value
-      )!;
+    (value: string) => {
+      const findValue = options.find((option) => option.value === value)!;
       setAllIntegrations(findValue);
       if (findValue.value === 'all') {
         form.setValue('integrations', []);
@@ -285,30 +296,50 @@ export const AddOrEditWebhook: FC<{
       <form onSubmit={form.handleSubmit(callBack)}>
         <div className="relative flex gap-[20px] flex-col flex-1 rounded-[4px] pt-0">
           <div>
-            <Input
-              label="Name"
-              translationKey="label_name"
-              {...form.register('name')}
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            <Input
-              label="URL"
-              translationKey="label_url"
-              {...form.register('url')}
+            <FormField
+              control={form.control}
+              name="url"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>URL</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            <Select
-              value={allIntegrations.value}
-              name="integrations"
-              label="Integrations"
-              translationKey="label_integrations"
-              disableForm={true}
-              onChange={changeIntegration}
-            >
-              {options.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </Select>
+            <div className="flex flex-col gap-[6px]">
+              <div className="text-[14px]">Integrations</div>
+              <Select
+                value={allIntegrations.value}
+                onValueChange={changeIntegration}
+              >
+                <SelectTrigger className="h-[42px]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {options.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
             {allIntegrations.value === 'specific' && dataList && !isLoading && (
               <PickPlatforms
                 integrations={dataList.integrations}

@@ -5,7 +5,7 @@ import React, { FC, useCallback, useState } from 'react';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import useSWR from 'swr';
 import { useUser } from '@gitroom/frontend/components/layout/user.context';
-import { Input } from '@gitroom/react/form/input';
+import { Input } from '@gitroom/react/ui/input';
 import { useToaster } from '@gitroom/react/toaster/toaster';
 import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
@@ -47,13 +47,11 @@ const SaveSetModal: FC<{
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <div>
+      <div className="flex flex-col gap-[6px]">
+        <div className="text-[14px] text-foreground">Set Name</div>
         <Input
-          label="Set Name"
-          translationKey="label_set_name"
           name="setName"
           value={name}
-          disableForm={true}
           onChange={(e) => setName(e.target.value)}
           placeholder="Enter a name for this set"
           autoFocus

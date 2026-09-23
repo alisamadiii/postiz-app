@@ -6,7 +6,7 @@ import { capitalize, orderBy } from 'lodash';
 import SafeImage from '@gitroom/react/helpers/safe.image';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { RenderAnalytics } from '@gitroom/frontend/components/platform-analytics/render.analytics';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 import { useRouter } from 'next/navigation';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { useVariables } from '@gitroom/react/helpers/variable.context';
@@ -169,7 +169,12 @@ export const PlatformAnalytics = () => {
           {t('supported', 'Supported:')}
           {allowedIntegrations.map((p) => capitalize(p)).join(', ')}
         </div>
-        <Button onClick={() => router.push('/platforms')}>
+        <Button
+          type="button"
+          size="lg"
+          className="cursor-pointer"
+          onClick={() => router.push('/platforms')}
+        >
           {t('go_to_platforms_to_add_channels', 'Go to Platforms to add channels')}
         </Button>
       </div>

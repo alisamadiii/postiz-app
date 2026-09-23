@@ -7,9 +7,22 @@ import React, { useCallback, useMemo } from 'react';
 import { useUser } from '@gitroom/frontend/components/layout/user.context';
 import { capitalize } from 'lodash';
 import { useModals } from '@gitroom/frontend/components/layout/new-modal';
-import { Input } from '@gitroom/react/form/input';
+import { Input } from '@gitroom/react/ui/input';
 import { useForm, FormProvider, useWatch } from 'react-hook-form';
-import { Select } from '@gitroom/react/form/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@gitroom/react/ui/select';
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from '@gitroom/react/ui/form';
 import { Checkbox } from '@gitroom/react/form/checkbox';
 import { classValidatorResolver } from '@hookform/resolvers/class-validator';
 import { AddTeamMemberDto } from '@gitroom/nestjs-libraries/dtos/settings/add.team.member.dto';
@@ -84,20 +97,52 @@ export const AddMember = () => {
       <form onSubmit={form.handleSubmit(submit)}>
         <div className="relative flex gap-[10px] flex-col flex-1 p-[16px] pt-0">
           {sendEmail && (
-            <Input
-              label="Email"
-              placeholder={t('enter_email', 'Enter email')}
+            <FormField
+              control={form.control}
               name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder={t('enter_email', 'Enter email')}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
           )}
-          <Select label="Role" name="role">
-            <option value="">{t('select_role', 'Select Role')}</option>
-            {roles.map((role) => (
-              <option key={role.value} value={role.value}>
-                {role.name}
-              </option>
-            ))}
-          </Select>
+          <FormField
+            control={form.control}
+            name="role"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Role</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value || undefined}
+                >
+                  <FormControl>
+                    <SelectTrigger className="h-[42px]">
+                      <SelectValue
+                        placeholder={t('select_role', 'Select Role')}
+                      />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {roles.map((role) => (
+                      <SelectItem key={role.value} value={role.value}>
+                        {role.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <div className="flex gap-[5px]">
             <div>
               <Checkbox name="sendEmail" />

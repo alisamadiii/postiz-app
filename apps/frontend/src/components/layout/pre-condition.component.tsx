@@ -2,7 +2,7 @@ import React, { FC, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { ModalWrapperComponent } from '@gitroom/frontend/components/new-launch/modal.wrapper.component';
 import { useModals } from '@gitroom/frontend/components/layout/new-modal';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 
 export const PreConditionComponentModal: FC = () => {
   const modal = useModals();
@@ -18,11 +18,22 @@ export const PreConditionComponentModal: FC = () => {
       </div>
       <div className="flex gap-[2px] justify-center">
         <Button
+          type="button"
+          size="lg"
+          className="cursor-pointer"
           onClick={() => (window.location.href = '/billing?finishTrial=true')}
         >
           Fast track - Charge me now
         </Button>
-        <Button onClick={modal.closeCurrent} secondary={true}>Cancel</Button>
+        <Button
+          type="button"
+          size="lg"
+          variant="secondary"
+          className="cursor-pointer"
+          onClick={modal.closeCurrent}
+        >
+          Cancel
+        </Button>
       </div>
     </div>
   );

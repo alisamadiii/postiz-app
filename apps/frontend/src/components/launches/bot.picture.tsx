@@ -4,8 +4,8 @@ import { TopTitle } from '@gitroom/frontend/components/launches/helpers/top.titl
 import React, { FC, FormEventHandler, useCallback, useState } from 'react';
 import { Integrations } from '@gitroom/frontend/components/launches/calendar.context';
 import { useModals } from '@gitroom/frontend/components/layout/new-modal';
-import { Input } from '@gitroom/react/form/input';
-import { Button } from '@gitroom/react/form/button';
+import { Input } from '@gitroom/react/ui/input';
+import { Button } from '@gitroom/react/ui/button';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { useToaster } from '@gitroom/react/toaster/toaster';
 import { showMediaBox } from '@gitroom/frontend/components/media/media.component';
@@ -66,24 +66,29 @@ export const BotPicture: FC<{
                 alt="Bot Picture"
                 className="w-[100px] h-[100px] rounded-full"
               />
-              <Button type="button" onClick={openMedia}>
+              <Button type="button" size="lg" onClick={openMedia}>
                 {t('upload', 'Upload')}
               </Button>
             </div>
           )}
           {props.canChangeNickName && (
-            <Input
-              value={nick}
-              onChange={(e) => setNickname(e.target.value)}
-              name="Nickname"
-              label={t('label_nickname', 'Nickname')}
-              placeholder=""
-              disableForm={true}
-            />
+            <div className="flex flex-col gap-[6px]">
+              <div className="text-[14px] text-foreground">
+                {t('label_nickname', 'Nickname')}
+              </div>
+              <Input
+                value={nick}
+                onChange={(e) => setNickname(e.target.value)}
+                name="Nickname"
+                placeholder=""
+              />
+            </div>
           )}
 
           <div className="mt-[50px]">
-            <Button type="submit">{t('save', 'Save')}</Button>
+            <Button type="submit" size="lg">
+              {t('save', 'Save')}
+            </Button>
           </div>
         </form>
       </div>

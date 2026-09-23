@@ -6,14 +6,27 @@ import {
 } from '@gitroom/frontend/components/third-parties/third-party.function';
 import { useThirdParty } from '@gitroom/frontend/components/third-parties/third-party.media';
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form';
-import { Textarea } from '@gitroom/react/form/textarea';
-import { Button } from '@gitroom/react/form/button';
+import { Textarea } from '@gitroom/react/ui/textarea';
+import { Button } from '@gitroom/react/ui/button';
 import { FC, useCallback, useState } from 'react';
 import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
 import { cn } from '@gitroom/react/helpers/cn';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { object, string } from 'zod';
-import { Select } from '@gitroom/react/form/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@gitroom/react/ui/select';
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from '@gitroom/react/ui/form';
 import { LoadingComponent } from '@gitroom/frontend/components/layout/loading';
 
 const aspectRatio = [
@@ -174,31 +187,86 @@ const HeygenProviderComponent = () => {
           onSubmit={form.handleSubmit(submit)}
           className="w-full flex flex-col"
         >
-          <Select label="Aspect Ratio" {...form.register('aspect_ratio')}>
-            <option value="">--SELECT--</option>
-            {aspectRatio.map((p) => (
-              <option key={p.key} value={p.key}>
-                {p.value}
-              </option>
-            ))}
-          </Select>
+          <FormField
+            control={form.control}
+            name="aspect_ratio"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Aspect Ratio</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value || undefined}
+                >
+                  <FormControl>
+                    <SelectTrigger className="h-[42px]">
+                      <SelectValue placeholder="--SELECT--" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {aspectRatio.map((p) => (
+                      <SelectItem key={p.key} value={p.key}>
+                        {p.value}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-          <Select label="Generate Captions" {...form.register('captions')}>
-            <option value="">--SELECT--</option>
-            {generateCaptions.map((p) => (
-              <option key={p.key} value={p.key}>
-                {p.value}
-              </option>
-            ))}
-          </Select>
+          <FormField
+            control={form.control}
+            name="captions"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Generate Captions</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value || undefined}
+                >
+                  <FormControl>
+                    <SelectTrigger className="h-[42px]">
+                      <SelectValue placeholder="--SELECT--" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {generateCaptions.map((p) => (
+                      <SelectItem key={p.key} value={p.key}>
+                        {p.value}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <div className="text-lg mb-3">Voice to generate</div>
           {!hideVoiceGenerator && (
-            <Button onClick={generateVoice} loading={voiceLoading}>
+            <Button
+              type="button"
+              size="lg"
+              onClick={generateVoice}
+              isLoading={voiceLoading}
+              showSpinner={voiceLoading}
+            >
               Generate Voice From My Post Text
             </Button>
           )}
-          <Textarea label="" {...form.register('voice')} />
+          <FormField
+            control={form.control}
+            name="voice"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Textarea {...field} className="min-h-[150px]" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           {!!data?.length && (
             <>
               <div className="text-lg my-3">Select Avatar</div>
@@ -237,7 +305,9 @@ const HeygenProviderComponent = () => {
             </>
           )}
 
-          <Button type="submit">Generate Video</Button>
+          <Button type="submit" size="lg">
+            Generate Video
+          </Button>
         </form>
       </FormProvider>
     </div>

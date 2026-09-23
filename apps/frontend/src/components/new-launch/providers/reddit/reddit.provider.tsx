@@ -9,7 +9,7 @@ import { useIntegration } from '@gitroom/frontend/components/launches/helpers/us
 import { Subreddit } from '@gitroom/frontend/components/new-launch/providers/reddit/subreddit';
 import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
 import { useFieldArray, useWatch } from 'react-hook-form';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 import {
   RedditSettingsDto,
   RedditSettingsValueDto,
@@ -196,7 +196,9 @@ const RedditSettings: FC = () => {
           </div>
         ))}
       </div>
-      <Button onClick={addField}>{t('add_subreddit', 'Add Subreddit')}</Button>
+      <Button type="button" size="lg" onClick={addField}>
+        {t('add_subreddit', 'Add Subreddit')}
+      </Button>
       {fields.length === 0 && (
         <div className="text-red-500 text-[12px] mt-[10px]">
           {t(

@@ -8,7 +8,20 @@ import { array, boolean, object, string } from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { CopilotTextarea } from '@copilotkit/react-textarea';
-import { Select } from '@gitroom/react/form/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@gitroom/react/ui/select';
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from '@gitroom/react/ui/form';
 import { useToaster } from '@gitroom/react/toaster/toaster';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
@@ -230,20 +243,30 @@ const AddOrRemoveSignature: FC<{
             />
           </div>
 
-          <Select
-            label="Auto add signature?"
-            translationKey="label_auto_add_signature"
-            {...form.register('autoAdd', {
-              setValueAs: (value) => value === 'true',
-            })}
-          >
-            <option value="false">
-              {t('no', 'No')}
-            </option>
-            <option value="true">
-              {t('yes', 'Yes')}
-            </option>
-          </Select>
+          <FormField
+            control={form.control}
+            name="autoAdd"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Auto add signature?</FormLabel>
+                <Select
+                  value={field.value ? 'true' : 'false'}
+                  onValueChange={(value) => field.onChange(value === 'true')}
+                >
+                  <FormControl>
+                    <SelectTrigger className="h-[42px]">
+                      <SelectValue />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="false">{t('no', 'No')}</SelectItem>
+                    <SelectItem value="true">{t('yes', 'Yes')}</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <Button type="submit">{t('save', 'Save')}</Button>
         </div>

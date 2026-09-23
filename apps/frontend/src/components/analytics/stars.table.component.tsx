@@ -9,7 +9,7 @@ import {
   useTransition,
 } from 'react';
 import { UtcToLocalDateRender } from '@gitroom/react/helpers/utc.date.render';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -197,7 +197,9 @@ export const StarsTableComponent = () => {
                   <td>{p.forks}</td>
                   <td>
                     <Link href={renderMediaLink(p.date)}>
-                      <Button>{t('check_launch', 'Check Launch')}</Button>
+                      <Button type="button" size="lg">
+                        {t('check_launch', 'Check Launch')}
+                      </Button>
                     </Link>
                   </td>
                 </tr>

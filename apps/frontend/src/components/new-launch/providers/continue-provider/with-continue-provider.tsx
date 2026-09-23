@@ -3,7 +3,7 @@
 import { FC, ReactNode, useCallback, useMemo, useState } from 'react';
 import useSWR from 'swr';
 import { cn } from '@gitroom/react/helpers/cn';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { useCustomProviderFunction } from '@gitroom/frontend/components/launches/helpers/use.custom.provider.function';
 
@@ -141,7 +141,15 @@ export function withContinueProvider<TItem, TSelection>(
           ))}
         </div>
         <div>
-          <Button disabled={!selection || isSaving} loading={isSaving} onClick={handleSave}>
+          <Button
+            type="button"
+            size="lg"
+            className="cursor-pointer"
+            disabled={!selection || isSaving}
+            isLoading={isSaving}
+            showSpinner={isSaving}
+            onClick={handleSave}
+          >
             {t('save', 'Save')}
           </Button>
         </div>

@@ -2,13 +2,20 @@
 
 import { FC, FormEvent, useCallback, useMemo, useState } from 'react';
 import { useCustomProviderFunction } from '@gitroom/frontend/components/launches/helpers/use.custom.provider.function';
-import { Input } from '@gitroom/react/form/input';
+import { Input } from '@gitroom/react/ui/input';
 import { useDebouncedCallback } from 'use-debounce';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 import { cn } from '@gitroom/react/helpers/cn';
 import { MultiMediaComponent } from '@gitroom/frontend/components/media/media.component';
 import { useWatch } from 'react-hook-form';
-import { Select } from '@gitroom/react/form/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@gitroom/react/ui/select';
+import { TranslatedLabel } from '@gitroom/react/translation/translated-label';
 import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
 import { Canonical } from '@gitroom/react/form/canonical';
 import { useIntegration } from '@gitroom/frontend/components/launches/helpers/use.integration';
@@ -41,6 +48,8 @@ export const RenderOptions: FC<{
     <div className="flex">
       {mapValues.map((p) => (
         <Button
+          type="button"
+          size="lg"
           className={cn('flex-1', p.id !== value && 'bg-secondary')}
           key={p.id}
           {...p}
@@ -185,14 +194,17 @@ export const Subreddit: FC<{
     <div className="bg-primary p-[20px]">
       {value?.subreddit ? (
         <>
-          <Input
-            error={errors?.subreddit?.message}
-            disableForm={true}
-            value={value.subreddit}
-            readOnly={true}
-            label="Subreddit"
-            name="subreddit"
-          />
+          <div className="flex flex-col gap-[6px]">
+            <div className="text-[14px] text-foreground">
+              <TranslatedLabel label="Subreddit" />
+            </div>
+            <Input value={value.subreddit} readOnly={true} />
+            {errors?.subreddit?.message && (
+              <p className="text-destructive text-[12px]">
+                {errors.subreddit.message}
+              </p>
+            )}
+          </div>
           <div className="mb-[12px]">
             <RenderOptions
               value={value.type}
@@ -200,29 +212,44 @@ export const Subreddit: FC<{
               onClick={setType}
             />
           </div>
-          <Input
-            error={errors?.title?.message}
-            value={value.title}
-            disableForm={true}
-            label="Title"
-            name="title"
-            onChange={setTitle}
-          />
-          <Select
-            error={errors?.flair?.message}
-            onChange={setFlair}
-            value={value?.flair?.id}
-            disableForm={true}
-            label="Flair"
-            name="flair"
-          >
-            <option value="">{t('select_flair', '--Select Flair--')}</option>
-            {value?.flairs?.map((f: any) => (
-              <option key={f.name} value={f.id}>
-                {f.name}
-              </option>
-            ))}
-          </Select>
+          <div className="flex flex-col gap-[6px]">
+            <div className="text-[14px] text-foreground">
+              <TranslatedLabel label="Title" />
+            </div>
+            <Input value={value.title} onChange={setTitle} />
+            {errors?.title?.message && (
+              <p className="text-destructive text-[12px]">
+                {errors.title.message}
+              </p>
+            )}
+          </div>
+          <div className="flex flex-col gap-[6px]">
+            <div className="text-[14px] text-foreground">
+              <TranslatedLabel label="Flair" />
+            </div>
+            <Select
+              value={value?.flair?.id != null ? String(value.flair.id) : undefined}
+              onValueChange={(v) => setFlair({ target: { value: v } })}
+            >
+              <SelectTrigger className="h-[42px]">
+                <SelectValue
+                  placeholder={t('select_flair', '--Select Flair--')}
+                />
+              </SelectTrigger>
+              <SelectContent>
+                {value?.flairs?.map((f: any) => (
+                  <SelectItem key={f.name} value={String(f.id)}>
+                    {f.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {errors?.flair?.message && (
+              <p className="text-destructive text-[12px]">
+                {errors.flair.message}
+              </p>
+            )}
+          </div>
           {value.type === 'link' && (
             <Canonical
               date={date}
@@ -237,20 +264,24 @@ export const Subreddit: FC<{
         </>
       ) : (
         <div className="relative">
-          <Input
-            placeholder="/r/selfhosted"
-            name="search"
-            label="Search Subreddit"
-            readOnly={loading}
-            value={searchValue}
-            error={errors?.message}
-            disableForm={true}
-            onInput={async (e) => {
-              // @ts-ignore
-              setSearchValue(e.target.value);
-              await search(e);
-            }}
-          />
+          <div className="flex flex-col gap-[6px]">
+            <div className="text-[14px] text-foreground">
+              <TranslatedLabel label="Search Subreddit" />
+            </div>
+            <Input
+              placeholder="/r/selfhosted"
+              readOnly={loading}
+              value={searchValue}
+              onInput={async (e) => {
+                // @ts-ignore
+                setSearchValue(e.target.value);
+                await search(e);
+              }}
+            />
+            {errors?.message && (
+              <p className="text-destructive text-[12px]">{errors.message}</p>
+            )}
+          </div>
           {!!results.length && !loading && (
             <div className="z-[400] w-full absolute bg-input -mt-[20px] outline-none border-border border cursor-pointer">
               {results.map((r: { id: string; name: string }) => (

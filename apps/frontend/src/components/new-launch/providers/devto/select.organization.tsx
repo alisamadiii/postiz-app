@@ -1,7 +1,13 @@
 'use client';
 
 import { FC, useEffect, useState } from 'react';
-import { Select } from '@gitroom/react/form/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@gitroom/react/ui/select';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { useCustomProviderFunction } from '@gitroom/frontend/components/launches/helpers/use.custom.provider.function';
 import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
@@ -40,18 +46,23 @@ export const SelectOrganization: FC<{
     return null;
   }
   return (
-    <Select
-      name={name}
-      label="Select organization"
-      onChange={onChangeInner}
-      value={currentMedia}
-    >
-      <option value="">{t('select_1', '--Select--')}</option>
-      {orgs.map((org: any) => (
-        <option key={org.id} value={org.id}>
-          {org.name}
-        </option>
-      ))}
-    </Select>
+    <div className="flex flex-col gap-[6px]">
+      <div className="text-[14px]">Select organization</div>
+      <Select
+        value={currentMedia}
+        onValueChange={(value) => onChangeInner({ target: { value, name } })}
+      >
+        <SelectTrigger className="h-[42px]">
+          <SelectValue placeholder={t('select_1', '--Select--')} />
+        </SelectTrigger>
+        <SelectContent>
+          {orgs.map((org: any) => (
+            <SelectItem key={org.id} value={org.id}>
+              {org.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   );
 };

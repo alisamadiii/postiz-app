@@ -4,8 +4,8 @@ import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { useUser } from '@gitroom/frontend/components/layout/user.context';
 import { useCallback, useMemo, useState } from 'react';
 import { pricing } from '@gitroom/nestjs-libraries/database/prisma/subscriptions/pricing';
-import { Input } from '@gitroom/react/form/input';
-import { Button } from '@gitroom/react/form/button';
+import { Input } from '@gitroom/react/ui/input';
+import { Button } from '@gitroom/react/ui/button';
 import { useSWRConfig } from 'swr';
 import { useToaster } from '@gitroom/react/toaster/toaster';
 import { useRouter } from 'next/navigation';
@@ -152,18 +152,25 @@ export const LifetimeDeal = () => {
 
           <div className="mt-[20px] flex items-center gap-[10px]">
             <div className="flex-1">
-              <Input
-                label="Code"
-                translationKey="label_code"
-                placeholder="Enter your code"
-                disableForm={true}
-                name="code"
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-              />
+              <div className="flex flex-col gap-[6px]">
+                <div className="text-[14px] text-foreground">
+                  {t('label_code', 'Code')}
+                </div>
+                <Input
+                  placeholder="Enter your code"
+                  name="code"
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                />
+              </div>
             </div>
             <div>
-              <Button disabled={code.length < 4} onClick={claim}>
+              <Button
+                type="button"
+                size="lg"
+                disabled={code.length < 4}
+                onClick={claim}
+              >
                 {t('claim', 'Claim')}
               </Button>
             </div>

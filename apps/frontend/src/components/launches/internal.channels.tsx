@@ -5,10 +5,23 @@ import {
 } from '@gitroom/frontend/components/launches/calendar.context';
 import { PickPlatforms } from '@gitroom/frontend/components/launches/helpers/pick.platform.component';
 import { useIntegration } from '@gitroom/frontend/components/launches/helpers/use.integration';
-import { Select } from '@gitroom/react/form/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@gitroom/react/ui/select';
 import { Slider } from '@gitroom/react/form/slider';
-import { Input } from '@gitroom/react/form/input';
-import { Textarea } from '@gitroom/react/form/textarea';
+import { Input } from '@gitroom/react/ui/input';
+import { Textarea } from '@gitroom/react/ui/textarea';
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from '@gitroom/react/ui/form';
 import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
 import { cn } from '@gitroom/react/helpers/cn';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
@@ -81,22 +94,43 @@ const PlugField: FC<{
   };
 }> = ({ plugIdentifier, field }) => {
   const fieldName = `plug--${plugIdentifier}--${field.name}`;
+  const { control } = useSettings();
 
   if (field.type === 'textarea') {
     return (
-      <Textarea
-        label={field.description}
+      <FormField
+        control={control}
         name={fieldName}
-        placeholder={field.placeholder}
+        render={({ field: rhfField }) => (
+          <FormItem>
+            <FormLabel>{field.description}</FormLabel>
+            <FormControl>
+              <Textarea
+                {...rhfField}
+                placeholder={field.placeholder}
+                className="min-h-[150px]"
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
       />
     );
   }
 
   return (
-    <Input
-      label={field.description}
+    <FormField
+      control={control}
       name={fieldName}
-      placeholder={field.placeholder}
+      render={({ field: rhfField }) => (
+        <FormItem>
+          <FormLabel>{field.description}</FormLabel>
+          <FormControl>
+            <Input {...rhfField} placeholder={field.placeholder} />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
     />
   );
 };
@@ -119,7 +153,7 @@ const Plug: FC<{
   const { allIntegrations, integration } = useIntegration();
   const t = useT();
 
-  const { watch, setValue, control, register } = useSettings();
+  const { watch, setValue, control } = useSettings();
   const [load, setLoad] = useState(false);
   const val = watch(`plug--${plug.identifier}--integrations`);
   const active = watch(`plug--${plug.identifier}--active`);
@@ -173,17 +207,37 @@ const Plug: FC<{
             )}
           >
             <div>{plug.description}</div>
-            <Select
-              label="Delay"
-              hideErrors={true}
-              {...register(`plug--${plug.identifier}--delay`)}
-            >
-              {delayOptions.map((p) => (
-                <option key={p.name} value={p.value}>
-                  {p.name}
-                </option>
-              ))}
-            </Select>
+            <FormField
+              control={control}
+              name={`plug--${plug.identifier}--delay`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Delay</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={
+                      field.value != null ? String(field.value) : undefined
+                    }
+                    defaultValue={
+                      field.value != null ? String(field.value) : undefined
+                    }
+                  >
+                    <FormControl>
+                      <SelectTrigger className="h-[42px]">
+                        <SelectValue />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {delayOptions.map((p) => (
+                        <SelectItem key={p.name} value={String(p.value)}>
+                          {p.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
             {plug.fields.length > 0 && (
               <div className="flex flex-col gap-[10px]">
                 {plug.fields.map((field) => (

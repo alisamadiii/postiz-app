@@ -2,7 +2,13 @@
 
 import { FC, useEffect, useState } from 'react';
 import { useCustomProviderFunction } from '@gitroom/frontend/components/launches/helpers/use.custom.provider.function';
-import { Select } from '@gitroom/react/form/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@gitroom/react/ui/select';
 import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 export const SlackChannelSelect: FC<{
@@ -40,18 +46,27 @@ export const SlackChannelSelect: FC<{
     return null;
   }
   return (
-    <Select
-      name={name}
-      label="Select Channel"
-      onChange={onChangeInner}
-      value={currentMedia}
-    >
-      <option value="">{t('select_1', '--Select--')}</option>
-      {publications.map((publication: any) => (
-        <option key={publication.id} value={publication.id}>
-          {publication.name}
-        </option>
-      ))}
-    </Select>
+    <div className="flex flex-col gap-[6px]">
+      <div className="text-[14px]">
+        {t('label_select_channel', 'Select Channel')}
+      </div>
+      <Select
+        value={currentMedia != null ? String(currentMedia) : undefined}
+        onValueChange={(value) =>
+          onChangeInner({ target: { value, name } })
+        }
+      >
+        <SelectTrigger className="h-[42px]">
+          <SelectValue placeholder={t('select_1', '--Select--')} />
+        </SelectTrigger>
+        <SelectContent>
+          {publications.map((publication: any) => (
+            <SelectItem key={publication.id} value={String(publication.id)}>
+              {publication.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   );
 };

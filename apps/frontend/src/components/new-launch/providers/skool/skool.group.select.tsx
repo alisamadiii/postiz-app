@@ -2,7 +2,14 @@
 
 import { FC, useEffect, useState } from 'react';
 import { useCustomProviderFunction } from '@gitroom/frontend/components/launches/helpers/use.custom.provider.function';
-import { Select } from '@gitroom/react/form/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@gitroom/react/ui/select';
+import { TranslatedLabel } from '@gitroom/react/translation/translated-label';
 import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 export const SkoolGroupSelect: FC<{
@@ -40,18 +47,25 @@ export const SkoolGroupSelect: FC<{
     return null;
   }
   return (
-    <Select
-      name={name}
-      label="Select Group"
-      onChange={onChangeInner}
-      value={currentGroup}
-    >
-      <option value="">{t('select_1', '--Select--')}</option>
-      {groups.map((group: any) => (
-        <option key={group.id} value={group.id}>
-          {group.name}
-        </option>
-      ))}
-    </Select>
+    <div className="flex flex-col gap-[6px]">
+      <div className="text-[14px]">
+        <TranslatedLabel label="Select Group" />
+      </div>
+      <Select
+        value={currentGroup != null ? String(currentGroup) : undefined}
+        onValueChange={(value) => onChangeInner({ target: { value, name } })}
+      >
+        <SelectTrigger className="h-[42px]">
+          <SelectValue placeholder={t('select_1', '--Select--')} />
+        </SelectTrigger>
+        <SelectContent>
+          {groups.map((group: any) => (
+            <SelectItem key={group.id} value={String(group.id)}>
+              {group.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   );
 };

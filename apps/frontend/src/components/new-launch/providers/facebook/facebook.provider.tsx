@@ -9,8 +9,21 @@ import {
   FACEBOOK_PRESETS,
 } from '@gitroom/nestjs-libraries/dtos/posts/providers-settings/facebook.dto';
 import { getPresetBackground } from '@gitroom/frontend/components/new-launch/providers/facebook/facebook.background';
-import { Input } from '@gitroom/react/form/input';
-import { Select } from '@gitroom/react/form/select';
+import { Input } from '@gitroom/react/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@gitroom/react/ui/select';
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@gitroom/react/ui/form';
 import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
 import { useIntegration } from '@gitroom/frontend/components/launches/helpers/use.integration';
 import { FacebookPreview } from '@gitroom/frontend/components/new-launch/providers/facebook/facebook.preview';
@@ -30,7 +43,7 @@ const postType = [
 
 export const FacebookSettings = () => {
   const t = useT();
-  const { register, watch, setValue } = useSettings();
+  const { watch, setValue, control } = useSettings();
   const { value } = useIntegration();
   const postCurrentType = watch('post_type');
   const preset = watch('text_format_preset_id');
@@ -51,60 +64,119 @@ export const FacebookSettings = () => {
   return (
     <>
       <div className="pt-[20px]">
-        <Select
-          label="Post Type"
-          {...register('post_type', {
-            value: 'post',
-          })}
-        >
-          <option value="">
-            {t('select_post_type', 'Select Post Type...')}
-          </option>
-          {postType.map((item) => (
-            <option key={item.value} value={item.value}>
-              {item.label}
-            </option>
-          ))}
-        </Select>
+        <FormField
+          control={control}
+          name="post_type"
+          defaultValue="post"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Post Type</FormLabel>
+              <Select
+                onValueChange={field.onChange}
+                value={field.value ?? undefined}
+                defaultValue={field.value}
+              >
+                <FormControl>
+                  <SelectTrigger className="h-[42px]">
+                    <SelectValue
+                      placeholder={t(
+                        'select_post_type',
+                        'Select Post Type...'
+                      )}
+                    />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {postType.map((item) => (
+                    <SelectItem key={item.value} value={item.value}>
+                      {item.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </div>
 
       {postCurrentType !== 'story' && (
-        <Input
-          label={'Embedded URL (only for text Post)'}
-          {...register('url')}
+        <FormField
+          control={control}
+          name="url"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Embedded URL (only for text Post)</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
       )}
 
       {presetAvailable && (
         <>
-          <Select
-            label="Background (applies to text-only posts shorter than 130 characters)"
-            hideErrors
-            {...register('text_format_preset_id')}
-            style={
-              selectedBg
-                ? { background: selectedBg.background, color: selectedBg.text }
-                : undefined
-            }
-          >
-            <option value="" style={{ background: '#ffffff', color: '#1c1e21' }}>
-              {t('facebook_background_none', 'None (plain text)')}
-            </option>
-            {FACEBOOK_PRESETS.map((item) => {
-              const bg = getPresetBackground(item.id);
-              return (
-                <option
-                  key={item.id}
-                  value={item.id}
-                  style={
-                    bg ? { background: bg.background, color: bg.text } : undefined
+          <FormField
+            control={control}
+            name="text_format_preset_id"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Background (applies to text-only posts shorter than 130
+                  characters)
+                </FormLabel>
+                <Select
+                  onValueChange={(value) =>
+                    field.onChange(value === '__none__' ? '' : value)
                   }
+                  value={field.value ? String(field.value) : '__none__'}
+                  defaultValue={field.value ? String(field.value) : '__none__'}
                 >
-                  {item.name}
-                </option>
-              );
-            })}
-          </Select>
+                  <FormControl>
+                    <SelectTrigger
+                      className="h-[42px]"
+                      style={
+                        selectedBg
+                          ? {
+                              background: selectedBg.background,
+                              color: selectedBg.text,
+                            }
+                          : undefined
+                      }
+                    >
+                      <SelectValue />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem
+                      value="__none__"
+                      style={{ background: '#ffffff', color: '#1c1e21' }}
+                    >
+                      {t('facebook_background_none', 'None (plain text)')}
+                    </SelectItem>
+                    {FACEBOOK_PRESETS.map((item) => {
+                      const bg = getPresetBackground(item.id);
+                      return (
+                        <SelectItem
+                          key={item.id}
+                          value={item.id}
+                          style={
+                            bg
+                              ? { background: bg.background, color: bg.text }
+                              : undefined
+                          }
+                        >
+                          {item.name}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
+              </FormItem>
+            )}
+          />
           <div className="text-[12px] opacity-70 mt-[8px]">
             {t(
               'facebook_background_note',

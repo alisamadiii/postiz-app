@@ -3,7 +3,7 @@ import { FC, useCallback, useRef, useState, useEffect } from 'react';
 import { useVideoFunction } from '@gitroom/frontend/components/videos/video.render.component';
 import useSWR from 'swr';
 import { useFormContext } from 'react-hook-form';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 import { cn } from '@gitroom/react/helpers/cn';
 import { useVideo } from '@gitroom/frontend/components/videos/video.context.wrapper';
 
@@ -141,6 +141,7 @@ const VoiceSelector: FC = () => {
 
             <Button
               type="button"
+              size="lg"
               className={cn(
                 'px-3 py-1 text-xs',
                 loadingVoice === voice.id && 'opacity-50 cursor-not-allowed',

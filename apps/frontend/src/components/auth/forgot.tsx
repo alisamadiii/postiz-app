@@ -1,10 +1,17 @@
 'use client';
 
-import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import Link from 'next/link';
-import { Button } from '@gitroom/react/form/button';
-import { Input } from '@gitroom/react/form/input';
+import { Button } from '@gitroom/react/ui/button';
+import { Input } from '@gitroom/react/ui/input';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '@gitroom/react/ui/form';
 import { useMemo, useState } from 'react';
 import { classValidatorResolver } from '@hookform/resolvers/class-validator';
 import { ForgotPasswordDto } from '@gitroom/nestjs-libraries/dtos/auth/forgot.password.dto';
@@ -36,58 +43,76 @@ export function Forgot() {
     setLoading(false);
   };
   return (
-    <div className="flex flex-1 flex-col">
-      <FormProvider {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div>
-            <h1 className="text-3xl font-bold text-start mb-4 cursor-pointer">
-              {t('forgot_password_1', 'Forgot Password')}
-            </h1>
+    <Form {...form}>
+      <form
+        className="flex w-full flex-col gap-6"
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
+        <div className="flex flex-col gap-1">
+          <h1 className="text-2xl font-semibold">
+            {t('forgot_password_1', 'Forgot Password')}
+          </h1>
+          <p className="text-muted-foreground text-sm">
+            {t(
+              'enter_your_email_to_reset',
+              'Enter your email and we will send you a reset link.'
+            )}
+          </p>
+        </div>
+
+        {!state ? (
+          <div className="flex flex-col gap-2">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="email"
+                      className="!h-[48px] !rounded-full px-5 text-base"
+                      placeholder={t('email_address', 'Email Address')}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Button
+              type="submit"
+              className="mt-2 !h-[48px] w-full rounded-full text-base"
+              isLoading={loading}
+              showSpinner={loading}
+            >
+              {t('send_password_reset_email', 'Send Password Reset Email')}
+            </Button>
+
+            <Link
+              href="/auth/login"
+              className="text-muted-foreground hover:text-foreground mt-1 text-center text-sm transition-colors"
+            >
+              {t('go_back_to_login', 'Go back to login')}
+            </Link>
           </div>
-          {!state ? (
-            <>
-              <div className="space-y-4 text-foreground">
-                <Input
-                  label="Email"
-                  translationKey="label_email"
-                  {...form.register('email')}
-                  type="email"
-                  placeholder={t('email_address', 'Email Address')}
-                />
-              </div>
-              <div className="text-center mt-6">
-                <div className="w-full flex">
-                  <Button type="submit" className="flex-1 !h-[52px] !rounded-[10px]" loading={loading}>
-                    {t(
-                      'send_password_reset_email',
-                      'Send Password Reset Email'
-                    )}
-                  </Button>
-                </div>
-                <p className="mt-4 text-sm">
-                  <Link href="/auth/login" className="underline cursor-pointer">
-                    {t('go_back_to_login', 'Go back to login')}
-                  </Link>
-                </p>
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="text-start mt-6">
-                {t(
-                  'we_have_send_you_an_email_with_a_link_to_reset_your_password',
-                  'We have send you an email with a link to reset your password.'
-                )}
-              </div>
-              <p className="mt-4 text-sm">
-                <Link href="/auth/login" className="underline cursor-pointer">
-                  {t('go_back_to_login', 'Go back to login')}
-                </Link>
-              </p>
-            </>
-          )}
-        </form>
-      </FormProvider>
-    </div>
+        ) : (
+          <div className="flex flex-col gap-4">
+            <div className="text-muted-foreground text-sm">
+              {t(
+                'we_have_send_you_an_email_with_a_link_to_reset_your_password',
+                'We have send you an email with a link to reset your password.'
+              )}
+            </div>
+            <Link
+              href="/auth/login"
+              className="text-muted-foreground hover:text-foreground text-center text-sm transition-colors"
+            >
+              {t('go_back_to_login', 'Go back to login')}
+            </Link>
+          </div>
+        )}
+      </form>
+    </Form>
   );
 }

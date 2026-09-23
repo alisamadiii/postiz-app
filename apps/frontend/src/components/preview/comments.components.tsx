@@ -1,7 +1,7 @@
 'use client';
 
 import { useUser } from '@gitroom/frontend/components/layout/user.context';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 import { FC, useCallback, useMemo, useState } from 'react';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import useSWR from 'swr';
@@ -60,7 +60,7 @@ export const RenderComponents: FC<{
             defaultValue={''}
           />
           <div className="flex justify-end">
-            <Button type="submit">
+            <Button type="submit" size="lg" className="cursor-pointer">
               <Send className="me-2 h-4 w-4" />
               {t('post', 'Post')}
             </Button>
@@ -103,7 +103,12 @@ export const CommentsComponents: FC<{
   }, []);
   if (!user?.id) {
     return (
-      <Button onClick={goToComments}>
+      <Button
+        type="button"
+        size="lg"
+        className="cursor-pointer"
+        onClick={goToComments}
+      >
         {t(
           'login_register_to_add_comments',
           'Login / Register to add comments'

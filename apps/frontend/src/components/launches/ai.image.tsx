@@ -1,4 +1,4 @@
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 import { FC, useCallback, useState } from 'react';
 import { cn } from '@gitroom/react/helpers/cn';
 import Loading from '@gitroom/frontend/components/layout/loading';
@@ -110,7 +110,7 @@ ${style}
         </div>
       </div>
       <div className="flex">
-        <Button type="button" onClick={generate} className="flex-1">
+        <Button type="button" size="lg" onClick={generate} className="flex-1">
           {t('generate', 'Generate')}
         </Button>
       </div>

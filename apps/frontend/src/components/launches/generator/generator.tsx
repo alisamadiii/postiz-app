@@ -8,9 +8,9 @@ import { useModals } from '@gitroom/frontend/components/layout/new-modal';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { classValidatorResolver } from '@hookform/resolvers/class-validator';
 import { GeneratorDto } from '@gitroom/nestjs-libraries/dtos/generator/generator.dto';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
-import { Textarea } from '@gitroom/react/form/textarea';
+import { Textarea } from '@gitroom/react/ui/textarea';
 import { Checkbox } from '@gitroom/react/form/checkbox';
 import { cn } from '@gitroom/react/helpers/cn';
 import {
@@ -18,7 +18,20 @@ import {
   useCalendar,
 } from '@gitroom/frontend/components/launches/calendar.context';
 import dayjs from 'dayjs';
-import { Select } from '@gitroom/react/form/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@gitroom/react/ui/select';
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from '@gitroom/react/ui/form';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { AddEditModal } from '@gitroom/frontend/components/new-launch/add.edit.modal';
 import { useToaster } from '@gitroom/react/toaster/toaster';
@@ -235,52 +248,109 @@ const FirstStep: FC = (props) => {
                     {showStep}
                   </div>
                 )}
-                <Textarea
-                  label={t('write_anything', 'Write anything')}
-                  disabled={loading}
-                  placeholder={t(
-                    'you_can_write_anything_you_want_and_also_add_links_we_will_do_the_research_for_you',
-                    'You can write anything you want, and also add links, we will do the research for you...'
+                <FormField
+                  control={form.control}
+                  name="research"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        {t('write_anything', 'Write anything')}
+                      </FormLabel>
+                      <FormControl>
+                        <Textarea
+                          {...field}
+                          disabled={loading}
+                          placeholder={t(
+                            'you_can_write_anything_you_want_and_also_add_links_we_will_do_the_research_for_you',
+                            'You can write anything you want, and also add links, we will do the research for you...'
+                          )}
+                          className="min-h-[150px]"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
                   )}
-                  {...form.register('research')}
                 />
-                <Select
-                  label={t('output_format', 'Output format')}
-                  {...form.register('format')}
-                >
-                  <option value="one_short">
-                    {t('short_post', 'Short post')}
-                  </option>
-                  <option value="one_long">
-                    {t('long_post', 'Long post')}
-                  </option>
-                  <option value="thread_short">
-                    {t(
-                      'a_thread_with_short_posts',
-                      'A thread with short posts'
-                    )}
-                  </option>
-                  <option value="thread_long">
-                    {t('a_thread_with_long_posts', 'A thread with long posts')}
-                  </option>
-                </Select>
-                <Select
-                  label={t('output_format', 'Output format')}
-                  {...form.register('tone')}
-                >
-                  <option value="personal">
-                    {t(
-                      'personal_voice_i_am_happy_to_announce',
-                      'Personal voice ("I am happy to announce")'
-                    )}
-                  </option>
-                  <option value="company">
-                    {t(
-                      'company_voice_we_are_happy_to_announce',
-                      'Company voice ("We are happy to announce")'
-                    )}
-                  </option>
-                </Select>
+                <FormField
+                  control={form.control}
+                  name="format"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        {t('output_format', 'Output format')}
+                      </FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value ?? undefined}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="h-[42px]">
+                            <SelectValue />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="one_short">
+                            {t('short_post', 'Short post')}
+                          </SelectItem>
+                          <SelectItem value="one_long">
+                            {t('long_post', 'Long post')}
+                          </SelectItem>
+                          <SelectItem value="thread_short">
+                            {t(
+                              'a_thread_with_short_posts',
+                              'A thread with short posts'
+                            )}
+                          </SelectItem>
+                          <SelectItem value="thread_long">
+                            {t(
+                              'a_thread_with_long_posts',
+                              'A thread with long posts'
+                            )}
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="tone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        {t('output_format', 'Output format')}
+                      </FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value ?? undefined}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="h-[42px]">
+                            <SelectValue />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="personal">
+                            {t(
+                              'personal_voice_i_am_happy_to_announce',
+                              'Personal voice ("I am happy to announce")'
+                            )}
+                          </SelectItem>
+                          <SelectItem value="company">
+                            {t(
+                              'company_voice_we_are_happy_to_announce',
+                              'Company voice ("We are happy to announce")'
+                            )}
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <div
                   className={cn('flex items-center', loading && 'opacity-50')}
                 >
@@ -297,8 +367,10 @@ const FirstStep: FC = (props) => {
         <div className="mt-[20px] flex justify-end">
           <Button
             type="submit"
+            size="lg"
             disabled={research.length < 10}
-            loading={loading}
+            isLoading={loading}
+            showSpinner={loading}
           >
             {t('generate', 'Generate')}
           </Button>

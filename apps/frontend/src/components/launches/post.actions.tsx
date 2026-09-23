@@ -13,7 +13,7 @@ import { ExistingDataContextProvider } from '@gitroom/frontend/components/launch
 import { AddEditModal } from '@gitroom/frontend/components/new-launch/add.edit.modal';
 import { StatisticsModal } from '@gitroom/frontend/components/launches/statistics';
 import { MissingReleaseModal } from '@gitroom/frontend/components/launches/missing-release.modal';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 
 const DebugJsonModal: FC<{ post: any }> = ({ post }) => {
   const t = useT();
@@ -52,8 +52,15 @@ const DebugJsonModal: FC<{ post: any }> = ({ post }) => {
         {t('debug_choose_copy', 'Choose what you want to copy')}
       </div>
       <div className="flex gap-[10px]">
-        <Button onClick={copyPostId}>{t('copy_post_id', 'Copy post id')}</Button>
-        <Button secondary onClick={copyJson}>
+        <Button type="button" size="lg" onClick={copyPostId}>
+          {t('copy_post_id', 'Copy post id')}
+        </Button>
+        <Button
+          type="button"
+          size="lg"
+          variant="secondary"
+          onClick={copyJson}
+        >
           {t('copy_debug_json', 'Copy Debug JSON')}
         </Button>
       </div>

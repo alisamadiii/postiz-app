@@ -6,7 +6,14 @@ import {
   withProvider,
 } from '@gitroom/frontend/components/new-launch/providers/high.order.provider';
 import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
-import { Input } from '@gitroom/react/form/input';
+import { Input } from '@gitroom/react/ui/input';
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@gitroom/react/ui/form';
 import { MediumPublications } from '@gitroom/frontend/components/new-launch/providers/medium/medium.publications';
 import { MediumTags } from '@gitroom/frontend/components/new-launch/providers/medium/medium.tags';
 import { MediumSettingsDto } from '@gitroom/nestjs-libraries/dtos/posts/providers-settings/medium.settings.dto';
@@ -18,8 +25,32 @@ const MediumSettings: FC = () => {
   const { date } = useIntegration();
   return (
     <>
-      <Input label="Title" {...form.register('title')} />
-      <Input label="Subtitle" {...form.register('subtitle')} />
+      <FormField
+        control={form.control}
+        name="title"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Title</FormLabel>
+            <FormControl>
+              <Input {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name="subtitle"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Subtitle</FormLabel>
+            <FormControl>
+              <Input {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
       <Canonical
         date={date}
         label="Canonical Link"

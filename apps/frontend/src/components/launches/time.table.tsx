@@ -4,8 +4,14 @@ import React, { FC, useCallback, useMemo, useState } from 'react';
 import { Integrations } from '@gitroom/frontend/components/launches/calendar.context';
 import dayjs from 'dayjs';
 import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
-import { Select } from '@gitroom/react/form/select';
-import { Button } from '@gitroom/react/form/button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@gitroom/react/ui/select';
+import { Button } from '@gitroom/react/ui/button';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
@@ -138,36 +144,44 @@ export const TimeTable: FC<{
 
         <div className="flex gap-[12px] items-end">
           <div className="flex-1">
-            <Select
-              label={t('hour', 'Hour')}
-              name="hour"
-              disableForm={true}
-              hideErrors={true}
-              value={hour}
-              onChange={(e) => setHour(Number(e.target.value))}
-            >
-              {hours.map((h) => (
-                <option key={h.value} value={h.value}>
-                  {h.value.toString().padStart(2, '0')}
-                </option>
-              ))}
-            </Select>
+            <div className="flex flex-col gap-[6px]">
+              <div className="text-[14px]">{t('hour', 'Hour')}</div>
+              <Select
+                value={String(hour)}
+                onValueChange={(v) => setHour(Number(v))}
+              >
+                <SelectTrigger className="h-[42px]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {hours.map((h) => (
+                    <SelectItem key={h.value} value={String(h.value)}>
+                      {h.value.toString().padStart(2, '0')}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
           <div className="flex-1">
-            <Select
-              label={t('minutes', 'Minutes')}
-              name="minutes"
-              disableForm={true}
-              hideErrors={true}
-              value={minute}
-              onChange={(e) => setMinute(Number(e.target.value))}
-            >
-              {minutes.map((m) => (
-                <option key={m.value} value={m.value}>
-                  {m.value.toString().padStart(2, '0')}
-                </option>
-              ))}
-            </Select>
+            <div className="flex flex-col gap-[6px]">
+              <div className="text-[14px]">{t('minutes', 'Minutes')}</div>
+              <Select
+                value={String(minute)}
+                onValueChange={(v) => setMinute(Number(v))}
+              >
+                <SelectTrigger className="h-[42px]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {minutes.map((m) => (
+                    <SelectItem key={m.value} value={String(m.value)}>
+                      {m.value.toString().padStart(2, '0')}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
           <button
             type="button"
@@ -223,7 +237,12 @@ export const TimeTable: FC<{
 
       {/* Save Button */}
       <div className="mt-[24px]">
-        <Button type="button" className="w-full rounded-[8px]" onClick={save}>
+        <Button
+          type="button"
+          size="lg"
+          className="w-full rounded-[8px]"
+          onClick={save}
+        >
           {t('save_changes', 'Save Changes')}
         </Button>
       </div>

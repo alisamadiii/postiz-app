@@ -3,7 +3,7 @@ import { TopTitle } from '@gitroom/frontend/components/launches/helpers/top.titl
 import { LoadingComponent } from '@gitroom/frontend/components/layout/loading';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { timer } from '@gitroom/helpers/utils/timer';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 import { X } from 'lucide-react';
 
 export const FinishTrial: FC<{ close: () => void }> = (props) => {
@@ -57,8 +57,22 @@ export const FinishTrial: FC<{ close: () => void }> = (props) => {
                       You trial has been successfully finished and you have been charged.
                     </div>
                     <div className="flex gap-[10px] mt-[20px]">
-                      <Button className="flex-1" onClick={() => window.close()}>Close window</Button>
-                      <Button className="flex-1" onClick={() => props.close()}>Close dialog</Button>
+                      <Button
+                        type="button"
+                        size="lg"
+                        className="flex-1"
+                        onClick={() => window.close()}
+                      >
+                        Close window
+                      </Button>
+                      <Button
+                        type="button"
+                        size="lg"
+                        className="flex-1"
+                        onClick={() => props.close()}
+                      >
+                        Close dialog
+                      </Button>
                     </div>
                   </div>
                 )}

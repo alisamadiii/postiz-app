@@ -1,10 +1,18 @@
 'use client';
 
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
-import { Button } from '@gitroom/react/form/button';
-import { Input } from '@gitroom/react/form/input';
+import { Button } from '@gitroom/react/ui/button';
+import { Input } from '@gitroom/react/ui/input';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@gitroom/react/ui/form';
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 
@@ -122,19 +130,31 @@ export function Activate() {
             </Link>
           </div>
         ) : (
-          <FormProvider {...form}>
+          <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
-              <Input
-                label={t('label_email', 'Email')}
-                translationKey="label_email"
-                {...form.register('email', { required: true })}
-                type="email"
-                placeholder={t('email_address', 'Email Address')}
+              <FormField
+                control={form.control}
+                name="email"
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('label_email', 'Email')}</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="email"
+                        placeholder={t('email_address', 'Email Address')}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
               <Button
                 type="submit"
                 className="rounded-[10px] !h-[52px]"
-                loading={loading}
+                isLoading={loading}
+                showSpinner={loading}
                 disabled={cooldown > 0}
               >
                 {cooldown > 0
@@ -142,7 +162,7 @@ export function Activate() {
                   : t('resend_activation_email', 'Resend Activation Email')}
               </Button>
             </form>
-          </FormProvider>
+          </Form>
         )}
         {status !== 'already_activated' && (
           <p className="mt-4 text-sm text-foreground">

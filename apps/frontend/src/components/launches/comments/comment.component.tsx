@@ -2,11 +2,11 @@ import { FC, Fragment, useCallback, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { TopTitle } from '@gitroom/frontend/components/launches/helpers/top.title.component';
 import { useModals } from '@gitroom/frontend/components/layout/new-modal';
-import { Textarea } from '@gitroom/react/form/textarea';
-import { Button } from '@gitroom/react/form/button';
+import { Textarea } from '@gitroom/react/ui/textarea';
+import { Button } from '@gitroom/react/ui/button';
 import { cn } from '@gitroom/react/helpers/cn';
 import { useUser } from '@gitroom/frontend/components/layout/user.context';
-import { Input } from '@gitroom/react/form/input';
+import { Input } from '@gitroom/react/ui/input';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
 import { Pencil, Trash2, X } from 'lucide-react';
@@ -17,6 +17,7 @@ export const CommentBox: FC<{
 }> = (props) => {
   const { value, onChange, type } = props;
   const Component = type === 'textarea' ? Textarea : Input;
+  const label = type === 'textarea' ? 'Add comment' : '';
   const [newComment, setNewComment] = useState(value || '');
   const newCommentFunc = useCallback(
     (event: {
@@ -40,16 +41,20 @@ export const CommentBox: FC<{
       )}
     >
       <div className={cn(type === 'input' && 'flex-1')}>
-        <Component
-          label={type === 'textarea' ? 'Add comment' : ''}
-          placeholder={type === 'input' ? 'Add comment' : ''}
-          name="comment"
-          disableForm={true}
-          value={newComment}
-          onChange={newCommentFunc}
-        />
+        <div className="flex flex-col gap-[6px]">
+          {!!label && <div className="text-[14px]">{label}</div>}
+          <Component
+            placeholder={type === 'input' ? 'Add comment' : ''}
+            name="comment"
+            value={newComment}
+            onChange={newCommentFunc}
+            className={type === 'textarea' ? 'min-h-[150px]' : undefined}
+          />
+        </div>
       </div>
       <Button
+        type="button"
+        size="lg"
         disabled={newComment.length < 2}
         onClick={changeIt}
         className={cn(type === 'input' && 'mb-[27px]')}

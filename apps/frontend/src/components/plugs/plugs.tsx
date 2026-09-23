@@ -7,8 +7,7 @@ import { cn } from '@gitroom/react/helpers/cn';
 import ImageWithFallback from '@gitroom/react/helpers/image.with.fallback';
 import SafeImage from '@gitroom/react/helpers/safe.image';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
-import { Select } from '@gitroom/react/form/select';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 import { useRouter } from 'next/navigation';
 import { useToaster } from '@gitroom/react/toaster/toaster';
 import { PlugsContext } from '@gitroom/frontend/components/plugs/plugs.context';
@@ -106,7 +105,12 @@ export const Plugs = () => {
             'You have to add: X, LinkedIn Page, Threads or Bluesky'
           )}
         </div>
-        <Button onClick={() => router.push('/launches')}>
+        <Button
+          type="button"
+          size="lg"
+          className="cursor-pointer"
+          onClick={() => router.push('/launches')}
+        >
           {t(
             'go_to_the_calendar_to_add_channels',
             'Go to the calendar to add channels'

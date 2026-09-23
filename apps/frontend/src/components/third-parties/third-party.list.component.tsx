@@ -3,12 +3,19 @@
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import useSWR from 'swr';
 import React, { FC, useCallback, useState } from 'react';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 import { useRouter } from 'next/navigation';
 import { useModals } from '@gitroom/frontend/components/layout/new-modal';
 import { FieldValues, FormProvider, useForm } from 'react-hook-form';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
-import { Input } from '@gitroom/react/form/input';
+import { Input } from '@gitroom/react/ui/input';
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from '@gitroom/react/ui/form';
 import { useToaster } from '@gitroom/react/toaster/toaster';
 import { ModalWrapperComponent } from '@gitroom/frontend/components/new-launch/modal.wrapper.component';
 
@@ -81,10 +88,27 @@ export const ApiModal: FC<{
           onSubmit={methods.handleSubmit(submit)}
         >
           <div className="pt-[10px]">
-            <Input label="API Key" name="api" />
+            <FormField
+              control={methods.control}
+              name="api"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>API Key</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
           <div>
-            <Button loading={loading} type="submit">
+            <Button
+              isLoading={loading}
+              showSpinner={loading}
+              type="submit"
+              size="lg"
+            >
               {t('add_integration', 'Add Integration')}
             </Button>
           </div>
@@ -142,7 +166,9 @@ export const ThirdPartyListComponent: FC<{ reload: () => void }> = (props) => {
           <div className="whitespace-pre-wrap text-left text-lg">{p.title}</div>
           <div className="whitespace-pre-wrap text-left">{p.description}</div>
           <div className="w-full flex">
-            <Button className="w-full">Add</Button>
+            <Button type="button" size="lg" className="w-full">
+              Add
+            </Button>
           </div>
         </div>
       ))}

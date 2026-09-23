@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 import copy from 'copy-to-clipboard';
 import { useCallback } from 'react';
 import { useToaster } from '@gitroom/react/toaster/toaster';
@@ -16,7 +16,12 @@ export const CopyClient = () => {
     copy(window.location.href.split?.('?')?.shift()!);
   }, []);
   return (
-    <Button onClick={copyToClipboard}>
+    <Button
+      type="button"
+      size="lg"
+      className="cursor-pointer"
+      onClick={copyToClipboard}
+    >
       {t('share_with_a_client', 'Share with a client')}
     </Button>
   );

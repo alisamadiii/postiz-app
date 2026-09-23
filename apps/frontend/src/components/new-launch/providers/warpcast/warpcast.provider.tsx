@@ -8,7 +8,7 @@ import { FC, useCallback } from 'react';
 import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
 import { useFieldArray } from 'react-hook-form';
 import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 import { Subreddit } from './subreddit';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 const WrapcastProvider: FC = () => {
@@ -53,7 +53,14 @@ const WrapcastProvider: FC = () => {
           </div>
         ))}
       </div>
-      <Button onClick={addField}>{t('add_channel', 'Add Channel')}</Button>
+      <Button
+        type="button"
+        size="lg"
+        onClick={addField}
+        className="cursor-pointer"
+      >
+        {t('add_channel', 'Add Channel')}
+      </Button>
     </>
   );
 };

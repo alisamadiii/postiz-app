@@ -3,10 +3,16 @@
 import { useModals } from '@gitroom/frontend/components/layout/new-modal';
 import React, { FC, useCallback, useMemo, useState } from 'react';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
-import { Input } from '@gitroom/react/form/input';
+import { Input } from '@gitroom/react/ui/input';
 import { FieldValues, FormProvider, useForm } from 'react-hook-form';
-import { Button } from '@gitroom/react/form/button';
-import { Button as UIButton } from '@gitroom/react/ui/button';
+import { Button, Button as UIButton } from '@gitroom/react/ui/button';
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@gitroom/react/ui/form';
 import {
   Dialog,
   DialogContent,
@@ -136,10 +142,24 @@ export const UrlModal: FC<{
           onSubmit={methods.handleSubmit(submit)}
         >
           <div className="pt-[10px]">
-            <Input label="URL" name="url" />
+            <FormField
+              control={methods.control}
+              name="url"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('label_url', 'URL')}</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
           <div>
-            <Button type="submit">{t('connect', 'Connect')}</Button>
+            <Button type="submit" size="lg">
+              {t('connect', 'Connect')}
+            </Button>
           </div>
         </form>
       </FormProvider>
@@ -237,23 +257,46 @@ export const CustomVariables: FC<{
                       i
                     </span>
                   </div>
-                  <Input
-                    label=""
-                    name={variable.key}
-                    type={variable.type == 'text' ? 'text' : 'password'}
+                  <FormField
+                    control={methods.control}
+                    name={variable.key as never}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            type={variable.type == 'text' ? 'text' : 'password'}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
                 </div>
               ) : (
-                <Input
-                  label={variable.label}
-                  name={variable.key}
-                  type={variable.type == 'text' ? 'text' : 'password'}
+                <FormField
+                  control={methods.control}
+                  name={variable.key as never}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{variable.label}</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          type={variable.type == 'text' ? 'text' : 'password'}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
               )}
             </div>
           ))}
           <div>
-            <Button type="submit">{t('connect', 'Connect')}</Button>
+            <Button type="submit" size="lg">
+              {t('connect', 'Connect')}
+            </Button>
           </div>
         </form>
       </FormProvider>
@@ -274,6 +317,7 @@ const ExtensionNotFound: FC = () => {
       <div className="flex gap-[10px]">
         <Button
           type="button"
+          size="lg"
           className="flex-1"
           onClick={() => {
             window.open(
@@ -287,6 +331,7 @@ const ExtensionNotFound: FC = () => {
         </Button>
         <Button
           type="button"
+          size="lg"
           className="flex-1 !bg-transparent border border-border text-foreground"
           onClick={() => modals.closeCurrent()}
         >
@@ -341,6 +386,7 @@ const ChromeExtensionWarning: FC<{
       <div className="flex gap-[10px] mt-[8px]">
         <Button
           type="button"
+          size="lg"
           className="flex-1"
           onClick={() => {
             modals.closeCurrent();
@@ -351,6 +397,7 @@ const ChromeExtensionWarning: FC<{
         </Button>
         <Button
           type="button"
+          size="lg"
           className="flex-1 !bg-transparent border border-border text-foreground"
           onClick={() => {
             modals.closeCurrent();

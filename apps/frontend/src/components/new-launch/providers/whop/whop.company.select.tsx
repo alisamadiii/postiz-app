@@ -2,7 +2,13 @@
 
 import { FC, useEffect, useState } from 'react';
 import { useCustomProviderFunction } from '@gitroom/frontend/components/launches/helpers/use.custom.provider.function';
-import { Select } from '@gitroom/react/form/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@gitroom/react/ui/select';
 import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 
@@ -41,18 +47,27 @@ export const WhopCompanySelect: FC<{
     return null;
   }
   return (
-    <Select
-      name={name}
-      label="Select Company"
-      onChange={onChangeInner}
-      value={currentCompany}
-    >
-      <option value="">{t('select_1', '--Select--')}</option>
-      {companies.map((company: any) => (
-        <option key={company.id} value={company.id}>
-          {company.name}
-        </option>
-      ))}
-    </Select>
+    <div className="flex flex-col gap-[6px]">
+      <div className="text-[14px]">
+        {t('label_select_company', 'Select Company')}
+      </div>
+      <Select
+        value={currentCompany != null ? String(currentCompany) : undefined}
+        onValueChange={(value) =>
+          onChangeInner({ target: { value, name } })
+        }
+      >
+        <SelectTrigger className="h-[42px]">
+          <SelectValue placeholder={t('select_1', '--Select--')} />
+        </SelectTrigger>
+        <SelectContent>
+          {companies.map((company: any) => (
+            <SelectItem key={company.id} value={String(company.id)}>
+              {company.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   );
 };

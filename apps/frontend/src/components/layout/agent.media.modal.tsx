@@ -4,7 +4,7 @@ import { FC, useCallback, useState } from 'react';
 import { useModals } from '@gitroom/frontend/components/layout/new-modal';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 
 export const AgentMediaModal: FC = () => {
   const fetch = useFetch();
@@ -91,10 +91,23 @@ export const AgentMediaModal: FC = () => {
       </div>
 
       <div className="flex gap-[12px] mt-[8px]">
-        <Button loading={loading} onClick={handleContinue}>
+        <Button
+          type="button"
+          size="lg"
+          isLoading={loading}
+          showSpinner={loading}
+          onClick={handleContinue}
+          className="cursor-pointer"
+        >
           {t('agent_media_continue', 'Continue to AgentMedia')}
         </Button>
-        <Button secondary={true} onClick={closeCurrent}>
+        <Button
+          type="button"
+          size="lg"
+          variant="secondary"
+          onClick={closeCurrent}
+          className="cursor-pointer"
+        >
           {t('cancel', 'Cancel')}
         </Button>
       </div>

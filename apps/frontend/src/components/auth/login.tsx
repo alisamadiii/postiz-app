@@ -1,21 +1,30 @@
 'use client';
 
-import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
-import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
-import Link from 'next/link';
-import { Button } from '@gitroom/react/form/button';
-import { Input } from '@gitroom/react/form/input';
 import { useMemo, useState } from 'react';
+import Link from 'next/link';
 import { classValidatorResolver } from '@hookform/resolvers/class-validator';
+import { SubmitHandler, useForm } from 'react-hook-form';
+
 import { LoginUserDto } from '@gitroom/nestjs-libraries/dtos/auth/login.user.dto';
-import { GithubProvider } from '@gitroom/frontend/components/auth/providers/github.provider';
-import { OauthProvider } from '@gitroom/frontend/components/auth/providers/oauth.provider';
-import { GoogleProvider } from '@gitroom/frontend/components/auth/providers/google.provider';
-import { AppleProvider } from '@gitroom/frontend/components/auth/providers/apple.provider';
+import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { useVariables } from '@gitroom/react/helpers/variable.context';
-import { FarcasterProvider } from '@gitroom/frontend/components/auth/providers/farcaster.provider';
-import WalletProvider from '@gitroom/frontend/components/auth/providers/wallet.provider';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
+import { Button } from '@gitroom/react/ui/button';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '@gitroom/react/ui/form';
+import { Input } from '@gitroom/react/ui/input';
+import { AppleProvider } from '@gitroom/frontend/components/auth/providers/apple.provider';
+import { FarcasterProvider } from '@gitroom/frontend/components/auth/providers/farcaster.provider';
+import { GithubProvider } from '@gitroom/frontend/components/auth/providers/github.provider';
+import { GoogleProvider } from '@gitroom/frontend/components/auth/providers/google.provider';
+import { OauthProvider } from '@gitroom/frontend/components/auth/providers/oauth.provider';
+import WalletProvider from '@gitroom/frontend/components/auth/providers/wallet.provider';
+
 type Inputs = {
   email: string;
   password: string;
@@ -67,7 +76,7 @@ export function Login() {
     }
   };
   return (
-    <FormProvider {...form}>
+    <Form {...form}>
       <form
         className="flex w-full flex-col gap-6"
         onSubmit={form.handleSubmit(onSubmit)}
@@ -86,35 +95,53 @@ export function Login() {
         </div>
 
         <div className="flex flex-col gap-2">
-          <Input
-            label=""
-            translationKey="label_email"
-            {...form.register('email')}
-            type="email"
-            className="!h-[48px] !rounded-full !bg-background !border-border"
-            placeholder={t('email_address', 'Email Address')}
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="email"
+                    className="!h-[48px] !rounded-full px-5 text-base"
+                    placeholder={t('email_address', 'Email Address')}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          <Input
-            label=""
-            translationKey="label_password"
-            {...form.register('password')}
-            autoComplete="off"
-            type="password"
-            className="!h-[48px] !rounded-full !bg-background !border-border"
-            placeholder={t('label_password', 'Password')}
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    {...field}
+                    autoComplete="off"
+                    type="password"
+                    className="!h-[48px] !rounded-full px-5 text-base"
+                    placeholder={t('label_password', 'Password')}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
 
           {notActivated && (
-            <div className="bg-amber-500/10 border border-amber-500/30 rounded-[10px] p-4">
-              <p className="text-amber-400 text-sm mb-2">
+            <div className="rounded-[10px] border border-amber-500/30 bg-amber-500/10 p-4">
+              <p className="mb-2 text-sm text-amber-400">
                 {t(
                   'account_not_activated',
-                  'Your account is not activated yet. Please check your email for the activation link.'
+                  'Your account is not activated yet. Please check your email for the activation link.',
                 )}
               </p>
               <Link
                 href="/auth/activate"
-                className="text-amber-400 underline hover:font-bold text-sm"
+                className="text-sm text-amber-400 underline hover:font-bold"
               >
                 {t('resend_activation_email', 'Resend Activation Email')}
               </Link>
@@ -124,7 +151,8 @@ export function Login() {
           <Button
             type="submit"
             className="mt-2 !h-[48px] w-full rounded-full text-base"
-            loading={loading}
+            isLoading={loading}
+            showSpinner={loading}
           >
             {t('sign_in_1', 'Sign in')}
           </Button>
@@ -136,28 +164,7 @@ export function Login() {
             {t('forgot_password', 'Forgot password')}
           </Link>
         </div>
-
-        <div className="flex items-center">
-          <div className="flex-1 border-t border-border" />
-          <span className="text-muted-foreground px-3 text-xs">
-            {t('or_continue_with', 'Or continue with')}
-          </span>
-          <div className="flex-1 border-t border-border" />
-        </div>
-
-        {isGeneral && genericOauth ? (
-          <OauthProvider />
-        ) : !isGeneral ? (
-          <GithubProvider />
-        ) : (
-          <div className="gap-[8px] flex">
-            <GoogleProvider />
-            {!!appleClientId && <AppleProvider />}
-            {!!neynarClientId && <FarcasterProvider />}
-            {billingEnabled && <WalletProvider />}
-          </div>
-        )}
       </form>
-    </FormProvider>
+    </Form>
   );
 }

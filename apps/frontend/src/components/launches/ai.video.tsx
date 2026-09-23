@@ -1,4 +1,4 @@
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 import React, { FC, useCallback, useState } from 'react';
 import { cn } from '@gitroom/react/helpers/cn';
 import Loading from '@gitroom/frontend/components/layout/loading';
@@ -94,18 +94,26 @@ export const Modal: FC<{
                 <div className="mt-[10px] flex w-full justify-center items-center gap-[10px]">
                   <div className="flex-1 flex">
                     <Button
+                      type="button"
+                      size="lg"
                       className="!flex-1"
                       onClick={() => setPosition('vertical')}
-                      secondary={position === 'horizontal'}
+                      variant={
+                        position === 'horizontal' ? 'secondary' : 'default'
+                      }
                     >
                       Vertical (Stories, Reels)
                     </Button>
                   </div>
                   <div className="flex-1 flex mt-[10px]">
                     <Button
+                      type="button"
+                      size="lg"
                       className="!flex-1"
                       onClick={() => setPosition('horizontal')}
-                      secondary={position === 'vertical'}
+                      variant={
+                        position === 'vertical' ? 'secondary' : 'default'
+                      }
                     >
                       Horizontal (Normal Post)
                     </Button>
@@ -115,7 +123,7 @@ export const Modal: FC<{
               </div>
             </div>
             <div className="flex">
-              <Button type="submit" className="flex-1">
+              <Button type="submit" size="lg" className="flex-1">
                 Generate
               </Button>
             </div>
@@ -145,7 +153,12 @@ const AiVideoModal: FC<{
           {t('choose_a_video_type', 'Choose a video type')}
         </div>
         {list.map((p) => (
-          <Button key={p.identifier} type="button" onClick={() => setType(p)}>
+          <Button
+            key={p.identifier}
+            type="button"
+            size="lg"
+            onClick={() => setType(p)}
+          >
             {p.title}
           </Button>
         ))}

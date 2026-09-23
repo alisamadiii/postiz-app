@@ -2,7 +2,14 @@ import { videoWrapper } from '@gitroom/frontend/components/videos/video.wrapper'
 import { FC, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useVideo } from '@gitroom/frontend/components/videos/video.context.wrapper';
-import { Textarea } from '@gitroom/react/form/textarea';
+import { Textarea } from '@gitroom/react/ui/textarea';
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from '@gitroom/react/ui/form';
 import { MultiMediaComponent } from '@gitroom/frontend/components/media/media.component';
 import { hasExtension } from '@gitroom/helpers/utils/has.extension';
 
@@ -13,7 +20,7 @@ export interface Voice {
 }
 
 const SeedanceSettings: FC = () => {
-  const { register, watch, setValue, formState } = useFormContext();
+  const { register, watch, setValue, formState, control } = useFormContext();
   const { value } = useVideo();
 
   const media = register('media', {
@@ -24,15 +31,23 @@ const SeedanceSettings: FC = () => {
 
   return (
     <div>
-      <Textarea
-        label="Prompt"
+      <FormField
+        control={control}
         name="prompt"
-        {...register('prompt', {
+        defaultValue={value}
+        rules={{
           required: true,
           minLength: 5,
-          value,
-        })}
-        error={formState?.errors?.prompt?.message}
+        }}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Prompt</FormLabel>
+            <FormControl>
+              <Textarea {...field} className="min-h-[150px]" />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
       />
       <div className="mb-[6px]">Images (max 3)</div>
       <MultiMediaComponent

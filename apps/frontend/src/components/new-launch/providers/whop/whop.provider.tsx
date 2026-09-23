@@ -5,7 +5,14 @@ import {
   withProvider,
 } from '@gitroom/frontend/components/new-launch/providers/high.order.provider';
 import { WhopDto } from '@gitroom/nestjs-libraries/dtos/posts/providers-settings/whop.dto';
-import { Input } from '@gitroom/react/form/input';
+import { Input } from '@gitroom/react/ui/input';
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@gitroom/react/ui/form';
 import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
 import { WhopCompanySelect } from '@gitroom/frontend/components/new-launch/providers/whop/whop.company.select';
 import { WhopExperienceSelect } from '@gitroom/frontend/components/new-launch/providers/whop/whop.experience.select';
@@ -31,7 +38,19 @@ const WhopSettings: FC = () => {
         {...form.register('experience')}
         companyId={selectedCompany}
       />
-      <Input label="Title (optional)" {...form.register('title')} />
+      <FormField
+        control={form.control}
+        name="title"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Title (optional)</FormLabel>
+            <FormControl>
+              <Input {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
     </div>
   );
 };

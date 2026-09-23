@@ -1,9 +1,15 @@
-import { Input } from '@gitroom/react/form/input';
-import { ChangeEventHandler, FC, useCallback, useMemo, useState } from 'react';
+import { Input } from '@gitroom/react/ui/input';
+import { FC, useCallback, useMemo, useState } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { useUser } from '@gitroom/frontend/components/layout/user.context';
-import { Select } from '@gitroom/react/form/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@gitroom/react/ui/select';
 import { pricing } from '@gitroom/nestjs-libraries/database/prisma/subscriptions/pricing';
 import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
 import { useVariables } from '@gitroom/react/helpers/variable.context';
@@ -11,7 +17,14 @@ import { setCookie } from '@gitroom/frontend/components/layout/layout.context';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { useModals } from '@gitroom/frontend/components/layout/new-modal';
 import { useToaster } from '@gitroom/react/toaster/toaster';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@gitroom/react/ui/form';
 import { ImportDebugPostModal } from '@gitroom/frontend/components/launches/import-debug-post.modal';
 import { useForm, FormProvider } from 'react-hook-form';
 import { classValidatorResolver } from '@hookform/resolvers/class-validator';
@@ -246,9 +259,12 @@ const ApplyCouponModal: FC<{ close: () => void }> = ({ close }) => {
                     : t('apply_coupon_once', 'next billing cycle only')}
                 </div>
                 <Button
+                  type="button"
+                  size="lg"
                   onClick={handleCancelCoupon}
-                  loading={cancelling}
-                  className="!bg-red-700 rounded-[4px] !h-[24px] !px-[10px] text-[12px]"
+                  isLoading={cancelling}
+                  showSpinner={cancelling}
+                  className="cursor-pointer !bg-red-700 rounded-[4px] !h-[24px] !px-[10px] text-[12px]"
                 >
                   {t('cancel', 'Cancel')}
                 </Button>
@@ -261,39 +277,46 @@ const ApplyCouponModal: FC<{ close: () => void }> = ({ close }) => {
           </div>
           {info.supported ? (
             <div className="grid grid-cols-3 gap-[12px]">
-              <Select
-                label={t('apply_coupon_type', 'Coupon type')}
-                name="couponType"
-                disableForm={true}
-                hideErrors={true}
-                value={type}
-                onChange={(e) => setType(e.target.value)}
-              >
-                <option value="percentage">
-                  {t('apply_coupon_percentage', 'Percentage')}
-                </option>
-                <option value="amount">
-                  {t('apply_coupon_fixed_amount', 'Fixed dollar amount')}
-                </option>
-              </Select>
-              <Input
-                label={t('apply_coupon_value', 'Value')}
-                name="couponValue"
-                type="number"
-                disableForm={true}
-                removeError={true}
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-              />
-              <Input
-                label={t('apply_coupon_months', 'Months')}
-                name="couponMonths"
-                type="number"
-                disableForm={true}
-                removeError={true}
-                value={months}
-                onChange={(e) => setMonths(e.target.value)}
-              />
+              <div className="flex flex-col gap-[6px]">
+                <div className="text-[14px]">
+                  {t('apply_coupon_type', 'Coupon type')}
+                </div>
+                <Select value={type} onValueChange={setType}>
+                  <SelectTrigger className="h-[42px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="percentage">
+                      {t('apply_coupon_percentage', 'Percentage')}
+                    </SelectItem>
+                    <SelectItem value="amount">
+                      {t('apply_coupon_fixed_amount', 'Fixed dollar amount')}
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex flex-col gap-[6px]">
+                <div className="text-[14px] text-foreground">
+                  {t('apply_coupon_value', 'Value')}
+                </div>
+                <Input
+                  name="couponValue"
+                  type="number"
+                  value={value}
+                  onChange={(e) => setValue(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col gap-[6px]">
+                <div className="text-[14px] text-foreground">
+                  {t('apply_coupon_months', 'Months')}
+                </div>
+                <Input
+                  name="couponMonths"
+                  type="number"
+                  value={months}
+                  onChange={(e) => setMonths(e.target.value)}
+                />
+              </div>
             </div>
           ) : (
             <div className="text-foreground/60 text-[13px]">
@@ -305,14 +328,22 @@ const ApplyCouponModal: FC<{ close: () => void }> = ({ close }) => {
           )}
           {!!error && <div className="text-red-400 text-[12px]">{error}</div>}
           <div className="flex gap-[12px] justify-end">
-            <Button onClick={close} className="rounded-[4px]">
+            <Button
+              type="button"
+              size="lg"
+              onClick={close}
+              className="cursor-pointer rounded-[4px]"
+            >
               {t('close', 'Close')}
             </Button>
             {info.supported && (
               <Button
+                type="button"
+                size="lg"
                 onClick={handleApply}
-                loading={applying}
-                className="!bg-blue-700 rounded-[4px]"
+                isLoading={applying}
+                showSpinner={applying}
+                className="cursor-pointer !bg-blue-700 rounded-[4px]"
               >
                 {t('apply', 'Apply')}
               </Button>
@@ -488,24 +519,32 @@ const ChargesModal: FC<{ close: () => void }> = ({ close }) => {
       </div>
       <div className="flex gap-[12px] justify-end">
         <Button
+          type="button"
+          size="lg"
           onClick={handleApplyCoupon}
-          className="!bg-blue-700 rounded-[4px]"
+          className="cursor-pointer !bg-blue-700 rounded-[4px]"
         >
           {t('apply_coupon', 'Apply Coupon')}
         </Button>
         <Button
+          type="button"
+          size="lg"
           onClick={handleRefund}
-          loading={refunding}
+          isLoading={refunding}
+          showSpinner={refunding}
           disabled={!selected.size}
-          className="rounded-[4px]"
+          className="cursor-pointer rounded-[4px]"
         >
           {t('refund_selected', 'Refund Selected')}
           {selected.size > 0 && ` (${selected.size})`}
         </Button>
         <Button
+          type="button"
+          size="lg"
           onClick={handleCancel}
-          loading={cancelling}
-          className="!bg-red-700 rounded-[4px]"
+          isLoading={cancelling}
+          showSpinner={cancelling}
+          className="cursor-pointer !bg-red-700 rounded-[4px]"
         >
           {t('cancel_subscription', 'Cancel Subscription')}
         </Button>
@@ -539,9 +578,8 @@ export const Subscription = () => {
   const fetch = useFetch();
   const t = useT();
 
-  const addSubscription: ChangeEventHandler<HTMLSelectElement> = useCallback(
-    async (e) => {
-      const value = e.target.value;
+  const addSubscription = useCallback(
+    async (value: string) => {
       if (
         await deleteDialog(
           'Are you sure you want to add a user subscription?',
@@ -560,24 +598,21 @@ export const Subscription = () => {
     []
   );
   return (
-    <Select
-      onChange={addSubscription}
-      hideErrors={true}
-      disableForm={true}
-      name="sub"
-      label=""
-      value=""
-    >
-      <option>
-        {t('add_free_subscription', '-- ADD FREE SUBSCRIPTION --')}
-      </option>
-      {Object.keys(pricing)
-        .filter((f) => !f.includes('FREE'))
-        .map((key) => (
-          <option key={key} value={key}>
-            {key}
-          </option>
-        ))}
+    <Select onValueChange={addSubscription}>
+      <SelectTrigger className="h-[42px]">
+        <SelectValue
+          placeholder={t('add_free_subscription', '-- ADD FREE SUBSCRIPTION --')}
+        />
+      </SelectTrigger>
+      <SelectContent>
+        {Object.keys(pricing)
+          .filter((f) => !f.includes('FREE'))
+          .map((key) => (
+            <SelectItem key={key} value={key}>
+              {key}
+            </SelectItem>
+          ))}
+      </SelectContent>
     </Select>
   );
 };
@@ -613,14 +648,17 @@ const AddAnnouncementModal: FC<{ close: () => void }> = ({ close }) => {
 
   return (
     <div className="flex flex-col gap-[16px] min-w-[500px]">
-      <Input
-        label={t('announcement_title', 'Title')}
-        name="title"
-        disableForm={true}
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder={t('announcement_title_placeholder', 'Announcement title')}
-      />
+      <div className="flex flex-col gap-[6px]">
+        <div className="text-[14px] text-foreground">
+          {t('announcement_title', 'Title')}
+        </div>
+        <Input
+          name="title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder={t('announcement_title_placeholder', 'Announcement title')}
+        />
+      </div>
       <div className="flex flex-col gap-[6px]">
         <label className="text-[14px]">
           {t('announcement_description', 'Description')}
@@ -655,10 +693,13 @@ const AddAnnouncementModal: FC<{ close: () => void }> = ({ close }) => {
       </div>
       <div className="flex justify-end">
         <Button
+          type="button"
+          size="lg"
           onClick={handleSubmit}
-          loading={saving}
+          isLoading={saving}
+          showSpinner={saving}
           disabled={!title.trim() || !description.trim()}
-          className="rounded-[4px]"
+          className="cursor-pointer rounded-[4px]"
         >
           {t('create_announcement', 'Create Announcement')}
         </Button>
@@ -734,17 +775,51 @@ const AddTeamMemberModal: FC<{ close: () => void }> = ({ close }) => {
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(submit)}>
         <div className="flex flex-col gap-[10px] min-w-[400px]">
-          <Input
-            label="Email"
-            placeholder={t('enter_email', 'Enter email')}
+          <FormField
+            control={form.control}
             name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder={t('enter_email', 'Enter email')} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          <Select label="Role" name="role">
-            <option value="">{t('select_role', 'Select Role')}</option>
-            <option value="USER">{t('user', 'User')}</option>
-            <option value="ADMIN">{t('admin', 'Admin')}</option>
-          </Select>
-          <Button type="submit" loading={saving} className="rounded-[4px]">
+          <FormField
+            control={form.control}
+            name="role"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Role</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value ?? undefined}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger className="h-[42px]">
+                      <SelectValue placeholder={t('select_role', 'Select Role')} />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="USER">{t('user', 'User')}</SelectItem>
+                    <SelectItem value="ADMIN">{t('admin', 'Admin')}</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button
+            type="submit"
+            size="lg"
+            isLoading={saving}
+            showSpinner={saving}
+            className="cursor-pointer rounded-[4px]"
+          >
             {t('add_team_member', 'Add Team Member')}
           </Button>
         </div>
@@ -936,9 +1011,6 @@ const SwitchUser = () => {
           autoComplete="off"
           placeholder={t('select_user_to_switch_to', 'Select user to switch to')}
           name="switchUser"
-          disableForm={true}
-          label=""
-          removeError={true}
           value={
             selected
               ? `${selected.name ? `${selected.name} - ` : ''}${selected.email}`
@@ -951,10 +1023,13 @@ const SwitchUser = () => {
         />
       </div>
       <Button
+        type="button"
+        size="lg"
         onClick={doSwitch}
-        loading={switching}
+        isLoading={switching}
+        showSpinner={switching}
         disabled={!selected}
-        className="rounded-[4px] whitespace-nowrap"
+        className="cursor-pointer rounded-[4px] whitespace-nowrap"
       >
         {t('switch_user', 'Switch User')}
       </Button>
@@ -1080,9 +1155,6 @@ export const Impersonate = () => {
                     autoComplete="off"
                     placeholder="Write the user details"
                     name="impersonate"
-                    disableForm={true}
-                    label=""
-                    removeError={true}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                   />

@@ -6,7 +6,7 @@ import { timer } from '@gitroom/helpers/utils/timer';
 import { useToaster } from '@gitroom/react/toaster/toaster';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { useModals } from '@gitroom/frontend/components/layout/new-modal';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 import copy from 'copy-to-clipboard';
 import Loading from '@gitroom/frontend/components/layout/loading';
 export const FarcasterProvider = () => {
@@ -193,7 +193,7 @@ export const FarcasterApproval: FC<{
           'Scan the QR code with your phone, or copy the link and open it on your phone, then approve Postiz in the Farcaster app.'
         )}
       </div>
-      <Button onClick={copyLink}>
+      <Button type="button" size="lg" onClick={copyLink}>
         {t('farcaster_copy_link', 'Copy Farcaster link')}
       </Button>
       <div className="flex items-center gap-[8px] text-sm opacity-70">

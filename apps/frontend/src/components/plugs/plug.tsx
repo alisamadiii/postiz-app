@@ -5,7 +5,7 @@ import {
   PlugsInterface,
   usePlugs,
 } from '@gitroom/frontend/components/plugs/plugs.context';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import useSWR, { mutate } from 'swr';
@@ -17,7 +17,14 @@ import {
   useForm,
   useFormContext,
 } from 'react-hook-form';
-import { Input } from '@gitroom/react/form/input';
+import { Input } from '@gitroom/react/ui/input';
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@gitroom/react/ui/form';
 import { CopilotTextarea } from '@copilotkit/react-textarea';
 import { cn } from '@gitroom/react/helpers/cn';
 import { string, object } from 'yup';
@@ -142,19 +149,32 @@ export const PlugPop: FC<{
                 {field.type === 'richtext' ? (
                   <TextArea name={field.name} placeHolder={field.placeholder} />
                 ) : (
-                  <Input
+                  <FormField
+                    control={form.control}
                     name={field.name}
-                    label={field.description}
-                    className="w-full mt-[8px] p-[8px] border border-border rounded-md text-black"
-                    placeholder={field.placeholder}
-                    type={field.type}
+                    render={({ field: controllerField }) => (
+                      <FormItem>
+                        <FormLabel>{field.description}</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...controllerField}
+                            className="w-full mt-[8px] p-[8px] border border-border rounded-md text-black"
+                            placeholder={field.placeholder}
+                            type={field.type}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
                 )}
               </div>
             ))}
           </div>
           <div className="mt-[20px]">
-            <Button type="submit">{t('activate', 'Activate')}</Button>
+            <Button type="submit" size="lg" className="cursor-pointer">
+              {t('activate', 'Activate')}
+            </Button>
           </div>
         </div>
       </form>
@@ -214,7 +234,9 @@ export const PlugItem: FC<{
           )}
         </div>
         <div className="flex-1">{plug.description}</div>
-        <Button>{!data ? 'Set Plug' : 'Edit Plug'}</Button>
+        <Button type="button" size="lg" className="cursor-pointer">
+          {!data ? 'Set Plug' : 'Edit Plug'}
+        </Button>
       </div>
     </div>
   );
