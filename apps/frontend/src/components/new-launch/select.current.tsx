@@ -7,6 +7,11 @@ import {
 } from '@gitroom/frontend/components/new-launch/store';
 import { cn } from '@gitroom/react/helpers/cn';
 import SafeImage from '@gitroom/react/helpers/safe.image';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@gitroom/react/ui/tooltip';
 import { useShallow } from 'zustand/react/shallow';
 import { GlobalIcon } from '@gitroom/frontend/components/ui/icons';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
@@ -108,10 +113,10 @@ export const SelectCurrent: FC = () => {
               setCurrent('global');
             }}
             className={cn(
-              'cursor-pointer flex gap-[8px] rounded-[8px] w-[40px] h-[40px] justify-center items-center bg-border',
+              'cursor-pointer flex gap-[8px] rounded-[8px] w-[40px] h-[40px] justify-center items-center bg-muted',
               current !== 'global'
-                ? 'text-[#A3A3A3]'
-                : 'border border-[#FC69FF] text-[#FC69FF]'
+                ? 'text-muted-foreground'
+                : 'border border-primary text-primary'
             )}
           >
             <div>
@@ -126,9 +131,9 @@ export const SelectCurrent: FC = () => {
               }}
               key={integration.id}
               className={cn(
-                'border cursor-pointer relative flex gap-[8px] w-[40px] h-[40px] rounded-[8px] items-center bg-border justify-center',
+                'border cursor-pointer relative flex gap-[8px] w-[40px] h-[40px] rounded-[8px] items-center bg-muted justify-center',
                 current === integration.id
-                  ? 'border-[#FC69FF] text-[#FC69FF]'
+                  ? 'border-primary text-primary'
                   : 'border-transparent'
               )}
             >
@@ -139,11 +144,9 @@ export const SelectCurrent: FC = () => {
                 X
               </div>
               <IsGlobal id={integration.id} />
+              <Tooltip>
+                <TooltipTrigger asChild>
               <div
-                {...{
-                  'data-tooltip-id': 'tooltip',
-                  'data-tooltip-content': integration.name,
-                }}
                 className={cn(
                   'relative w-full h-full rounded-full flex justify-center items-center filter transition-all duration-500'
                 )}
@@ -175,6 +178,9 @@ export const SelectCurrent: FC = () => {
                   />
                 )}
               </div>
+                </TooltipTrigger>
+                <TooltipContent>{integration.name}</TooltipContent>
+              </Tooltip>
             </div>
           ))}
         </div>
@@ -197,13 +203,13 @@ export const IsGlobal: FC<{ id: string }> = ({ id }) => {
   }
 
   return (
-    <div
-      data-tooltip-id="tooltip"
-      data-tooltip-content={t(
-        'no_longer_global_mode',
-        'No longer in global mode'
-      )}
-      className="w-[8px] h-[8px] bg-[#FC69FF] -top-[1px] -end-[3px] absolute rounded-full"
-    />
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <div className="w-[8px] h-[8px] bg-primary -top-[1px] -end-[3px] absolute rounded-full" />
+      </TooltipTrigger>
+      <TooltipContent>
+        {t('no_longer_global_mode', 'No longer in global mode')}
+      </TooltipContent>
+    </Tooltip>
   );
 };

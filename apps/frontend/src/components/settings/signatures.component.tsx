@@ -1,10 +1,9 @@
-import React, { FC, Fragment, useCallback } from 'react';
+import React, { FC, useCallback } from 'react';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import useSWR from 'swr';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 import { cn } from '@gitroom/react/helpers/cn';
 import { useModals } from '@gitroom/frontend/components/layout/new-modal';
-import { TopTitle } from '@gitroom/frontend/components/launches/helpers/top.title.component';
 import { array, boolean, object, string } from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -14,6 +13,21 @@ import { useToaster } from '@gitroom/react/toaster/toaster';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
 import { X } from 'lucide-react';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@gitroom/react/ui/card';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@gitroom/react/ui/table';
 export const SignaturesComponent: FC<{
   appendSignature?: (value: string) => void;
 }> = (props) => {
@@ -60,79 +74,89 @@ export const SignaturesComponent: FC<{
   const t = useT();
 
   return (
-    <div className="flex flex-col">
-      <h3 className="text-[20px]">{t('signatures', 'Signatures')}</h3>
-      <div className="text-muted-foreground mt-[4px]">
-        {t(
-          'you_can_add_signatures_to_your_account_to_be_used_in_your_posts',
-          'You can add signatures to your account to be used in your posts.'
-        )}
-      </div>
-      <div className="my-[16px] mt-[16px] bg-muted border-border items-center border rounded-[4px] p-[24px] flex gap-[24px]">
-        <div className="flex flex-col w-full">
-          {!!data?.length && (
-            <div
-              className={`grid ${
-                !!appendSignature
-                  ? 'grid-cols-[1fr,1fr,1fr,1fr,1fr]'
-                  : 'grid-cols-[1fr,1fr,1fr,1fr]'
-              } w-full gap-y-[10px]`}
-            >
-              <div>{t('content', 'Content')}</div>
-              <div className="text-center">{t('auto_add', 'Auto Add?')}</div>
-              {!!appendSignature && (
-                <div className="text-center">{t('actions', 'Actions')}</div>
-              )}
-              <div className="text-center">{t('edit', 'Edit')}</div>
-              <div className="text-center">{t('delete', 'Delete')}</div>
+    <Card>
+      <CardHeader>
+        <CardTitle>{t('signatures', 'Signatures')}</CardTitle>
+        <CardDescription>
+          {t(
+            'you_can_add_signatures_to_your_account_to_be_used_in_your_posts',
+            'You can add signatures to your account to be used in your posts.'
+          )}
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-[16px]">
+        {!!data?.length && (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>{t('content', 'Content')}</TableHead>
+                <TableHead className="text-center">
+                  {t('auto_add', 'Auto Add?')}
+                </TableHead>
+                {!!appendSignature && (
+                  <TableHead className="text-center">
+                    {t('actions', 'Actions')}
+                  </TableHead>
+                )}
+                <TableHead className="text-center">
+                  {t('edit', 'Edit')}
+                </TableHead>
+                <TableHead className="text-center">
+                  {t('delete', 'Delete')}
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {data?.map((p: any) => (
-                <Fragment key={p.id}>
-                  <div className="relative flex-1 me-[20px] overflow-x-hidden">
-                    <div className="absolute start-0 line-clamp-1 top-[50%] -translate-y-[50%] text-ellipsis">
-                      {p.content.slice(0, 15) + '...'}
-                    </div>
-                  </div>
-                  <div className="flex flex-col justify-center relative me-[20px]">
-                    <div className="text-center w-full absolute start-0 line-clamp-1 top-[50%] -translate-y-[50%]">
-                      {p.autoAdd ? 'Yes' : 'No'}
-                    </div>
-                  </div>
+                <TableRow key={p.id}>
+                  <TableCell>{p.content.slice(0, 15) + '...'}</TableCell>
+                  <TableCell className="text-center">
+                    {p.autoAdd ? 'Yes' : 'No'}
+                  </TableCell>
                   {!!appendSignature && (
-                    <div className="flex justify-center">
-                      <Button onClick={() => appendSignature(p.content)}>
+                    <TableCell className="text-center">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => appendSignature(p.content)}
+                      >
                         {t('use_signature', 'Use Signature')}
                       </Button>
-                    </div>
+                    </TableCell>
                   )}
-                  <div className="flex justify-center">
-                    <div>
-                      <Button onClick={addSignature(p)}>
-                        {t('edit', 'Edit')}
-                      </Button>
-                    </div>
-                  </div>
-                  <div className="flex justify-center">
-                    <div>
-                      <Button onClick={deleteSignature(p)}>
-                        {t('delete', 'Delete')}
-                      </Button>
-                    </div>
-                  </div>
-                </Fragment>
+                  <TableCell className="text-center">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={addSignature(p)}
+                    >
+                      {t('edit', 'Edit')}
+                    </Button>
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      onClick={deleteSignature(p)}
+                    >
+                      {t('delete', 'Delete')}
+                    </Button>
+                  </TableCell>
+                </TableRow>
               ))}
-            </div>
-          )}
-          <div>
-            <Button
-              onClick={addSignature()}
-              className={cn((data?.length || 0) > 0 && 'my-[16px]')}
-            >
-              {t('add_a_signature', 'Add a signature')}
-            </Button>
-          </div>
+            </TableBody>
+          </Table>
+        )}
+        <div>
+          <Button type="button" onClick={addSignature()}>
+            {t('add_a_signature', 'Add a signature')}
+          </Button>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 const details = object().shape({
@@ -192,7 +216,7 @@ const AddOrRemoveSignature: FC<{
             <CopilotTextarea
               disableBranding={true}
               className={cn(
-                '!min-h-40 !max-h-80 p-2 overflow-x-hidden scrollbar scrollbar-thumb-[#612AD5] bg-muted outline-none'
+                '!min-h-40 !max-h-80 p-2 overflow-x-hidden scrollbar scrollbar-thumb-muted bg-muted outline-none'
               )}
               value={text}
               onChange={(e) => {

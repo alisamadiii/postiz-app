@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FC, Fragment, useCallback, useMemo } from 'react';
+import React, { FC, Fragment, useCallback, useMemo, useState } from 'react';
 import { useLaunchStore } from '@gitroom/frontend/components/new-launch/store';
 import { useShallow } from 'zustand/react/shallow';
 import { cn } from '@gitroom/react/helpers/cn';
@@ -10,17 +10,19 @@ import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { hasLinks } from '@gitroom/helpers/utils/strip.links';
 import { countLength } from '@gitroom/helpers/utils/count.length';
 import { SquareCheckBig, TriangleAlert, ChevronDown } from 'lucide-react';
+import { Button } from '@gitroom/react/ui/button';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@gitroom/react/ui/popover';
 
 const Valid: FC = () => {
-  return (
-    <SquareCheckBig width={16} height={16} className="text-[#00EB75]" />
-  );
+  return <SquareCheckBig width={16} height={16} className="text-green-600" />;
 };
 
 const Invalid: FC = () => {
-  return (
-    <TriangleAlert width={16} height={16} className="text-white" />
-  );
+  return <TriangleAlert width={16} height={16} className="text-white" />;
 };
 export const InformationComponent: FC<{
   chars: Record<string, number>;
@@ -147,47 +149,57 @@ export const InformationComponent: FC<{
     return validLimit ?? limits[0];
   }, [isGlobal, selectedIntegrations, chars, isInternal, countFor]);
 
-  return (
-    <div
+  const [open, setOpen] = useState(false);
+  const hasPanel = !!((isGlobal && selectedIntegrations.length) || !isValid);
+
+  const trigger = (
+    <Button
+      type="button"
+      variant={isValid ? 'outline' : 'default'}
       className={cn(
-        'group rounded-[6px] gap-[4px] h-[30px] px-[6px] flex justify-center items-center relative',
-        isValid ? 'border border-muted' : 'bg-[#FF3F3F]'
+        'h-[30px] gap-[4px] px-[6px]',
+        !isValid && 'bg-destructive text-white hover:bg-destructive/90'
       )}
     >
       {isValid ? <Valid /> : <Invalid />}
-
       {!isGlobal && (
-        <div className={cn("text-[10px] font-[600] flex justify-center items-center", !isValid && 'text-white')}>
+        <span className="text-[10px] font-[600]">
           {currentChars}/{totalAllowedChars}
-        </div>
+        </span>
       )}
       {isGlobal && globalDisplayLimit !== null && (
-        <div className={cn("text-[10px] font-[600] flex justify-center items-center", !isValid && 'text-white')}>
+        <span className="text-[10px] font-[600]">
           {globalDisplayLimit.count}/{globalDisplayLimit.limit}
-        </div>
+        </span>
       )}
-      {((isGlobal && selectedIntegrations.length) || !isValid) && (
+      {hasPanel && (
         <ChevronDown
-          width={16}
-          height={16}
-          className={cn('group-hover:rotate-180', !isValid && 'text-white')}
+          className={cn('size-4 transition-transform', open && 'rotate-180')}
         />
       )}
-      {((isGlobal && selectedIntegrations.length) || !isValid) && (
-        <div
-          className={cn(
-            'z-[300] hidden rounded-[12px] bg-card group-hover:flex absolute end-0 bottom-[100%] mb-[5px] p-[12px] flex-col',
-            isValid ? 'border border-muted' : 'border border-[#FF3F3F]'
-          )}
-        >
+    </Button>
+  );
+
+  if (!hasPanel) {
+    return trigger;
+  }
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>{trigger}</PopoverTrigger>
+      <PopoverContent side="top" align="end" className="z-[700] w-auto">
+        <div className="flex flex-col">
           {!isPicture && !totalChars && (
             <div
               className={cn(
-                'text-sm text-[#FF3F3F] whitespace-nowrap',
+                'text-sm text-destructive whitespace-nowrap',
                 isGlobal && selectedIntegrations.length && 'mb-[12px]'
               )}
             >
-              {t('your_post_should_have_at_least_one_character_or_one_image', 'Your post should have at least one character or one image.')}
+              {t(
+                'your_post_should_have_at_least_one_character_or_one_image',
+                'Your post should have at least one character or one image.'
+              )}
             </div>
           )}
           {isGlobal && (
@@ -210,7 +222,7 @@ export const InformationComponent: FC<{
                         ? ''
                         : countFor(p.integration.identifier) >
                           (chars?.[p.integration.id] || 0)
-                        ? 'text-[#FF3F3F]'
+                        ? 'text-destructive'
                         : ''
                     )}
                   >
@@ -224,7 +236,7 @@ export const InformationComponent: FC<{
                         ? ''
                         : countFor(p.integration.identifier) >
                           (chars?.[p.integration.id] || 0)
-                        ? 'text-[#FF3F3F]'
+                        ? 'text-destructive'
                         : ''
                     )}
                   >
@@ -241,7 +253,7 @@ export const InformationComponent: FC<{
           {showStripLinkWarning && (
             <div
               className={cn(
-                'text-sm text-[#FF3F3F] whitespace-nowrap',
+                'text-sm text-destructive whitespace-nowrap',
                 ((isGlobal && selectedIntegrations.length) ||
                   (!isPicture && !totalChars)) &&
                   'mt-[12px]'
@@ -252,7 +264,7 @@ export const InformationComponent: FC<{
             </div>
           )}
         </div>
-      )}
-    </div>
+      </PopoverContent>
+    </Popover>
   );
 };

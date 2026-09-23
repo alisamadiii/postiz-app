@@ -31,27 +31,57 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
->(({ className, children, ...props }, ref) => (
-  <DialogPortal>
-    <DialogOverlay />
-    <DialogPrimitive.Content
-      ref={ref}
-      data-slot="dialog-content"
-      className={cn(
-        "fixed left-[50%] top-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-2xl bg-background/90 p-6 text-sm ring-1 ring-foreground/10 outline-none duration-100 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95 md:max-w-lg",
-        className,
-      )}
-      {...props}
-    >
-      {children}
-      <DialogPrimitive.Close className="absolute right-2 top-2 inline-flex size-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none">
-        <X className="h-4 w-4" />
-        <span className="sr-only">Close</span>
-      </DialogPrimitive.Close>
-    </DialogPrimitive.Content>
-  </DialogPortal>
-));
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
+    overlayClassName?: string;
+    overlayStyle?: React.CSSProperties;
+    onOverlayClick?: () => void;
+    hideClose?: boolean;
+  }
+>(
+  (
+    {
+      className,
+      children,
+      overlayClassName,
+      overlayStyle,
+      onOverlayClick,
+      hideClose,
+      ...props
+    },
+    ref,
+  ) => (
+    <DialogPortal>
+      {/* Plain div (not DialogPrimitive.Overlay) so the overlay also renders when the dialog is non-modal */}
+      <div
+        aria-hidden="true"
+        data-slot="dialog-overlay"
+        className={cn(
+          "fixed inset-0 z-50 bg-black/10 supports-[backdrop-filter]:backdrop-blur-xs animate-in fade-in-0 duration-100",
+          overlayClassName,
+        )}
+        style={overlayStyle}
+        onClick={onOverlayClick}
+      />
+      <DialogPrimitive.Content
+        ref={ref}
+        data-slot="dialog-content"
+        className={cn(
+          "fixed left-[50%] top-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-2xl bg-background/90 p-6 text-sm ring-1 ring-foreground/10 outline-none duration-100 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95 md:max-w-lg",
+          className,
+        )}
+        {...props}
+      >
+        {children}
+        {!hideClose && (
+          <DialogPrimitive.Close className="absolute right-2 top-2 inline-flex size-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none">
+            <X className="h-4 w-4" />
+            <span className="sr-only">Close</span>
+          </DialogPrimitive.Close>
+        )}
+      </DialogPrimitive.Content>
+    </DialogPortal>
+  ),
+);
 DialogContent.displayName = DialogPrimitive.Content.displayName;
 
 const DialogHeader = ({

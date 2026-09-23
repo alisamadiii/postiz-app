@@ -1,19 +1,33 @@
 'use client';
 import 'reflect-metadata';
 
-import React, { FC, Fragment, useCallback, useMemo, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import useSWR from 'swr';
 import { useUser } from '@gitroom/frontend/components/layout/user.context';
-import { Button } from '@gitroom/react/form/button';
 import { Input } from '@gitroom/react/form/input';
 import { useToaster } from '@gitroom/react/toaster/toaster';
-import { cn } from '@gitroom/react/helpers/cn';
 import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { AddEditModal } from '@gitroom/frontend/components/new-launch/add.edit.modal';
 import { newDayjs } from '@gitroom/frontend/components/layout/set.timezone';
 import { useModals } from '@gitroom/frontend/components/layout/new-modal';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@gitroom/react/ui/card';
+import { Button } from '@gitroom/react/ui/button';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@gitroom/react/ui/table';
 
 const SaveSetModal: FC<{
   postData: any;
@@ -46,7 +60,7 @@ const SaveSetModal: FC<{
         />
       </div>
       <div className="flex gap-2 justify-end">
-        <Button type="button" secondary onClick={onCancel}>
+        <Button type="button" variant="outline" onClick={onCancel}>
           {t('cancel', 'Cancel')}
         </Button>
         <Button type="submit" disabled={!name.trim()}>
@@ -166,47 +180,58 @@ export const Sets: FC = () => {
   const t = useT();
 
   return (
-    <div className="flex flex-col">
-      <h3 className="text-[20px]">Sets ({data?.length || 0})</h3>
-      <div className="text-muted-foreground mt-[4px]">
-        Manage your content sets for easy reuse across posts.
-      </div>
-      <div className="my-[16px] mt-[16px] bg-muted border-border items-center border rounded-[4px] p-[24px] flex gap-[24px]">
-        <div className="flex flex-col w-full">
-          {!!data?.length && (
-            <div className="grid grid-cols-[2fr,1fr,1fr] w-full gap-y-[10px]">
-              <div>{t('name', 'Name')}</div>
-              <div>{t('edit', 'Edit')}</div>
-              <div>{t('delete', 'Delete')}</div>
+    <Card>
+      <CardHeader>
+        <CardTitle>Sets ({data?.length || 0})</CardTitle>
+        <CardDescription>
+          Manage your content sets for easy reuse across posts.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-[16px]">
+        {!!data?.length && (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>{t('name', 'Name')}</TableHead>
+                <TableHead>{t('edit', 'Edit')}</TableHead>
+                <TableHead>{t('delete', 'Delete')}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {data?.map((p: any) => (
-                <Fragment key={p.id}>
-                  <div className="flex flex-col justify-center">{p.name}</div>
-                  <div className="flex flex-col justify-center">
-                    <div>
-                      <Button onClick={addSet(p)}>{t('edit', 'Edit')}</Button>
-                    </div>
-                  </div>
-                  <div className="flex flex-col justify-center">
-                    <div>
-                      <Button onClick={deleteSet(p)}>
-                        {t('delete', 'Delete')}
-                      </Button>
-                    </div>
-                  </div>
-                </Fragment>
+                <TableRow key={p.id}>
+                  <TableCell className="font-medium">{p.name}</TableCell>
+                  <TableCell>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={addSet(p)}
+                    >
+                      {t('edit', 'Edit')}
+                    </Button>
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      onClick={deleteSet(p)}
+                    >
+                      {t('delete', 'Delete')}
+                    </Button>
+                  </TableCell>
+                </TableRow>
               ))}
-            </div>
-          )}
-          <div>
-            <Button
-              onClick={addSet()}
-              className={cn((data?.length || 0) > 0 && 'my-[16px]')}
-            >
-              Add a set
-            </Button>
-          </div>
+            </TableBody>
+          </Table>
+        )}
+        <div>
+          <Button type="button" onClick={addSet()}>
+            Add a set
+          </Button>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };

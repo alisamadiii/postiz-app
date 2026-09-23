@@ -1,9 +1,8 @@
 'use client';
 
-import React, { FC, Fragment, useCallback, useMemo, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import useSWR from 'swr';
-import { Button } from '@gitroom/react/form/button';
 import { useModals } from '@gitroom/frontend/components/layout/new-modal';
 import { Input } from '@gitroom/react/form/input';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -15,8 +14,25 @@ import { useToaster } from '@gitroom/react/toaster/toaster';
 import { cn } from '@gitroom/react/helpers/cn';
 import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
 import { CopilotTextarea } from '@copilotkit/react-textarea';
-import { Slider } from '@gitroom/react/form/slider';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@gitroom/react/ui/card';
+import { Button } from '@gitroom/react/ui/button';
+import { Switch } from '@gitroom/react/ui/switch';
+import { Skeleton } from '@gitroom/react/ui/skeleton';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@gitroom/react/ui/table';
 export const Autopost: FC = () => {
   const fetch = useFetch();
   const t = useT();
@@ -25,7 +41,7 @@ export const Autopost: FC = () => {
   const list = useCallback(async () => {
     return (await fetch('/autopost')).json();
   }, []);
-  const { data, mutate } = useSWR('autopost', list);
+  const { data, mutate, isLoading } = useSWR('autopost', list);
   const addWebhook = useCallback(
     (data?: any) => () => {
       modal.openModal({
@@ -68,64 +84,89 @@ export const Autopost: FC = () => {
     },
     [mutate]
   );
+
+  if (isLoading) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>{t('autopost', 'Autopost')}</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-[16px]">
+          <Skeleton className="h-[36px] w-full" />
+          <Skeleton className="h-[36px] w-full" />
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
-    <div className="flex flex-col">
-      <h3 className="text-[20px]">{t('autopost', 'Autopost')}</h3>
-      <div className="text-muted-foreground mt-[4px]">
-        {t(
-          'autopost_can_automatically_posts_your_rss_new_items_to_social_media',
-          'Autopost can automatically posts your RSS new items to social media'
-        )}
-      </div>
-      <div className="my-[16px] mt-[16px] bg-muted border-border items-center border rounded-[4px] p-[24px] flex gap-[24px]">
-        <div className="flex flex-col w-full">
-          {!!data?.length && (
-            <div className="grid grid-cols-[1fr,1fr,1fr,1fr,1fr] w-full gap-y-[10px]">
-              <div>{t('title', 'Title')}</div>
-              <div>{t('url', 'URL')}</div>
-              <div>{t('edit', 'Edit')}</div>
-              <div>{t('delete', 'Delete')}</div>
-              <div>{t('active', 'Active')}</div>
-              {data?.map((p: any) => (
-                <Fragment key={p.id}>
-                  <div className="flex flex-col justify-center">{p.title}</div>
-                  <div className="flex flex-col justify-center">{p.url}</div>
-                  <div className="flex flex-col justify-center">
-                    <div>
-                      <Button onClick={addWebhook(p)}>
-                        {t('edit', 'Edit')}
-                      </Button>
-                    </div>
-                  </div>
-                  <div className="flex flex-col justify-center">
-                    <div>
-                      <Button onClick={deleteHook(p)}>
-                        {t('delete', 'Delete')}
-                      </Button>
-                    </div>
-                  </div>
-                  <div>
-                    <Slider
-                      value={p.active ? 'on' : 'off'}
-                      onChange={changeActive(p)}
-                      fill={true}
-                    />
-                  </div>
-                </Fragment>
-              ))}
-            </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>{t('autopost', 'Autopost')}</CardTitle>
+        <CardDescription>
+          {t(
+            'autopost_can_automatically_posts_your_rss_new_items_to_social_media',
+            'Autopost can automatically posts your RSS new items to social media'
           )}
-          <div>
-            <Button
-              onClick={addWebhook()}
-              className={cn((data?.length || 0) > 0 && 'my-[16px]')}
-            >
-              {t('add_an_autopost', 'Add an autopost')}
-            </Button>
-          </div>
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-[16px]">
+        {!!data?.length && (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>{t('title', 'Title')}</TableHead>
+                <TableHead>{t('url', 'URL')}</TableHead>
+                <TableHead>{t('edit', 'Edit')}</TableHead>
+                <TableHead>{t('delete', 'Delete')}</TableHead>
+                <TableHead>{t('active', 'Active')}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {data?.map((p: any) => (
+                <TableRow key={p.id}>
+                  <TableCell>{p.title}</TableCell>
+                  <TableCell>{p.url}</TableCell>
+                  <TableCell>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={addWebhook(p)}
+                    >
+                      {t('edit', 'Edit')}
+                    </Button>
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      onClick={deleteHook(p)}
+                    >
+                      {t('delete', 'Delete')}
+                    </Button>
+                  </TableCell>
+                  <TableCell>
+                    <Switch
+                      checked={p.active}
+                      onCheckedChange={(checked) =>
+                        changeActive(p)(checked ? 'on' : 'off')
+                      }
+                    />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+        <div>
+          <Button type="button" onClick={addWebhook()}>
+            {t('add_an_autopost', 'Add an autopost')}
+          </Button>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 const details = object().shape({
@@ -425,6 +466,7 @@ export const AddOrEditWebhook: FC<{
               )}
               <Button
                 type="button"
+                variant="outline"
                 className="mt-[24px]"
                 onClick={sendTest}
                 disabled={

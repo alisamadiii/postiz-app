@@ -1,73 +1,78 @@
 'use client';
 
 import React, {
+  ClipboardEvent,
   FC,
+  forwardRef,
   useCallback,
   useEffect,
+  useImperativeHandle,
   useMemo,
   useRef,
   useState,
-  ClipboardEvent,
-  forwardRef,
-  useImperativeHandle,
 } from 'react';
-import { cn } from '@gitroom/react/helpers/cn';
-import { makeId } from '@gitroom/nestjs-libraries/services/make.is';
-import EmojiPicker from 'emoji-picker-react';
-import { Theme } from 'emoji-picker-react';
+import { useCopilotAction, useCopilotReadable } from '@copilotkit/react-core';
+import Bold from '@tiptap/extension-bold';
+import Document from '@tiptap/extension-document';
+import Heading from '@tiptap/extension-heading';
+import { History } from '@tiptap/extension-history';
+import Link from '@tiptap/extension-link';
+import { BulletList, ListItem } from '@tiptap/extension-list';
+import Mention from '@tiptap/extension-mention';
+import Paragraph from '@tiptap/extension-paragraph';
+import Text from '@tiptap/extension-text';
+import Underline from '@tiptap/extension-underline';
+import { Placeholder } from '@tiptap/extensions';
+import {
+  EditorContent,
+  Extension,
+  mergeAttributes,
+  useEditor,
+} from '@tiptap/react';
+import { Dashboard } from '@uppy/react';
+import EmojiPicker, { Theme } from 'emoji-picker-react';
 import { useTheme } from 'next-themes';
-import { BoldText } from '@gitroom/frontend/components/new-launch/bold.text';
-import { UText } from '@gitroom/frontend/components/new-launch/u.text';
-import { SignatureBox } from '@gitroom/frontend/components/signature';
+import { useShallow } from 'zustand/react/shallow';
+
+import { makeId } from '@gitroom/nestjs-libraries/services/make.is';
+import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
+import { stripHtmlValidation } from '@gitroom/helpers/utils/strip.html.validation';
+import { cn } from '@gitroom/react/helpers/cn';
+import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
+import { useToaster } from '@gitroom/react/toaster/toaster';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
+import { Button } from '@gitroom/react/ui/button';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@gitroom/react/ui/tooltip';
+import { useExistingData } from '@gitroom/frontend/components/launches/helpers/use.existing.data';
+import { InformationComponent } from '@gitroom/frontend/components/launches/information.component';
+import { UpDownArrow } from '@gitroom/frontend/components/launches/up.down.arrow';
+import { MultiMediaComponent } from '@gitroom/frontend/components/media/media.component';
+import { useUppyUploader } from '@gitroom/frontend/components/media/new.uploader';
+import { AComponent } from '@gitroom/frontend/components/new-launch/a.component';
+import { AddPostButton } from '@gitroom/frontend/components/new-launch/add.post.button';
+import { BoldText } from '@gitroom/frontend/components/new-launch/bold.text';
+import { Bullets } from '@gitroom/frontend/components/new-launch/bullets.component';
+import { DelayComponent } from '@gitroom/frontend/components/new-launch/delay.component';
+import { HeadingComponent } from '@gitroom/frontend/components/new-launch/heading.component';
+import { suggestion } from '@gitroom/frontend/components/new-launch/mention.component';
 import {
   SelectedIntegrations,
   useLaunchStore,
 } from '@gitroom/frontend/components/new-launch/store';
-import { useShallow } from 'zustand/react/shallow';
-import { AddPostButton } from '@gitroom/frontend/components/new-launch/add.post.button';
-import { MultiMediaComponent } from '@gitroom/frontend/components/media/media.component';
-import { UpDownArrow } from '@gitroom/frontend/components/launches/up.down.arrow';
-import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
-import { useExistingData } from '@gitroom/frontend/components/launches/helpers/use.existing.data';
-import { useCopilotAction, useCopilotReadable } from '@copilotkit/react-core';
-import { useDropzone } from 'react-dropzone';
-import { useUppyUploader } from '@gitroom/frontend/components/media/new.uploader';
-import { Dashboard } from '@uppy/react';
-import Link from '@tiptap/extension-link';
+import { UText } from '@gitroom/frontend/components/new-launch/u.text';
+import { SignatureBox } from '@gitroom/frontend/components/signature';
 import {
-  useEditor,
-  EditorContent,
-  Extension,
-  mergeAttributes,
-} from '@tiptap/react';
-import Document from '@tiptap/extension-document';
-import Bold from '@tiptap/extension-bold';
-import Text from '@tiptap/extension-text';
-import Paragraph from '@tiptap/extension-paragraph';
-import Underline from '@tiptap/extension-underline';
-import { stripHtmlValidation } from '@gitroom/helpers/utils/strip.html.validation';
-import { History } from '@tiptap/extension-history';
-import { BulletList, ListItem } from '@tiptap/extension-list';
-import { Bullets } from '@gitroom/frontend/components/new-launch/bullets.component';
-import Heading from '@tiptap/extension-heading';
-import { HeadingComponent } from '@gitroom/frontend/components/new-launch/heading.component';
-import Mention from '@tiptap/extension-mention';
-import { suggestion } from '@gitroom/frontend/components/new-launch/mention.component';
-import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
-import { AComponent } from '@gitroom/frontend/components/new-launch/a.component';
-import { Placeholder } from '@tiptap/extensions';
-import { useToaster } from '@gitroom/react/toaster/toaster';
-import { InformationComponent } from '@gitroom/frontend/components/launches/information.component';
-import {
-  LockIcon,
   ConnectionLineIcon,
+  DelayIcon,
+  EmojiIcon,
+  LockIcon,
   ResetIcon,
   TrashIcon,
-  EmojiIcon,
-  DelayIcon,
 } from '@gitroom/frontend/components/ui/icons';
-import { DelayComponent } from '@gitroom/frontend/components/new-launch/delay.component';
 
 const MAX_UPLOAD_SIZE = 1024 * 1024 * 1024; // 1 GB
 
@@ -169,10 +174,11 @@ export const EditorWrapper: FC<{
       setLoadedState: state.setLoaded,
       selectedIntegration: state.selectedIntegrations,
       chars: state.chars,
-    }))
+    })),
   );
 
   const existingData = useExistingData();
+  const isPublished = existingData?.posts?.[0]?.state === 'PUBLISHED';
   const [loaded, setLoaded] = useState(true);
 
   useEffect(() => {
@@ -214,7 +220,7 @@ export const EditorWrapper: FC<{
 
       return setGlobalValue(newValue);
     },
-    [internal, items]
+    [internal, items],
   );
 
   useCopilotReadable({
@@ -245,7 +251,7 @@ export const EditorWrapper: FC<{
 
       return setGlobalValueText(index, value);
     },
-    [current, global, internal]
+    [current, global, internal],
   );
 
   const changeImages = useCallback(
@@ -256,7 +262,7 @@ export const EditorWrapper: FC<{
 
       return setGlobalValueMedia(index, value);
     },
-    [current, global, internal]
+    [current, global, internal],
   );
 
   const appendImages = useCallback(
@@ -267,7 +273,7 @@ export const EditorWrapper: FC<{
 
       return appendGlobalValueMedia(index, value);
     },
-    [current, global, internal]
+    [current, global, internal],
   );
 
   const changeOrder = useCallback(
@@ -280,7 +286,7 @@ export const EditorWrapper: FC<{
       changeOrderGlobal(index, direction);
       setLoaded(false);
     },
-    [changeOrderInternal, changeOrderGlobal, current, global, internal]
+    [changeOrderInternal, changeOrderGlobal, current, global, internal],
   );
 
   const goBackToGlobal = useCallback(async () => {
@@ -288,9 +294,9 @@ export const EditorWrapper: FC<{
       await deleteDialog(
         t(
           'are_you_sure_go_back_to_global_mode',
-          'This action is irreversible. Are you sure you want to go back to global mode?'
+          'This action is irreversible. Are you sure you want to go back to global mode?',
         ),
-        t('yes_go_back_to_global_mode', 'Yes, go back to global mode')
+        t('yes_go_back_to_global_mode', 'Yes, go back to global mode'),
       )
     ) {
       setLoaded(false);
@@ -326,7 +332,7 @@ export const EditorWrapper: FC<{
         },
       ]);
     },
-    [current, global, internal]
+    [current, global, internal],
   );
 
   const deletePost = useCallback(
@@ -335,9 +341,9 @@ export const EditorWrapper: FC<{
         !(await deleteDialog(
           t(
             'are_you_sure_delete_this_post',
-            'Are you sure you want to delete this post?'
+            'Are you sure you want to delete this post?',
           ),
-          t('yes_delete_it', 'Yes, delete it!')
+          t('yes_delete_it', 'Yes, delete it!'),
         ))
       ) {
         return;
@@ -351,7 +357,7 @@ export const EditorWrapper: FC<{
       deleteGlobalValue(index);
       setLoaded(false);
     },
-    [current, global, internal, t]
+    [current, global, internal, t],
   );
 
   if (!loaded || !loadedState) {
@@ -361,29 +367,28 @@ export const EditorWrapper: FC<{
   return (
     <div
       className={cn(
-        'relative flex-col gap-[20px] flex-1',
+        'relative flex-1 flex-col gap-[20px]',
         (items.length === 1 || !canEdit || !comments) && 'flex',
-        ((!canEdit && !isCreateSet) || !comments) &&
-          'bg-card rounded-[12px]'
+        ((!canEdit && !isCreateSet) || !comments) && 'bg-card rounded-[12px]',
       )}
     >
       {isCreateSet && current !== 'global' && (
         <>
-          <div className="text-center absolute w-full h-full left-0 top-0 items-center justify-center flex z-[101] flex-col gap-[16px]">
+          <div className="absolute top-0 left-0 z-[101] flex h-full w-full flex-col items-center justify-center gap-[16px] text-center">
             <div>
-              <div className="w-[54px] h-[54px] rounded-full absolute z-[101] flex justify-center items-center">
+              <div className="absolute z-[101] flex h-[54px] w-[54px] items-center justify-center rounded-full">
                 <LockIcon />
               </div>
-              <div className="w-[54px] h-[54px] rounded-full bg-card opacity-80" />
+              <div className="bg-card h-[54px] w-[54px] rounded-full opacity-80" />
             </div>
             <div className="text-[14px] font-[600] text-white">
               {t(
                 'cant_edit_networks_when_creating_set',
-                "You can't edit networks when creating a set"
+                "You can't edit networks when creating a set",
               )}
             </div>
           </div>
-          <div className="absolute w-full h-full left-0 top-0 bg-newBackdrop opacity-60 z-[100] rounded-[12px]" />
+          <div className="bg-background absolute top-0 left-0 z-[100] h-full w-full rounded-[12px] opacity-60" />
         </>
       )}
       {!canEdit && !isCreateSet && (
@@ -393,44 +398,44 @@ export const EditorWrapper: FC<{
               setLoaded(false);
               addRemoveInternal(current);
             }}
-            className="text-center absolute w-full h-full p-[20px] left-0 top-0 items-center justify-center flex z-[101] flex-col gap-[16px]"
+            className="absolute top-0 left-0 z-[101] flex h-full w-full flex-col items-center justify-center gap-[16px] p-[20px] text-center"
           >
             <div>
-              <div className="w-[54px] h-[54px] rounded-full absolute z-[101] flex justify-center items-center">
+              <div className="absolute z-[101] flex h-[54px] w-[54px] items-center justify-center rounded-full">
                 <LockIcon />
               </div>
-              <div className="w-[54px] h-[54px] rounded-full bg-card opacity-80" />
+              <div className="bg-card h-[54px] w-[54px] rounded-full opacity-80" />
             </div>
             <div className="text-[14px] font-[600] text-white">
               {t(
                 'click_to_exit_global_editing',
-                'Click this button to exit global editing and customize the post for this channel'
+                'Click this button to exit global editing and customize the post for this channel',
               )}
             </div>
             <div>
-              <div className="text-white rounded-[8px] h-[44px] px-[20px] bg-[#D82D7E] cursor-pointer flex justify-center items-center">
+              <div className="text-primary-foreground bg-primary hover:bg-primary/80 flex h-[44px] cursor-pointer items-center justify-center rounded-[8px] px-[20px]">
                 {t('edit_content', 'Edit content')}
               </div>
             </div>
           </div>
-          <div className="absolute w-full h-full left-0 top-0 bg-newBackdrop opacity-60 z-[100] rounded-[12px]" />
+          <div className="bg-background absolute top-0 left-0 z-[100] h-full w-full rounded-[12px] opacity-60" />
         </>
       )}
       {items.map((g, index) => (
         <div
           key={g.id}
           className={cn(
-            'relative flex flex-col gap-[20px] flex-1 bg-card',
+            'bg-card relative flex flex-1 flex-col gap-[20px]',
             index === 0 && 'rounded-t-[12px]',
             (index === items.length - 1 || !comments) && 'rounded-b-[12px]',
             !canEdit && !isCreateSet && 'blur-s',
-            ((!canEdit && index > 0) || (!comments && index > 0)) && 'hidden'
+            ((!canEdit && index > 0) || (!comments && index > 0)) && 'hidden',
           )}
         >
-          <div className="flex gap-[5px] flex-1 w-full">
-            <div className="flex-1 flex w-full">
+          <div className="flex w-full flex-1 gap-[5px]">
+            <div className="flex w-full flex-1">
               {index > 0 && (
-                <div className="flex justify-center pl-[12px] text-border">
+                <div className="text-border flex justify-center pl-[12px]">
                   <ConnectionLineIcon />
                 </div>
               )}
@@ -455,7 +460,8 @@ export const EditorWrapper: FC<{
                 chars={chars}
                 childButton={
                   <>
-                    {(canEdit && items.length - 1 === index) || !comments ? (
+                    {!isPublished &&
+                    ((canEdit && items.length - 1 === index) || !comments) ? (
                       <div className="flex items-center">
                         <div className="flex-1">
                           {comments && (
@@ -468,19 +474,19 @@ export const EditorWrapper: FC<{
                         </div>
                         {!!internal && !existingData?.integration && (
                           <div
-                            className="mt-[12px] flex gap-[20px] items-center cursor-pointer select-none"
+                            className="mt-[12px] flex cursor-pointer items-center gap-[20px] select-none"
                             onClick={goBackToGlobal}
                           >
-                            <div className="flex gap-[6px] items-center">
-                              <div className="w-[8px] h-[8px] rounded-full bg-[#FC69FF]" />
+                            <div className="flex items-center gap-[6px]">
+                              <div className="bg-primary h-[8px] w-[8px] rounded-full" />
                               <div className="text-[14px] font-[600]">
                                 {t(
                                   'editing_a_specific_network',
-                                  'Editing a Specific Network'
+                                  'Editing a Specific Network',
                                 )}
                               </div>
                             </div>
-                            <div className="flex gap-[6px] items-center">
+                            <div className="flex items-center gap-[6px]">
                               <div>
                                 <ResetIcon />
                               </div>
@@ -496,7 +502,7 @@ export const EditorWrapper: FC<{
                 }
               />
             </div>
-            {comments && (
+            {comments && !isPublished && (
               <div className="flex flex-col items-center gap-[10px] pe-[12px]">
                 <UpDownArrow
                   isUp={index !== 0}
@@ -509,9 +515,9 @@ export const EditorWrapper: FC<{
                     data-tooltip-id="tooltip"
                     data-tooltip-content={t(
                       'delete_post_tooltip',
-                      'Delete Post'
+                      'Delete Post',
                     )}
-                    className="cursor-pointer text-[#FF3F3F]"
+                    className="text-destructive cursor-pointer"
                   />
                 )}
                 {index > 0 && (
@@ -585,9 +591,9 @@ export const Editor: FC<{
         toaster.show(
           t(
             'upload_size_limit_exceeded',
-            'Upload size limit exceeded. Maximum 1 GB per upload session.'
+            'Upload size limit exceeded. Maximum 1 GB per upload session.',
           ),
-          'warning'
+          'warning',
         );
         return;
       }
@@ -598,7 +604,7 @@ export const Editor: FC<{
         uppy.addFile(file);
       }
     },
-    [uppy, toaster, t]
+    [uppy, toaster, t],
   );
 
   const paste = useCallback(
@@ -629,9 +635,9 @@ export const Editor: FC<{
         toaster.show(
           t(
             'upload_size_limit_exceeded',
-            'Upload size limit exceeded. Maximum 1 GB per upload session.'
+            'Upload size limit exceeded. Maximum 1 GB per upload session.',
           ),
-          'warning'
+          'warning',
         );
         return;
       }
@@ -644,22 +650,38 @@ export const Editor: FC<{
         uppy.addFile(file);
       }
     },
-    [uppy, num, comments, toaster, t]
+    [uppy, num, comments, toaster, t],
   );
 
-  const { getRootProps, isDragActive } = useDropzone({
-    onDrop: (files) => {
+  const { registerDropHandler, unregisterDropHandler, setActiveDropTarget } =
+    useLaunchStore(
+      useShallow((state) => ({
+        registerDropHandler: state.registerDropHandler,
+        unregisterDropHandler: state.unregisterDropHandler,
+        setActiveDropTarget: state.setActiveDropTarget,
+      })),
+    );
+
+  const existingData = useExistingData();
+  const isPublished = existingData?.posts?.[0]?.state === 'PUBLISHED';
+
+  const dropKey = `post-${num || 0}`;
+  useEffect(() => {
+    if ((num > 0 && comments === 'no-media') || isPublished) {
+      return;
+    }
+    registerDropHandler(dropKey, (files: File[]) => {
       if (loading) {
         toaster.show(
           'Upload current in progress, please wait and then try again.',
-          'warning'
+          'warning',
         );
         return;
       }
       onDrop(files);
-    },
-    noDrag: num > 0 && comments === 'no-media',
-  });
+    });
+    return () => unregisterDropHandler(dropKey);
+  }, [dropKey, num, comments, loading, onDrop, isPublished]);
 
   const valueWithoutHtml = useMemo(() => {
     return stripHtmlValidation('normal', props.value || '', true);
@@ -670,7 +692,7 @@ export const Editor: FC<{
       editorRef?.current?.editor?.commands?.insertContent(emoji);
       editorRef?.current?.editor?.commands?.focus();
     },
-    [props.value, id]
+    [props.value, id],
   );
 
   const [loadedEditor, setLoadedEditor] = useState(editorType);
@@ -697,25 +719,21 @@ export const Editor: FC<{
   }
 
   return (
-    <div className="flex flex-col gap-[20px] flex-1">
+    <div className="flex flex-1 flex-col gap-[20px]">
       <div
         className={cn(
-          'relative flex-1 px-[12px] pt-[12px] pb-[12px] flex flex-col',
-          num > 0 && '!rounded-bs-[0]'
+          'relative flex flex-1 flex-col px-[12px] pt-[12px] pb-[12px]',
+          num > 0 && '!rounded-bs-[0]',
         )}
         id={id}
       >
-        <div className="relative cursor-text flex flex-1 flex-col">
-          <div {...getRootProps()} className="flex flex-1 flex-col">
-            <div
-              className={cn(
-                'absolute left-0 top-0 w-full h-full bg-black/70 z-[300] transition-all items-center justify-center flex text-white text-sm',
-                !isDragActive ? 'pointer-events-none opacity-0' : 'opacity-100'
-              )}
-            >
-              {t('drop_files_here_to_upload', 'Drop your files here to upload')}
-            </div>
-            <div className="px-[10px] pt-[10px] bg-card rounded-t-[6px] relative z-[99]">
+        <div className="relative flex flex-1 cursor-text flex-col">
+          <div
+            className="flex flex-1 flex-col"
+            onFocusCapture={() => setActiveDropTarget(dropKey)}
+            onMouseDown={() => setActiveDropTarget(dropKey)}
+          >
+            <div className="bg-card relative z-[99] rounded-t-[6px] px-[10px] pt-[10px]">
               <OnlyEditor
                 value={props.value}
                 editorType={editorType}
@@ -733,8 +751,8 @@ export const Editor: FC<{
                 editorRef?.current?.editor?.commands?.focus('end');
               }}
             />
-            <div className="w-full pointer-events-none">
-              <div className="w-full h-[46px] overflow-hidden absolute left-0 bg-card uppyChange">
+            <div className="pointer-events-none w-full">
+              <div className="bg-card uppyChange absolute left-0 h-[46px] w-full overflow-hidden">
                 <Dashboard
                   height={46}
                   uppy={uppy}
@@ -749,7 +767,7 @@ export const Editor: FC<{
               </div>
             </div>
             <div
-              className="w-full h-[46px] bg-card cursor-text"
+              className="bg-card h-[46px] w-full cursor-text"
               onClick={() => {
                 if (editorRef?.current?.editor?.isFocused) {
                   return;
@@ -757,10 +775,12 @@ export const Editor: FC<{
                 editorRef?.current?.editor?.commands?.focus('end');
               }}
             />
-            <div className="flex bg-card rounded-b-[6px] cursor-default">
+            <div className="flex cursor-default rounded-b-[6px]">
               {setImages && (
                 <MultiMediaComponent
-                  mediaNotAvailable={num > 0 && comments === 'no-media'}
+                  mediaNotAvailable={
+                    (num > 0 && comments === 'no-media') || isPublished
+                  }
                   allData={allValues}
                   text={valueWithoutHtml}
                   label={t('attachments', 'Attachments')}
@@ -778,70 +798,81 @@ export const Editor: FC<{
                     />
                   }
                   toolBar={
-                    <div className="flex gap-[5px]">
-                      <SignatureBox editor={editorRef?.current?.editor} />
-                      {editorType !== 'none' && (
-                        <>
-                          <UText
-                            editor={editorRef?.current?.editor}
-                            currentValue={props.value!}
-                          />
-                          <BoldText
-                            editor={editorRef?.current?.editor}
-                            currentValue={props.value!}
-                          />
-                        </>
-                      )}
-                      {(editorType === 'markdown' || editorType === 'html') &&
-                        identifier !== 'telegram' && (
+                    isPublished ? undefined : (
+                      <div className="flex gap-[5px]">
+                        <SignatureBox editor={editorRef?.current?.editor} />
+                        {editorType !== 'none' && (
                           <>
-                            <AComponent
+                            <UText
                               editor={editorRef?.current?.editor}
                               currentValue={props.value!}
                             />
-                            <Bullets
-                              editor={editorRef?.current?.editor}
-                              currentValue={props.value!}
-                            />
-                            <HeadingComponent
+                            <BoldText
                               editor={editorRef?.current?.editor}
                               currentValue={props.value!}
                             />
                           </>
                         )}
-                      <div
-                        data-tooltip-id="tooltip"
-                        data-tooltip-content={t('insert_emoji', 'Insert Emoji')}
-                        className="select-none cursor-pointer rounded-[6px] w-[30px] h-[30px] bg-muted flex justify-center items-center"
-                        onClick={() => setEmojiPickerOpen(!emojiPickerOpen)}
-                      >
-                        <EmojiIcon />
-                      </div>
-                      <div className="relative">
-                        <div
-                          className={cn(
-                            'absolute z-[500] -start-[50px]',
-                            num === 0 && allValues?.length > 1
-                              ? 'top-[35px]'
-                              : 'bottom-[35px]'
+                        {(editorType === 'markdown' || editorType === 'html') &&
+                          identifier !== 'telegram' && (
+                            <>
+                              <AComponent
+                                editor={editorRef?.current?.editor}
+                                currentValue={props.value!}
+                              />
+                              <Bullets
+                                editor={editorRef?.current?.editor}
+                                currentValue={props.value!}
+                              />
+                              <HeadingComponent
+                                editor={editorRef?.current?.editor}
+                                currentValue={props.value!}
+                              />
+                            </>
                           )}
-                        >
-                          <EmojiPicker
-                            height={400}
-                            theme={
-                              resolvedTheme === 'light'
-                                ? Theme.LIGHT
-                                : Theme.DARK
-                            }
-                            onEmojiClick={(e) => {
-                              addText(e.emoji);
-                              setEmojiPickerOpen(false);
-                            }}
-                            open={emojiPickerOpen}
-                          />
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              onClick={() =>
+                                setEmojiPickerOpen(!emojiPickerOpen)
+                              }
+                            >
+                              <EmojiIcon />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            {t('insert_emoji', 'Insert Emoji')}
+                          </TooltipContent>
+                        </Tooltip>
+                        <div className="relative">
+                          <div
+                            className={cn(
+                              'absolute -start-[50px] z-[500]',
+                              num === 0 && allValues?.length > 1
+                                ? 'top-[35px]'
+                                : 'bottom-[35px]',
+                            )}
+                          >
+                            <EmojiPicker
+                              height={400}
+                              theme={
+                                resolvedTheme === 'light'
+                                  ? Theme.LIGHT
+                                  : Theme.DARK
+                              }
+                              onEmojiClick={(e) => {
+                                addText(e.emoji);
+                                setEmojiPickerOpen(false);
+                              }}
+                              open={emojiPickerOpen}
+                            />
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    )
                   }
                   onChange={(value) => {
                     setImages(value.target.value);
@@ -870,11 +901,13 @@ export const OnlyEditor = forwardRef<
 >(({ editorType, value, onChange, paste }, ref) => {
   const t = useT();
   const fetch = useFetch();
+  const existingData = useExistingData();
+  const isPublished = existingData?.posts?.[0]?.state === 'PUBLISHED';
 
   const { internal } = useLaunchStore(
     useShallow((state) => ({
       internal: state.internal.find((p) => p.integration.id === state.current),
-    }))
+    })),
   );
 
   const loadList = useCallback(
@@ -904,7 +937,7 @@ export const OnlyEditor = forwardRef<
         return [];
       }
     },
-    [internal, fetch]
+    [internal, fetch],
   );
 
   const editor = useEditor({
@@ -958,7 +991,7 @@ export const OnlyEditor = forwardRef<
 
                   // only allow protocols specified in ctx.protocols
                   const allowedProtocols = ctx.protocols.map((p) =>
-                    typeof p === 'string' ? p : p.scheme
+                    typeof p === 'string' ? p : p.scheme,
                   );
 
                   if (!allowedProtocols.includes(protocol)) {
@@ -1033,6 +1066,7 @@ export const OnlyEditor = forwardRef<
       }),
     ],
     content: value || '',
+    editable: !isPublished,
     shouldRerenderOnTransaction: true,
     immediatelyRender: false,
     // @ts-ignore

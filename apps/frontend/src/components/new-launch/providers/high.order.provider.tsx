@@ -220,6 +220,9 @@ export const withProvider = function <T extends object>(params: {
         trigger: () => {
           return form.trigger();
         },
+        isDirty: () => {
+          return form.formState.isDirty;
+        },
       }),
       [value]
     );

@@ -62,7 +62,7 @@ export const Input: FC<
       )}
       <div
         className={cn(
-          'flex items-center h-[42px] rounded-md border border-border bg-card text-foreground transition-colors focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50',
+          'flex items-center h-[42px] rounded-md border border-border bg-card text-foreground transition-all focus-within:border-primary focus-within:ring-[3px] focus-within:ring-primary/40',
           className
         )}
       >
@@ -76,8 +76,8 @@ export const Input: FC<
           {...rest}
         />
       </div>
-      {!removeError && (
-        <div className="text-destructive text-[12px]">{err || <>&nbsp;</>}</div>
+      {!removeError && err && (
+        <div className="text-destructive text-[12px]">{err}</div>
       )}
     </div>
   );

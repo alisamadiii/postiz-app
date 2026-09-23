@@ -1,23 +1,37 @@
 'use client';
 
-import { FC, useCallback } from 'react';
+import { FC } from 'react';
 import { List } from 'lucide-react';
+import { Button } from '@gitroom/react/ui/button';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@gitroom/react/ui/tooltip';
+import { useT } from '@gitroom/react/translation/get.transation.service.client';
 
 export const Bullets: FC<{
   editor: any;
   currentValue: string;
 }> = ({ editor }) => {
+  const t = useT();
   const bullet = () => {
     editor?.commands?.toggleBulletList();
   };
   return (
-    <div
-      data-tooltip-id="tooltip"
-      data-tooltip-content="Bullets"
-      onClick={bullet}
-      className="select-none cursor-pointer rounded-[6px] w-[30px] h-[30px] bg-muted flex justify-center items-center"
-    >
-      <List className="size-4" />
-    </div>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          onClick={bullet}
+          className="size-[30px] rounded-[6px] bg-muted hover:bg-muted/70"
+        >
+          <List className="size-4" />
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>{t('bullets', 'Bullets')}</TooltipContent>
+    </Tooltip>
   );
 };

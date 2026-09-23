@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import useSWR from 'swr';
 import React, { useCallback, useMemo } from 'react';
@@ -18,6 +18,14 @@ import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
 import copy from 'copy-to-clipboard';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { Trash2 } from 'lucide-react';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@gitroom/react/ui/card';
+import { Separator } from '@gitroom/react/ui/separator';
 
 const roles = [
   {
@@ -165,22 +173,25 @@ export const TeamsComponent = () => {
   );
 
   return (
-    <div className="flex flex-col">
-      <h3 className="text-[20px]">{t('team_members', 'Team Members')}</h3>
-      <div className="text-muted-foreground mt-[4px]">
-        {t(
-          'invite_your_assistant_or_team_member_to_manage_your_account',
-          'Invite your assistant or team member to manage your account'
-        )}
-      </div>
-      <div className="my-[16px] mt-[16px] bg-muted border-border border rounded-[4px] p-[24px] flex flex-col gap-[24px]">
-        <div className="flex flex-col gap-[16px]">
-          {(data || []).map((p) => (
-            <div key={p.user.id} className="flex items-center">
-              <div className="flex-1">
+    <Card>
+      <CardHeader>
+        <CardTitle>{t('team_members', 'Team Members')}</CardTitle>
+        <CardDescription>
+          {t(
+            'invite_your_assistant_or_team_member_to_manage_your_account',
+            'Invite your assistant or team member to manage your account'
+          )}
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-[16px]">
+        {(data || []).map((p, index) => (
+          <React.Fragment key={p.user.id}>
+            {index > 0 && <Separator />}
+            <div className="flex items-center gap-[24px]">
+              <div className="flex-1 text-sm font-medium">
                 {capitalize(p.user.email.split('@')[0]).split('.')[0]}
               </div>
-              <div className="flex-1">
+              <div className="flex-1 text-sm text-muted-foreground">
                 {p.role === 'USER'
                   ? t('user', 'User')
                   : p.role === 'ADMIN'
@@ -190,30 +201,27 @@ export const TeamsComponent = () => {
               {+myLevel > +getLevel(p.role) ? (
                 <div className="flex-1 flex justify-end">
                   <Button
-                    className={`!bg-card !h-[24px] border border-muted-foreground rounded-[4px] text-[12px]`}
+                    type="button"
+                    variant="destructive"
+                    size="sm"
                     onClick={remove(p)}
-                    secondary={true}
                   >
-                    <div className="flex justify-center items-center gap-[4px]">
-                      <div>
-                        <Trash2 width={14} height={15} />
-                      </div>
-                      <div>{t('remove', 'Remove')}</div>
-                    </div>
+                    <Trash2 />
+                    {t('remove', 'Remove')}
                   </Button>
                 </div>
               ) : (
                 <div className="flex-1" />
               )}
             </div>
-          ))}
-        </div>
+          </React.Fragment>
+        ))}
         <div>
-          <Button onClick={addMember}>
+          <Button type="button" onClick={addMember}>
             {t('add_another_member', 'Add another member')}
           </Button>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };

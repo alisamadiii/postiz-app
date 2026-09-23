@@ -133,7 +133,31 @@ interface StoreState {
   setChars: (id: string, chars: number) => void;
   chars: Record<string, number>;
   setComments: (comments: boolean | 'no-media') => void;
+  snapshot: string | null;
+  takeSnapshot: () => void;
+  dropHandlers: Record<string, (files: File[]) => void>;
+  registerDropHandler: (key: string, handler: (files: File[]) => void) => void;
+  unregisterDropHandler: (key: string) => void;
+  activeDropTarget: string | null;
+  setActiveDropTarget: (activeDropTarget: string | null) => void;
 }
+
+export const serializeForDirtyCheck = (state: StoreState) =>
+  JSON.stringify({
+    global: state.global,
+    internal: state.internal.map((item) => ({
+      id: item.integration.id,
+      values: item.integrationValue,
+    })),
+    selectedIntegrations: state.selectedIntegrations.map((item) => ({
+      id: item.integration.id,
+      settings: item.settings,
+    })),
+    tags: state.tags,
+    repeater: state.repeater ?? null,
+    date: state.date.format('YYYY-MM-DDTHH:mm'),
+    postComment: state.postComment,
+  });
 
 const initialState = {
   editor: undefined as undefined,
@@ -155,9 +179,12 @@ const initialState = {
   global: [] as Values[],
   internal: [] as Internal[],
   chars: {},
+  snapshot: null as string | null,
+  dropHandlers: {} as Record<string, (files: File[]) => void>,
+  activeDropTarget: null as string | null,
 };
 
-export const useLaunchStore = create<StoreState>()((set) => ({
+export const useLaunchStore = create<StoreState>()((set, get) => ({
   ...initialState,
   setCurrent: (current: string) =>
     set((state) => ({
@@ -650,5 +677,29 @@ export const useLaunchStore = create<StoreState>()((set) => ({
             }
           : item
       ),
+    })),
+  takeSnapshot: () =>
+    set((state) => ({
+      snapshot: serializeForDirtyCheck(get()),
+    })),
+  registerDropHandler: (key: string, handler: (files: File[]) => void) =>
+    set((state) => ({
+      dropHandlers: {
+        ...state.dropHandlers,
+        [key]: handler,
+      },
+    })),
+  unregisterDropHandler: (key: string) =>
+    set((state) => {
+      const { [key]: removed, ...dropHandlers } = state.dropHandlers;
+      return {
+        dropHandlers,
+        activeDropTarget:
+          state.activeDropTarget === key ? null : state.activeDropTarget,
+      };
+    }),
+  setActiveDropTarget: (activeDropTarget: string | null) =>
+    set((state) => ({
+      activeDropTarget,
     })),
 }));

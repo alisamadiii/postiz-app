@@ -1,12 +1,25 @@
 'use client';
 
-import { FC, Fragment, useCallback } from 'react';
+import React, { FC, useCallback } from 'react';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import useSWR from 'swr';
-import { Button } from '@gitroom/react/form/button';
 import { useToaster } from '@gitroom/react/toaster/toaster';
 import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@gitroom/react/ui/card';
+import { Button } from '@gitroom/react/ui/button';
+import { Separator } from '@gitroom/react/ui/separator';
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@gitroom/react/ui/avatar';
 
 const useApprovedApps = () => {
   const fetch = useFetch();
@@ -59,66 +72,66 @@ export const ApprovedAppsComponent: FC = () => {
   }
 
   return (
-    <div className="flex flex-col gap-[20px]">
-      <div className="flex flex-col">
-        <h3 className="text-[20px]">
-          {t('approved_apps', 'Approved Apps')}
-        </h3>
-        <div className="text-muted-foreground mt-[4px]">
+    <Card>
+      <CardHeader>
+        <CardTitle>{t('approved_apps', 'Approved Apps')}</CardTitle>
+        <CardDescription>
           {t(
             'apps_you_have_authorized',
             'Applications you have authorized to access your Postiz account.'
           )}
-        </div>
-      </div>
-
-      <div className="bg-muted border-border border rounded-[4px] p-[24px]">
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-[16px]">
         {!apps?.length ? (
-          <div className="text-muted-foreground">
+          <div className="text-sm text-muted-foreground">
             {t('no_approved_apps', 'No approved apps yet.')}
           </div>
         ) : (
-          <div className="flex flex-col gap-[16px]">
-            {apps.map((app: any) => (
-              <div
-                key={app.id}
-                className="flex items-center justify-between p-[12px] border border-border rounded-[4px]"
-              >
+          apps.map((app: any, index: number) => (
+            <React.Fragment key={app.id}>
+              {index > 0 && <Separator />}
+              <div className="flex items-center justify-between gap-[24px]">
                 <div className="flex items-center gap-[12px]">
-                  {app.oauthApp?.picture?.path ? (
-                    <img
-                      src={app.oauthApp.picture.path}
-                      alt={app.oauthApp.name}
-                      className="w-[40px] h-[40px] rounded-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-[40px] h-[40px] rounded-full bg-border flex items-center justify-center text-muted-foreground">
+                  <Avatar>
+                    {app.oauthApp?.picture?.path && (
+                      <AvatarImage
+                        src={app.oauthApp.picture.path}
+                        alt={app.oauthApp.name}
+                        className="object-cover"
+                      />
+                    )}
+                    <AvatarFallback>
                       {app.oauthApp?.name?.[0]?.toUpperCase() || '?'}
-                    </div>
-                  )}
-                  <div>
-                    <div className="text-[14px] font-bold">
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col">
+                    <div className="text-sm font-medium">
                       {app.oauthApp?.name}
                     </div>
                     {app.oauthApp?.description && (
-                      <div className="text-muted-foreground text-[12px]">
+                      <div className="text-xs text-muted-foreground">
                         {app.oauthApp.description}
                       </div>
                     )}
-                    <div className="text-muted-foreground text-[12px]">
+                    <div className="text-xs text-muted-foreground">
                       {t('authorized_on', 'Authorized on')}{' '}
                       {new Date(app.createdAt).toLocaleDateString()}
                     </div>
                   </div>
                 </div>
-                <Button onClick={revokeApp(app)}>
+                <Button
+                  type="button"
+                  variant="destructive"
+                  onClick={revokeApp(app)}
+                >
                   {t('revoke', 'Revoke')}
                 </Button>
               </div>
-            ))}
-          </div>
+            </React.Fragment>
+          ))
         )}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };

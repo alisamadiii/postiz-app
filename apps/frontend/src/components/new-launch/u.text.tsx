@@ -1,9 +1,16 @@
 'use client';
 
-import { FC, useCallback } from 'react';
+import { FC } from 'react';
 import { Underline } from 'lucide-react';
-import { Editor, Transforms } from 'slate';
-import { ReactEditor } from 'slate-react';
+
+import { useT } from '@gitroom/react/translation/get.transation.service.client';
+import { Button } from '@gitroom/react/ui/button';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@gitroom/react/ui/tooltip';
+
 const underlineMap = {
   a: 'a̲',
   b: 'b̲',
@@ -69,25 +76,26 @@ const underlineMap = {
   '0': '0̲',
 };
 const reverseMap = Object.fromEntries(
-  Object.entries(underlineMap).map(([key, value]) => [value, key])
+  Object.entries(underlineMap).map(([key, value]) => [value, key]),
 );
 export const UText: FC<{
   editor: any;
   currentValue: string;
 }> = ({ editor }) => {
+  const t = useT();
   const mark = () => {
     editor?.commands?.unsetBold();
     editor?.commands?.toggleUnderline();
     editor?.commands?.focus();
   };
   return (
-    <div
-      data-tooltip-id="tooltip"
-      data-tooltip-content="Underline"
-      onClick={mark}
-      className="select-none cursor-pointer rounded-[6px] w-[30px] h-[30px] bg-muted flex justify-center items-center"
-    >
-      <Underline className="size-4" />
-    </div>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button type="button" variant="ghost" size="icon" onClick={mark}>
+          <Underline className="size-4" />
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>{t('underline', 'Underline')}</TooltipContent>
+    </Tooltip>
   );
 };

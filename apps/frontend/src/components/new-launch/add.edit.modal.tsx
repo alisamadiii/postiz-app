@@ -9,6 +9,7 @@ import { Integrations } from '@gitroom/frontend/components/launches/calendar.con
 import { useShallow } from 'zustand/react/shallow';
 import { useExistingData } from '@gitroom/frontend/components/launches/helpers/use.existing.data';
 import { newDayjs } from '@gitroom/frontend/components/layout/set.timezone';
+import { TooltipProvider } from '@gitroom/react/ui/tooltip';
 
 export interface AddEditModalProps {
   dummy?: boolean;
@@ -63,7 +64,11 @@ export const AddEditModal: FC<AddEditModalProps> = (props) => {
     return null;
   }
 
-  return <AddEditModalInner {...props} />;
+  return (
+    <TooltipProvider delayDuration={200}>
+      <AddEditModalInner {...props} />
+    </TooltipProvider>
+  );
 };
 
 export const AddEditModalInner: FC<AddEditModalProps> = (props) => {
@@ -125,6 +130,7 @@ export const AddEditModalInnerInner: FC<AddEditModalProps> = (props) => {
     setTags,
     setEditor,
     setRepeater,
+    takeSnapshot,
   } = useLaunchStore(
     useShallow((state) => ({
       reset: state.reset,
@@ -136,6 +142,7 @@ export const AddEditModalInnerInner: FC<AddEditModalProps> = (props) => {
       setTags: state.setTags,
       setEditor: state.setEditor,
       setRepeater: state.setRepeater,
+      takeSnapshot: state.takeSnapshot,
     }))
   );
 
@@ -212,6 +219,12 @@ export const AddEditModalInnerInner: FC<AddEditModalProps> = (props) => {
             },
           ]
     );
+
+    // Snapshot the freshly seeded state (after the zustand batch settles) so
+    // closing without changes can skip the exit confirmation.
+    setTimeout(() => {
+      takeSnapshot();
+    }, 0);
 
     return () => {
       reset();

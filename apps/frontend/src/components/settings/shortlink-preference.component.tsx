@@ -3,9 +3,23 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import useSWR from 'swr';
-import { Select } from '@gitroom/react/form/select';
 import { useToaster } from '@gitroom/react/toaster/toaster';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@gitroom/react/ui/card';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@gitroom/react/ui/select';
+import { Skeleton } from '@gitroom/react/ui/skeleton';
 
 type ShortLinkPreference = 'ASK' | 'YES' | 'NO';
 
@@ -46,8 +60,8 @@ const ShortlinkPreferenceComponent = () => {
   }, [data]);
 
   const handleChange = useCallback(
-    async (event: React.ChangeEvent<HTMLSelectElement>) => {
-      const newValue = event.target.value as ShortLinkPreference;
+    async (value: string) => {
+      const newValue = value as ShortLinkPreference;
 
       // Update local state immediately
       setLocalValue(newValue);
@@ -65,53 +79,55 @@ const ShortlinkPreferenceComponent = () => {
 
   if (isLoading) {
     return (
-      <div className="my-[16px] mt-[16px] bg-muted border-border border rounded-[4px] p-[24px]">
-        <div className="animate-pulse">{t('loading', 'Loading...')}</div>
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>{t('shortlink_settings', 'Shortlink Settings')}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Skeleton className="h-[36px] w-full" />
+        </CardContent>
+      </Card>
     );
   }
 
   return (
-    <div className="my-[16px] mt-[16px] bg-muted border-border border rounded-[4px] p-[24px] flex flex-col gap-[24px]">
-      <div className="mt-[4px]">
-        {t('shortlink_settings', 'Shortlink Settings')}
-      </div>
-      <div className="flex items-center justify-between gap-[24px]">
-        <div className="flex flex-col flex-1">
-          <div className="text-[14px]">
-            {t('shortlink_preference', 'Shortlink Preference')}
+    <Card>
+      <CardHeader>
+        <CardTitle>{t('shortlink_settings', 'Shortlink Settings')}</CardTitle>
+        <CardDescription>
+          {t(
+            'shortlink_preference_description',
+            'Control how URLs in your posts are handled. Shortlinks provide click statistics.'
+          )}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="flex items-center justify-between gap-[24px]">
+          <div className="flex flex-col">
+            <div className="text-sm font-medium">
+              {t('shortlink_preference', 'Shortlink Preference')}
+            </div>
           </div>
-          <div className="text-[12px] text-muted-foreground">
-            {t(
-              'shortlink_preference_description',
-              'Control how URLs in your posts are handled. Shortlinks provide click statistics.'
-            )}
-          </div>
-        </div>
-        <div className="w-[200px]">
-          <Select
-            name="shortlink"
-            label=""
-            disableForm={true}
-            hideErrors={true}
-            value={localValue}
-            onChange={handleChange}
-          >
-            <option value="ASK">
-              {t('shortlink_ask', 'Ask every time')}
-            </option>
-            <option value="YES">
-              {t('shortlink_yes', 'Always shortlink')}
-            </option>
-            <option value="NO">
-              {t('shortlink_no', 'Never shortlink')}
-            </option>
+          <Select value={localValue} onValueChange={handleChange}>
+            <SelectTrigger className="w-[200px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ASK">
+                {t('shortlink_ask', 'Ask every time')}
+              </SelectItem>
+              <SelectItem value="YES">
+                {t('shortlink_yes', 'Always shortlink')}
+              </SelectItem>
+              <SelectItem value="NO">
+                {t('shortlink_no', 'Never shortlink')}
+              </SelectItem>
+            </SelectContent>
           </Select>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 
 export default ShortlinkPreferenceComponent;
-

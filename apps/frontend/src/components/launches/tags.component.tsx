@@ -7,17 +7,22 @@ import useSWR from 'swr';
 import { Input } from '@gitroom/react/form/input';
 import { ColorPicker } from '@gitroom/react/form/color.picker';
 import { Button } from '@gitroom/react/form/button';
+import { Button as UIButton } from '@gitroom/react/ui/button';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@gitroom/react/ui/popover';
 import { uniqBy } from 'lodash';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
-import { useClickOutside } from '@mantine/hooks';
 import { cn } from '@gitroom/react/helpers/cn';
 import { useModals } from '@gitroom/frontend/components/layout/new-modal';
 import {
   TagIcon,
-  DropdownArrowIcon,
   PlusIcon,
   CheckmarkIcon,
 } from '@gitroom/frontend/components/ui/icons';
+import { ChevronDown } from 'lucide-react';
 
 export const TagsComponent: FC<{
   name: string;
@@ -68,13 +73,6 @@ export const TagsComponentInner: FC<{
     })
   );
   const modals = useModals();
-
-  const ref = useClickOutside(() => {
-    if (!isOpen || !allowClose) {
-      return;
-    }
-    setIsOpen(false);
-  });
 
   const addTag = useCallback(async () => {
     const val: string | undefined = await new Promise((resolve) => {
@@ -158,43 +156,38 @@ export const TagsComponentInner: FC<{
   );
 
   return (
-    <div
-      ref={ref}
-      className={cn(
-        'border rounded-[8px] justify-center flex items-center relative h-[44px] text-[15px] font-[600] select-none',
-        isOpen ? 'border-primary' : 'border-foreground/10'
-      )}
+    <Popover
+      open={isOpen}
+      onOpenChange={(o) => {
+        if (!o && !allowClose) {
+          return;
+        }
+        setIsOpen(o);
+      }}
     >
-      <div
-        onClick={() => setIsOpen(!isOpen)}
-        className="px-[16px] justify-center flex gap-[8px] items-center h-full select-none flex-1"
-      >
-        <div className="cursor-pointer">
+      <PopoverTrigger asChild>
+        <UIButton variant="outline" size="lg" className="font-[600]">
           <TagIcon />
-        </div>
-        <div className="cursor-pointer flex gap-[4px]">
           {tagValue.length === 0 ? (
-            t('add_new_tag', 'Add New Tag')
+            <span>{t('add_new_tag', 'Add New Tag')}</span>
           ) : (
-            <>
-              <div
-                className="h-full flex justify-center items-center px-[8px] rounded-[4px]"
+            <span className="flex gap-[4px] items-center">
+              <span
+                className="text-shadow-tags text-white flex justify-center items-center px-[8px] rounded-[4px]"
                 style={{ backgroundColor: tagValue[0].color }}
               >
-                <span className="text-shadow-tags text-[#fff]">
-                  {tagValue[0].name}
-                </span>
-              </div>
+                {tagValue[0].name}
+              </span>
               {tagValue.length > 1 ? <span>+{tagValue.length - 1}</span> : null}
-            </>
+            </span>
           )}
-        </div>
-        <div className="cursor-pointer">
-          <DropdownArrowIcon rotated={isOpen} />
-        </div>
-      </div>
-      {isOpen && (
-        <div className="z-[300] absolute start-0 bottom-[100%] w-[240px] bg-card p-[12px] menu-shadow -translate-y-[10px] flex flex-col">
+          <ChevronDown
+            className={cn('size-4 transition-transform', isOpen && 'rotate-180')}
+          />
+        </UIButton>
+      </PopoverTrigger>
+      <PopoverContent side="top" align="start" className="z-[700] w-[240px]">
+        <div className="flex flex-col">
           {(data?.tags || []).map((p: any) => (
             <div
               onClick={() => {
@@ -241,20 +234,13 @@ export const TagsComponentInner: FC<{
               )}
             </div>
           ))}
-          <div
-            onClick={addTag}
-            className="cursor-pointer gap-[8px] flex w-full h-[34px] rounded-[8px] mt-[12px] px-[16px] justify-center items-center bg-primary text-white"
-          >
-            <div>
-              <PlusIcon />
-            </div>
-            <div className="text-[13px] font-[600]">
-              {t('add_new_tag', 'Add New Tag')}
-            </div>
-          </div>
+          <UIButton onClick={addTag} className="mt-[12px] w-full">
+            <PlusIcon />
+            {t('add_new_tag', 'Add New Tag')}
+          </UIButton>
         </div>
-      )}
-    </div>
+      </PopoverContent>
+    </Popover>
   );
 };
 

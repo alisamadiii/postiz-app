@@ -17,8 +17,18 @@ const MetricComponent = dynamic(
 export const GlobalSettings = () => {
   const t = useT();
   return (
-    <div className="flex flex-col">
-      <h3 className="text-[20px]">{t('global_settings', 'Global Settings')}</h3>
+    <div className="flex flex-col gap-[24px]">
+      <div className="flex flex-col gap-[4px]">
+        <h3 className="text-2xl font-semibold">
+          {t('global_settings', 'Global Settings')}
+        </h3>
+        <p className="text-sm text-muted-foreground">
+          {t(
+            'global_settings_description',
+            'Manage your preferences, notifications and account'
+          )}
+        </p>
+      </div>
       <MetricComponent />
       <EmailNotificationsComponent />
       <ShortlinkPreferenceComponent />

@@ -155,120 +155,114 @@ export function RegisterAfter({
   };
   return (
     <FormProvider {...form}>
-      <form className="flex-1 flex" onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-col flex-1">
-          <div>
-            <h1 className="text-[40px] font-[500] -tracking-[0.8px] text-start cursor-pointer">
-              {t('sign_up', 'Sign Up')}
-            </h1>
+      <form
+        className="flex w-full flex-col gap-6"
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
+        <div className="flex flex-col gap-1">
+          <h1 className="text-2xl font-semibold">{t('sign_up', 'Sign Up')}</h1>
+          <p className="text-muted-foreground text-sm">
+            {t('already_have_an_account', 'Already Have An Account?')}
+            <Link
+              href="/auth/login"
+              className="text-foreground ml-1 font-medium transition-opacity hover:opacity-70"
+            >
+              {t('sign_in', 'Sign In')}
+            </Link>
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          {!isAfterProvider && (
+            <>
+              <Input
+                label=""
+                translationKey="label_email"
+                {...form.register('email')}
+                type="email"
+                className="!h-[48px] !rounded-full !bg-background !border-border"
+                placeholder={t('email_address', 'Email Address')}
+              />
+              <Input
+                label=""
+                translationKey="label_password"
+                {...form.register('password')}
+                autoComplete="off"
+                type="password"
+                className="!h-[48px] !rounded-full !bg-background !border-border"
+                placeholder={t('label_password', 'Password')}
+              />
+            </>
+          )}
+          <Input
+            label=""
+            translationKey="label_company"
+            {...form.register('company')}
+            autoComplete="off"
+            type="text"
+            className="!h-[48px] !rounded-full !bg-background !border-border"
+            placeholder={t('label_company', 'Company')}
+          />
+
+          <div className={cn('text-[12px] text-muted-foreground')}>
+            {t(
+              'by_registering_you_agree_to_our',
+              'By registering you agree to our'
+            )}
+            &nbsp;
+            <a
+              href={`https://postiz.com/terms`}
+              className="text-foreground underline hover:opacity-70"
+              rel="nofollow"
+            >
+              {t('terms_of_service', 'Terms of Service')}
+            </a>
+            &nbsp;
+            {t('and', 'and')}&nbsp;
+            <a
+              href={`https://postiz.com/privacy`}
+              rel="nofollow"
+              className="text-foreground underline hover:opacity-70"
+            >
+              {t('privacy_policy', 'Privacy Policy')}
+            </a>
           </div>
-          <div className="text-[14px] mt-[32px] mb-[12px]">
-            {t('continue_with', 'Continue With')}
-          </div>
-          <div className="flex flex-col text-[14px]">
-            {!isAfterProvider &&
-              (!isGeneral ? (
-                <GithubProvider />
-              ) : (
-                <div className="gap-[8px] flex">
-                  {genericOauth && isGeneral ? (
-                    <OauthProvider />
-                  ) : (
-                    <GoogleProvider />
-                  )}
-                  {!!appleClientId && <AppleProvider />}
-                  {!!neynarClientId && <FarcasterProvider />}
-                  {billingEnabled && <WalletProvider />}
-                </div>
-              ))}
-            {!isAfterProvider && (
-              <div className="h-[20px] mb-[24px] mt-[24px] relative">
-                <div className="absolute w-full h-[1px] bg-border top-[50%] -translate-y-[50%]" />
-                <div
-                  className={`absolute z-[1] justify-center items-center w-full start-0 -top-[4px] flex`}
-                >
-                  <div className="px-[16px]">{t('or', 'or')}</div>
-                </div>
+
+          <Button
+            type="submit"
+            className="mt-2 !h-[48px] w-full rounded-full text-base"
+            loading={loading}
+          >
+            {t('create_account', 'Create Account')}
+          </Button>
+        </div>
+
+        {!isAfterProvider && (
+          <>
+            <div className="flex items-center">
+              <div className="flex-1 border-t border-border" />
+              <span className="text-muted-foreground px-3 text-xs">
+                {t('or_continue_with', 'Or continue with')}
+              </span>
+              <div className="flex-1 border-t border-border" />
+            </div>
+
+            {!isGeneral ? (
+              <GithubProvider />
+            ) : (
+              <div className="gap-[8px] flex">
+                {genericOauth && isGeneral ? (
+                  <OauthProvider />
+                ) : (
+                  <GoogleProvider />
+                )}
+                {!!appleClientId && <AppleProvider />}
+                {!!neynarClientId && <FarcasterProvider />}
+                {billingEnabled && <WalletProvider />}
               </div>
             )}
-            <div className="flex flex-col gap-[12px]">
-              <div className="text-foreground">
-                {!isAfterProvider && (
-                  <>
-                    <Input
-                      label="Email"
-                      translationKey="label_email"
-                      {...form.register('email')}
-                      type="email"
-                      placeholder={t('email_address', 'Email Address')}
-                    />
-                    <Input
-                      label="Password"
-                      translationKey="label_password"
-                      {...form.register('password')}
-                      autoComplete="off"
-                      type="password"
-                      placeholder={t('label_password', 'Password')}
-                    />
-                  </>
-                )}
-                <Input
-                  label="Company"
-                  translationKey="label_company"
-                  {...form.register('company')}
-                  autoComplete="off"
-                  type="text"
-                  placeholder={t('label_company', 'Company')}
-                />
-              </div>
-              <div className={cn('text-[12px]')}>
-                {t(
-                  'by_registering_you_agree_to_our',
-                  'By registering you agree to our'
-                )}
-                &nbsp;
-                <a
-                  href={`https://postiz.com/terms`}
-                  className="underline hover:font-bold"
-                  rel="nofollow"
-                >
-                  {t('terms_of_service', 'Terms of Service')}
-                </a>
-                &nbsp;
-                {t('and', 'and')}&nbsp;
-                <a
-                  href={`https://postiz.com/privacy`}
-                  rel="nofollow"
-                  className="underline hover:font-bold"
-                >
-                  {t('privacy_policy', 'Privacy Policy')}
-                </a>
-                &nbsp;
-              </div>
-              <div className="text-center mt-6">
-                <div className="w-full flex">
-                  <Button
-                    type="submit"
-                    className="flex-1 rounded-[10px] !h-[52px]"
-                    loading={loading}
-                  >
-                    {t('create_account', 'Create Account')}
-                  </Button>
-                </div>
-                <p className="mt-4 text-sm">
-                  {t('already_have_an_account', 'Already Have An Account?')}
-                  &nbsp;
-                  <Link
-                    href="/auth/login"
-                    className="underline  cursor-pointer"
-                  >
-                    {t('sign_in', 'Sign In')}
-                  </Link>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+          </>
+        )}
       </form>
     </FormProvider>
   );

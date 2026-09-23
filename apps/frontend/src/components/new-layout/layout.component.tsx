@@ -24,6 +24,7 @@ import { ContinueProvider } from '@gitroom/frontend/components/layout/continue.p
 import { ContextWrapper } from '@gitroom/frontend/components/layout/user.context';
 import { CopilotKit } from '@copilotkit/react-core';
 import { MantineWrapper } from '@gitroom/react/helpers/mantine.wrapper';
+import { TooltipProvider } from '@gitroom/react/ui/tooltip';
 import { Impersonate } from '@gitroom/frontend/components/layout/impersonate';
 import { AnnouncementBanner } from '@gitroom/frontend/components/layout/announcement.banner';
 import { PreConditionComponent } from '@gitroom/frontend/components/layout/pre-condition.component';
@@ -71,6 +72,7 @@ export const LayoutComponent = ({ children }: { children: ReactNode }) => {
         useSingleEndpoint={true}
         showDevConsole={false}
       >
+        <TooltipProvider delayDuration={200}>
         <MantineWrapper>
           <ToolTip />
           <Toaster />
@@ -106,6 +108,7 @@ export const LayoutComponent = ({ children }: { children: ReactNode }) => {
             </div>
           </CheckPayment>
         </MantineWrapper>
+        </TooltipProvider>
       </CopilotKit>
     </ContextWrapper>
   );

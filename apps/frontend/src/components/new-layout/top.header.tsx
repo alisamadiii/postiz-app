@@ -2,7 +2,6 @@
 
 import { FC } from 'react';
 import dynamic from 'next/dynamic';
-import { StreakComponent } from '@gitroom/frontend/components/layout/streak.component';
 import { OrganizationSelector } from '@gitroom/frontend/components/layout/organization.selector';
 import { ChromeExtensionComponent } from '@gitroom/frontend/components/layout/chrome.extension.component';
 import { AttachToFeedbackIcon } from '@gitroom/frontend/components/new-layout/sentry.feedback.component';
@@ -20,7 +19,6 @@ export const TopHeader: FC = () => {
     <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center gap-[12px] border-b border-border bg-sidebar px-[20px]">
       <div className="flex-1" />
       <div className="flex items-center gap-[20px] text-muted-foreground">
-        <StreakComponent />
         <OrganizationSelector />
         <div className="hover:text-foreground">
           <ModeComponent />

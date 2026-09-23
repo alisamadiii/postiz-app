@@ -1,10 +1,9 @@
 'use client';
 
-import React, { FC, Fragment, useCallback, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import useSWR from 'swr';
 import { useUser } from '@gitroom/frontend/components/layout/user.context';
-import { Button } from '@gitroom/react/form/button';
 import { useModals } from '@gitroom/frontend/components/layout/new-modal';
 import { Input } from '@gitroom/react/form/input';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -13,9 +12,25 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Select } from '@gitroom/react/form/select';
 import { PickPlatforms } from '@gitroom/frontend/components/launches/helpers/pick.platform.component';
 import { useToaster } from '@gitroom/react/toaster/toaster';
-import { cn } from '@gitroom/react/helpers/cn';
 import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@gitroom/react/ui/card';
+import { Button } from '@gitroom/react/ui/button';
+import { Skeleton } from '@gitroom/react/ui/skeleton';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@gitroom/react/ui/table';
 
 export const Webhooks: FC = () => {
   const fetch = useFetch();
@@ -26,7 +41,7 @@ export const Webhooks: FC = () => {
   const list = useCallback(async () => {
     return (await fetch('/webhooks')).json();
   }, []);
-  const { data, mutate } = useSWR('webhooks', list);
+  const { data, mutate, isLoading } = useSWR('webhooks', list);
   const addWebhook = useCallback(
     (data?: any) => () => {
       modal.openModal({
@@ -58,58 +73,82 @@ export const Webhooks: FC = () => {
     []
   );
 
+  if (isLoading) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>{t('webhooks', 'Webhooks')}</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-[16px]">
+          <Skeleton className="h-[36px] w-full" />
+          <Skeleton className="h-[36px] w-full" />
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
-    <div className="flex flex-col">
-      <h3 className="text-[20px]">
-        {t('webhooks', 'Webhooks')} ({data?.length || 0}/{user?.tier?.webhooks})
-      </h3>
-      <div className="text-muted-foreground mt-[4px]">
-        {t(
-          'webhooks_are_a_way_to_get_notified_when_something_happens_in_postiz_via_an_http_request',
-          'Webhooks are a way to get notified when something happens in Postiz via\n        an HTTP request.'
-        )}
-      </div>
-      <div className="my-[16px] mt-[16px] bg-muted border-border items-center border rounded-[4px] p-[24px] flex gap-[24px]">
-        <div className="flex flex-col w-full">
-          {!!data?.length && (
-            <div className="grid grid-cols-[1fr,1fr,1fr,1fr] w-full gap-y-[10px]">
-              <div>{t('name', 'Name')}</div>
-              <div>{t('url', 'URL')}</div>
-              <div>{t('edit', 'Edit')}</div>
-              <div>{t('delete', 'Delete')}</div>
-              {data?.map((p: any) => (
-                <Fragment key={p.id}>
-                  <div className="flex flex-col justify-center">{p.name}</div>
-                  <div className="flex flex-col justify-center">{p.url}</div>
-                  <div className="flex flex-col justify-center">
-                    <div>
-                      <Button onClick={addWebhook(p)}>
-                        {t('edit', 'Edit')}
-                      </Button>
-                    </div>
-                  </div>
-                  <div className="flex flex-col justify-center">
-                    <div>
-                      <Button onClick={deleteHook(p)}>
-                        {t('delete', 'Delete')}
-                      </Button>
-                    </div>
-                  </div>
-                </Fragment>
-              ))}
-            </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          {t('webhooks', 'Webhooks')} ({data?.length || 0}/
+          {user?.tier?.webhooks})
+        </CardTitle>
+        <CardDescription>
+          {t(
+            'webhooks_are_a_way_to_get_notified_when_something_happens_in_postiz_via_an_http_request',
+            'Webhooks are a way to get notified when something happens in Postiz via\n        an HTTP request.'
           )}
-          <div>
-            <Button
-              onClick={addWebhook()}
-              className={cn((data?.length || 0) > 0 && 'my-[16px]')}
-            >
-              {t('add_a_webhook', 'Add a webhook')}
-            </Button>
-          </div>
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-[16px]">
+        {!!data?.length && (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>{t('name', 'Name')}</TableHead>
+                <TableHead>{t('url', 'URL')}</TableHead>
+                <TableHead>{t('edit', 'Edit')}</TableHead>
+                <TableHead>{t('delete', 'Delete')}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {data?.map((p: any) => (
+                <TableRow key={p.id}>
+                  <TableCell>{p.name}</TableCell>
+                  <TableCell>{p.url}</TableCell>
+                  <TableCell>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={addWebhook(p)}
+                    >
+                      {t('edit', 'Edit')}
+                    </Button>
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      onClick={deleteHook(p)}
+                    >
+                      {t('delete', 'Delete')}
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+        <div>
+          <Button type="button" onClick={addWebhook()}>
+            {t('add_a_webhook', 'Add a webhook')}
+          </Button>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 const details = object().shape({
@@ -294,7 +333,7 @@ export const AddOrEditWebhook: FC<{
               </Button>
               <Button
                 type="button"
-                secondary={true}
+                variant="outline"
                 className="mt-[24px]"
                 onClick={sendTest}
                 disabled={

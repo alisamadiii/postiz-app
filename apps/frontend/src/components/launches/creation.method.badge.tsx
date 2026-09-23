@@ -1,5 +1,10 @@
 import { FC } from 'react';
 import { cn } from '@gitroom/react/helpers/cn';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@gitroom/react/ui/tooltip';
 
 type CreationMethod = 'UNKNOWN' | 'WEB' | 'API' | 'MCP' | 'AUTOPOST' | 'CLI';
 
@@ -29,22 +34,27 @@ export const CreationMethodBadge: FC<Props> = ({
       : 'h-[18px] px-[8px] text-[10px]';
 
   return (
-    <div
-      className={cn(
-        'inline-flex items-center justify-center rounded-full text-white font-bold uppercase tracking-wide leading-none cursor-default',
-        sizeClasses,
-        creationMethod === 'WEB' && 'bg-[#6b7280]',
-        creationMethod === 'API' && 'bg-[#2563eb]',
-        creationMethod === 'MCP' && 'bg-[#9333ea]',
-        creationMethod === 'AUTOPOST' && 'bg-[#d97706]',
-        creationMethod === 'CLI' && 'bg-[#0f766e]',
-        className
-      )}
-      style={ringColor ? { boxShadow: `0 0 0 2px ${ringColor}` } : undefined}
-      data-tooltip-id="tooltip"
-      data-tooltip-content={tooltipFor(creationMethod)}
-    >
-      {creationMethod}
-    </div>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <div
+          className={cn(
+            'inline-flex items-center justify-center rounded-full text-white font-bold uppercase tracking-wide leading-none cursor-default',
+            sizeClasses,
+            creationMethod === 'WEB' && 'bg-[#6b7280]',
+            creationMethod === 'API' && 'bg-[#2563eb]',
+            creationMethod === 'MCP' && 'bg-[#9333ea]',
+            creationMethod === 'AUTOPOST' && 'bg-[#d97706]',
+            creationMethod === 'CLI' && 'bg-[#0f766e]',
+            className
+          )}
+          style={
+            ringColor ? { boxShadow: `0 0 0 2px ${ringColor}` } : undefined
+          }
+        >
+          {creationMethod}
+        </div>
+      </TooltipTrigger>
+      <TooltipContent>{tooltipFor(creationMethod)}</TooltipContent>
+    </Tooltip>
   );
 };

@@ -3,12 +3,19 @@
 import React, { FC, useCallback, useState } from 'react';
 import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
-import { Button } from '@gitroom/react/form/button';
 import { useVariables } from '@gitroom/react/helpers/variable.context';
 import { setCookie } from '@gitroom/frontend/components/layout/layout.context';
 import { useToaster } from '@gitroom/react/toaster/toaster';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { TrashIcon } from '@gitroom/frontend/components/ui/icons';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@gitroom/react/ui/card';
+import { Button } from '@gitroom/react/ui/button';
 
 const DeleteAccountComponent: FC<{ isLink?: boolean }> = ({ isLink }) => {
   const t = useT();
@@ -88,30 +95,42 @@ const DeleteAccountComponent: FC<{ isLink?: boolean }> = ({ isLink }) => {
   }
 
   return (
-    <div className="my-[16px] mt-[16px] bg-muted border-border border rounded-[4px] p-[24px] flex flex-col gap-[24px]">
+    <Card className="border border-destructive/30">
       {loadingOverlay}
-      <div className="mt-[4px]">{t('delete_account', 'Delete Account')}</div>
-      <div className="flex items-center justify-between">
-        <div className="flex flex-col">
-          <div className="text-[14px]">
-            {t('delete_your_account', 'Delete your account')}
-          </div>
-          <div className="text-[12px] text-muted-foreground">
-            {t(
-              'delete_account_description',
-              'Your account, organizations and channels will be deleted permanently'
-            )}
-          </div>
-        </div>
-        <Button
-          className="!bg-red-800"
-          loading={loading}
-          onClick={deleteAccount}
-        >
+      <CardHeader>
+        <CardTitle className="text-destructive">
           {t('delete_account', 'Delete Account')}
-        </Button>
-      </div>
-    </div>
+        </CardTitle>
+        <CardDescription>
+          {t(
+            'delete_account_description',
+            'Your account, organizations and channels will be deleted permanently'
+          )}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="flex items-center justify-between gap-[24px]">
+          <div className="flex flex-col">
+            <div className="text-sm font-medium">
+              {t('delete_your_account', 'Delete your account')}
+            </div>
+            <div className="text-xs text-muted-foreground">
+              {t('delete_account_irreversible', 'This action cannot be undone')}
+            </div>
+          </div>
+          <Button
+            type="button"
+            variant="destructive"
+            isLoading={loading}
+            showSpinner={true}
+            onClick={deleteAccount}
+          >
+            <TrashIcon size={16} />
+            {t('delete_account', 'Delete Account')}
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 

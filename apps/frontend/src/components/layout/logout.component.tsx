@@ -46,7 +46,8 @@ export const LogoutComponent: FC<{ isIcon?: boolean }> = ({ isIcon }) => {
             `}
           />
         ) : (
-          <span className="text-red-400">
+          <span className="flex items-center gap-[8px] text-red-400 hover:text-red-500 transition-colors">
+            <LogOut width={16} height={16} />
             {t('logout_from', 'Logout from')}
             {isGeneral ? ' Postiz' : ' Gitroom'}
           </span>

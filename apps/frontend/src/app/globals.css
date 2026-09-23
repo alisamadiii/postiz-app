@@ -318,3 +318,30 @@
     @apply cursor-pointer;
   }
 }
+
+/* TipTap editor: no focus outline/ring on the contenteditable */
+.ProseMirror,
+.ProseMirror:focus,
+.ProseMirror-focused {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* TipTap placeholder (Placeholder extension renders data-placeholder, needs CSS to show) */
+.ProseMirror p.is-editor-empty:first-child::before,
+.tiptap p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: var(--muted-foreground);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Hide the Uppy Dashboard idle drop prompt/hints; only the upload progress bar should paint */
+.uppyChange .uppy-Dashboard-AddFiles,
+.uppyChange .uppy-Dashboard-AddFiles-title,
+.uppyChange .uppy-Dashboard-AddFiles-info,
+.uppyChange .uppy-Dashboard-note,
+.uppyChange .uppy-Dashboard-dropFilesHereHint {
+  display: none !important;
+}

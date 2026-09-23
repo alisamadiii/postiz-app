@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@gitroom/react/ui/button';
 import React, { FC } from 'react';
 import { Plus } from 'lucide-react';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
@@ -10,28 +10,21 @@ export const AddPostButton: FC<{
   num: number;
   postComment: PostComment;
 }> = (props) => {
-  const { onClick, num } = props;
+  const { onClick } = props;
   const t = useT();
 
   return (
     <div className="flex">
-      <div
-        onClick={onClick}
-        className="select-none cursor-pointer h-[34px] rounded-[6px] flex bg-[#D82D7E] gap-[8px] justify-center items-center pl-[16px] pr-[20px] text-[13px] font-[600] mt-[12px]"
-      >
-        <div>
-          <Plus className="size-4 text-white" />
-        </div>
-        <div className="!text-white">
-          {t(
-            ...(props.postComment === PostComment.ALL
-              ? ['add_comment_or_post', 'Add comment or post']
-              : props.postComment === PostComment.POST
-              ? ['add_post', 'Add post']
-              : ['add_comment', 'Add comment'])
-          )}
-        </div>
-      </div>
+      <Button type="button" onClick={onClick} className="mt-[12px]">
+        <Plus className="size-4" />
+        {t(
+          ...(props.postComment === PostComment.ALL
+            ? ['add_comment_or_post', 'Add comment or post']
+            : props.postComment === PostComment.POST
+            ? ['add_post', 'Add post']
+            : ['add_comment', 'Add comment'])
+        )}
+      </Button>
     </div>
   );
 };

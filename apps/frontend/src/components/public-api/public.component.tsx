@@ -12,7 +12,15 @@ import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
 import { useDecisionModal } from '@gitroom/frontend/components/layout/new-modal';
 import { DeveloperComponent } from '@gitroom/frontend/components/developer/developer.component';
 import { McpClientIcon } from '@gitroom/frontend/components/public-api/mcp.client.icons';
-import { cn } from '@gitroom/react/helpers/cn';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@gitroom/react/ui/card';
+import { Button } from '@gitroom/react/ui/button';
+import { Input } from '@gitroom/react/ui/input';
 
 // Remote clients can't set headers, they get a URL to paste (hint = where)
 export const remoteMcpClients = {
@@ -270,17 +278,17 @@ export const CopyButton = ({
 }) => {
   const toaster = useToaster();
   return (
-    <button
+    <Button
       type="button"
+      variant="outline"
       onClick={() => {
         copy(text);
         toaster.show(`${label} copied to clipboard`, 'success');
       }}
-      className="cursor-pointer px-[16px] h-[36px] bg-secondary hover:bg-accent transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
     >
-      <Copy width={14} height={14} />
+      <Copy />
       {label}
-    </button>
+    </Button>
   );
 };
 
@@ -317,108 +325,93 @@ const McpSection = ({
         );
 
   return (
-    <div className="bg-newBgColorInnerInner rounded-[12px] border border-border overflow-hidden">
-      <div className="bg-card px-[20px] py-[14px] border-b border-border flex items-start justify-between gap-[12px]">
-        <div>
-          <div className="text-[15px] font-[600]">
-            {t('mcp_client_configuration', 'MCP Client Configuration')}
+    <Card>
+      <CardHeader>
+        <div className="flex items-start justify-between gap-[12px]">
+          <div className="flex flex-col space-y-1.5">
+            <CardTitle>
+              {t('mcp_client_configuration', 'MCP Client Configuration')}
+            </CardTitle>
+            <CardDescription>
+              {t(
+                'connect_your_mcp_client_to_postiz_to_schedule_your_posts_faster',
+                'Connect Postiz MCP server to your client (Http streaming) to schedule your posts faster.'
+              )}
+            </CardDescription>
           </div>
-          <div className="text-[13px] text-muted-foreground mt-[2px]">
-            {t(
-              'connect_your_mcp_client_to_postiz_to_schedule_your_posts_faster',
-              'Connect Postiz MCP server to your client (Http streaming) to schedule your posts faster.'
+          <div className="flex gap-[6px] shrink-0">
+            {billingEnabled && (
+              <>
+                <Button asChild>
+                  <a href={mcpConnectorUrls.Claude} target="_blank">
+                    <ExternalLink />
+                    {t('add_to_claude', 'Add to Claude')}
+                  </a>
+                </Button>
+                <Button asChild>
+                  <a href={mcpConnectorUrls.ChatGPT} target="_blank">
+                    <ExternalLink />
+                    {t('add_to_chatgpt', 'Add to ChatGPT')}
+                  </a>
+                </Button>
+              </>
             )}
+            <Button asChild>
+              <a
+                href="https://docs.postiz.com/mcp/introduction"
+                target="_blank"
+              >
+                <ExternalLink />
+                {t('read_the_docs', 'Docs')}
+              </a>
+            </Button>
           </div>
         </div>
-        <div className="flex gap-[6px] shrink-0 pt-[2px]">
-          {billingEnabled && (
-            <>
-              <a
-                className="cursor-pointer px-[16px] h-[36px] bg-primary hover:bg-primary/90 text-white transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
-                href={mcpConnectorUrls.Claude}
-                target="_blank"
-              >
-                <ExternalLink width={13} height={13} />
-                {t('add_to_claude', 'Add to Claude')}
-              </a>
-              <a
-                className="cursor-pointer px-[16px] h-[36px] bg-primary hover:bg-primary/90 text-white transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
-                href={mcpConnectorUrls.ChatGPT}
-                target="_blank"
-              >
-                <ExternalLink width={13} height={13} />
-                {t('add_to_chatgpt', 'Add to ChatGPT')}
-              </a>
-            </>
-          )}
-          <a
-            className="cursor-pointer px-[16px] h-[36px] bg-primary hover:bg-primary/90 text-white transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
-            href="https://docs.postiz.com/mcp/introduction"
-            target="_blank"
-          >
-            <ExternalLink width={13} height={13} />
-            {t('read_the_docs', 'Docs')}
-          </a>
-        </div>
-      </div>
-      <div className="p-[20px] flex flex-col gap-[16px]">
+      </CardHeader>
+      <CardContent className="flex flex-col gap-[16px]">
         {!chatOnly && (
           <div className="flex flex-col gap-[6px]">
-            <div className="text-[13px] font-[600] text-muted-foreground">
+            <div className="text-sm font-medium">
               {t('auth_method', 'Authentication')}
             </div>
             <div className="flex gap-[6px]">
               {(['oauth', 'apikey'] as const).map((m) => (
-                <button
+                <Button
                   key={m}
                   type="button"
-                  className={cn(
-                    'cursor-pointer px-[14px] h-[36px] text-[13px] font-[500] rounded-[8px] transition-colors',
-                    auth === m
-                      ? 'bg-primary text-white'
-                      : 'bg-secondary text-muted-foreground hover:bg-accent hover:text-foreground'
-                  )}
+                  variant={auth === m ? 'default' : 'secondary'}
                   onClick={() => setAuth(m)}
                 >
                   {m === 'oauth'
                     ? t('sign_in_no_api_key', 'Sign in with Postiz (no API key)')
                     : t('api_key', 'API Key')}
-                </button>
+                </Button>
               ))}
             </div>
           </div>
         )}
         <div className="flex flex-col gap-[6px]">
-          <div className="text-[13px] font-[600] text-muted-foreground">
-            {t('mcp_client', 'Client')}
-          </div>
+          <div className="text-sm font-medium">{t('mcp_client', 'Client')}</div>
           <div className="flex flex-wrap gap-[6px]">
             {[
               ...Object.keys(remoteMcpClients),
               ...mcpClients,
               ...Object.keys(chatOnlyMcpClients),
             ].map((client) => (
-              <button
+              <Button
                 key={client}
                 type="button"
-                className={cn(
-                  'cursor-pointer px-[14px] h-[36px] text-[13px] font-[500] rounded-[8px] transition-colors flex items-center gap-[8px]',
-                  activeClient === client
-                    ? 'bg-primary text-white'
-                    : 'bg-secondary text-muted-foreground hover:bg-accent hover:text-foreground'
-                )}
-                onClick={() =>
-                  setActiveClient(client as AnyMcpClient)
-                }
+                variant={activeClient === client ? 'default' : 'secondary'}
+                onClick={() => setActiveClient(client as AnyMcpClient)}
               >
                 <McpClientIcon client={client} />
                 {client}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
         <div className="flex flex-col gap-[8px]">
-          <div className="text-[12px] text-muted-foreground font-[500]">
+          <div className="text-xs text-muted-foreground">
             {hint}
             {auth === 'oauth' &&
               !chatOnly &&
@@ -427,62 +420,52 @@ const McpSection = ({
                 'Your agent will open a browser window to sign in to Postiz.'
               )}`}
           </div>
-          <pre className="bg-card border border-border rounded-[8px] p-[16px] text-[13px] whitespace-pre-wrap break-all overflow-x-auto leading-[1.6]">
+          <pre className="bg-muted border border-border rounded-md p-4 text-sm whitespace-pre-wrap break-all overflow-x-auto leading-[1.6]">
             {maskedConfig}
           </pre>
           <div className="flex gap-[8px]">
             {auth === 'apikey' && !chatOnly && (
-              <button
+              <Button
                 type="button"
+                variant="outline"
                 onClick={() => setRevealed(!revealed)}
-                className="cursor-pointer px-[16px] h-[36px] bg-secondary hover:bg-accent transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
               >
-                {revealed ? (
-                  <EyeOff width={14} height={14} />
-                ) : (
-                  <Eye width={14} height={14} />
-                )}
+                {revealed ? <EyeOff /> : <Eye />}
                 {revealed ? t('hide', 'Hide') : t('reveal', 'Reveal')}
-              </button>
+              </Button>
             )}
             <CopyButton text={config} label={t('copy', 'Copy')} />
             {!isRemoteMcpClient(activeClient) && !chatOnly && (
               <CopyButton text={baseUrl} label={t('copy_url', 'Copy URL')} />
             )}
             {activeClient === 'Claude' && billingEnabled && (
-              <a
-                className="cursor-pointer px-[16px] h-[36px] bg-primary hover:bg-primary/90 text-white transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
-                href={mcpConnectorUrls.Claude}
-                target="_blank"
-              >
-                <ExternalLink width={13} height={13} />
-                {t('add_to_claude', 'Add to Claude')}
-              </a>
+              <Button asChild>
+                <a href={mcpConnectorUrls.Claude} target="_blank">
+                  <ExternalLink />
+                  {t('add_to_claude', 'Add to Claude')}
+                </a>
+              </Button>
             )}
             {activeClient === 'ChatGPT' && billingEnabled && (
-              <a
-                className="cursor-pointer px-[16px] h-[36px] bg-primary hover:bg-primary/90 text-white transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
-                href={mcpConnectorUrls.ChatGPT}
-                target="_blank"
-              >
-                <ExternalLink width={13} height={13} />
-                {t('add_to_chatgpt', 'Add to ChatGPT')}
-              </a>
+              <Button asChild>
+                <a href={mcpConnectorUrls.ChatGPT} target="_blank">
+                  <ExternalLink />
+                  {t('add_to_chatgpt', 'Add to ChatGPT')}
+                </a>
+              </Button>
             )}
             {activeClient === 'Grok Bot' && billingEnabled && (
-              <a
-                className="cursor-pointer px-[16px] h-[36px] bg-primary hover:bg-primary/90 text-white transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
-                href={mcpConnectorUrls['Grok Bot']}
-                target="_blank"
-              >
-                <ExternalLink width={13} height={13} />
-                {t('add_to_grok_bot', 'Add to Grok Bot')}
-              </a>
+              <Button asChild>
+                <a href={mcpConnectorUrls['Grok Bot']} target="_blank">
+                  <ExternalLink />
+                  {t('add_to_grok_bot', 'Add to Grok Bot')}
+                </a>
+              </Button>
             )}
           </div>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 
@@ -541,82 +524,74 @@ const CliSection = ({ apiKey }: { apiKey: string }) => {
       : steps;
 
   return (
-    <div className="bg-newBgColorInnerInner rounded-[12px] border border-border overflow-hidden">
-      <div className="bg-card px-[20px] py-[14px] border-b border-border flex items-start justify-between gap-[12px]">
-        <div>
-          <div className="text-[15px] font-[600]">
-            {t('cli_and_skills', 'CLI & AI Skills')}
+    <Card>
+      <CardHeader>
+        <div className="flex items-start justify-between gap-[12px]">
+          <div className="flex flex-col space-y-1.5">
+            <CardTitle>{t('cli_and_skills', 'CLI & AI Skills')}</CardTitle>
+            <CardDescription>
+              {t(
+                'cli_description',
+                'Use the Postiz CLI to automate posting from your terminal, or install the skill to let your AI agent schedule posts for you.'
+              )}
+            </CardDescription>
           </div>
-          <div className="text-[13px] text-muted-foreground mt-[2px]">
-            {t(
-              'cli_description',
-              'Use the Postiz CLI to automate posting from your terminal, or install the skill to let your AI agent schedule posts for you.'
-            )}
+          <div className="flex gap-[6px] shrink-0">
+            <Button asChild>
+              <a
+                href="https://docs.postiz.com/cli/introduction"
+                target="_blank"
+              >
+                <ExternalLink />
+                {t('read_the_docs', 'Docs')}
+              </a>
+            </Button>
           </div>
         </div>
-        <div className="flex gap-[6px] shrink-0 pt-[2px]">
-          <a
-            className="cursor-pointer px-[16px] h-[36px] bg-primary hover:bg-primary/90 text-white transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
-            href="https://docs.postiz.com/cli/introduction"
-            target="_blank"
-          >
-            <ExternalLink width={13} height={13} />
-            {t('read_the_docs', 'Docs')}
-          </a>
-        </div>
-      </div>
-      <div className="p-[20px] flex flex-col gap-[16px]">
+      </CardHeader>
+      <CardContent className="flex flex-col gap-[16px]">
         <div className="flex gap-[6px]">
           {(['local', 'ci'] as const).map((m) => (
-            <button
+            <Button
               key={m}
               type="button"
-              className={cn(
-                'cursor-pointer px-[14px] h-[36px] text-[13px] font-[500] rounded-[8px] transition-colors',
-                mode === m
-                  ? 'bg-primary text-white'
-                  : 'bg-secondary text-muted-foreground hover:bg-accent hover:text-foreground'
-              )}
+              variant={mode === m ? 'default' : 'secondary'}
               onClick={() => setMode(m)}
             >
               {m === 'local'
                 ? t('locally', 'Locally')
                 : t('ci_remote_servers', 'CI / Remote servers')}
-            </button>
+            </Button>
           ))}
         </div>
         {displaySteps.map((step, i) => (
           <div key={i} className="flex flex-col gap-[6px]">
-            <div className="text-[13px] font-[600] text-muted-foreground">
+            <div className="text-sm font-medium">
               {i + 1}. {step.label}
             </div>
-            <pre className="bg-card border border-border rounded-[8px] p-[16px] text-[13px] whitespace-pre-wrap break-all overflow-x-auto leading-[1.6]">
+            <pre className="bg-muted border border-border rounded-md p-4 text-sm whitespace-pre-wrap break-all overflow-x-auto leading-[1.6]">
               {step.code}
             </pre>
           </div>
         ))}
         <div className="flex gap-[8px]">
           {mode === 'ci' && (
-            <button
+            <Button
               type="button"
+              variant="outline"
               onClick={() => setRevealed(!revealed)}
-              className="cursor-pointer px-[16px] h-[36px] bg-secondary hover:bg-accent transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
             >
-              {revealed ? (
-                <EyeOff width={14} height={14} />
-              ) : (
-                <Eye width={14} height={14} />
-              )}
+              {revealed ? <EyeOff /> : <Eye />}
               {revealed ? t('hide', 'Hide') : t('reveal', 'Reveal')}
-            </button>
+            </Button>
           )}
           <CopyButton
             text={steps.map((s) => s.code).join(' && ')}
             label={t('copy_all', 'Copy All')}
           />
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 
@@ -657,8 +632,8 @@ const PublicApiContent = () => {
   const mcpBase = mcpUrl || backendUrl;
 
   return (
-    <div className="flex flex-col gap-[40px]">
-      <div className="text-[14px] text-foreground leading-[1.7]">
+    <div className="flex flex-col gap-[24px]">
+      <div className="text-sm text-foreground leading-[1.7]">
         {t(
           'api_auth_note_line1',
           'Use your API Key to automate your own account.'
@@ -679,77 +654,66 @@ const PublicApiContent = () => {
           'and you will receive a pos_ prefixed token that works with the API, MCP, and CLI — just like an API Key.'
         )}
       </div>
-      <div className="bg-newBgColorInnerInner rounded-[12px] border border-border overflow-hidden">
-        <div className="bg-card px-[20px] py-[14px] border-b border-border flex items-start justify-between gap-[12px]">
-          <div>
-            <div className="text-[15px] font-[600]">
-              {t('api_key', 'API Key')}
+      <Card>
+        <CardHeader>
+          <div className="flex items-start justify-between gap-[12px]">
+            <div className="flex flex-col space-y-1.5">
+              <CardTitle>{t('api_key', 'API Key')}</CardTitle>
+              <CardDescription>
+                {t(
+                  'use_postiz_api_to_integrate_with_your_tools',
+                  'Use Postiz API to integrate with your tools.'
+                )}
+              </CardDescription>
             </div>
-            <div className="text-[13px] text-muted-foreground mt-[2px]">
-              {t(
-                'use_postiz_api_to_integrate_with_your_tools',
-                'Use Postiz API to integrate with your tools.'
-              )}
+            <div className="flex gap-[6px] shrink-0">
+              <Button asChild>
+                <a href="https://docs.postiz.com/public-api" target="_blank">
+                  <ExternalLink />
+                  {t('read_the_docs', 'Docs')}
+                </a>
+              </Button>
+              <Button asChild>
+                <a
+                  href="https://www.npmjs.com/package/n8n-nodes-postiz"
+                  target="_blank"
+                >
+                  <ExternalLink />
+                  {t('n8n_node', 'N8N Node')}
+                </a>
+              </Button>
             </div>
           </div>
-          <div className="flex gap-[6px] shrink-0 pt-[2px]">
-            <a
-              className="cursor-pointer px-[16px] h-[36px] bg-primary hover:bg-primary/90 text-white transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
-              href="https://docs.postiz.com/public-api"
-              target="_blank"
-            >
-              <ExternalLink width={13} height={13} />
-            {t('read_the_docs', 'Docs')}
-            </a>
-            <a
-              className="cursor-pointer px-[16px] h-[36px] bg-primary hover:bg-primary/90 text-white transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
-              href="https://www.npmjs.com/package/n8n-nodes-postiz"
-              target="_blank"
-            >
-              <ExternalLink width={13} height={13} />
-              {t('n8n_node', 'N8N Node')}
-            </a>
-          </div>
-        </div>
-        <div className="p-[20px] flex flex-col gap-[16px]">
-          <div className="bg-card border border-border rounded-[8px] px-[16px] h-[44px] flex items-center overflow-hidden">
-            <code className="text-[14px] flex-1 truncate">
-              {reveal ? (
-                user.publicApi
-              ) : (
-                <span className="flex items-center">
-                  <span className="blur-sm select-none">
-                    {user.publicApi.slice(0, -5)}
-                  </span>
-                  <span>{user.publicApi.slice(-5)}</span>
-                </span>
-              )}
-            </code>
-          </div>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-[16px]">
+          <Input
+            readOnly
+            className="font-mono"
+            value={
+              reveal
+                ? user.publicApi
+                : `${'•'.repeat(
+                    Math.max(user.publicApi.length - 5, 0)
+                  )}${user.publicApi.slice(-5)}`
+            }
+          />
           <div className="flex gap-[8px]">
-            <button
+            <Button
               type="button"
+              variant="outline"
               onClick={() => setReveal(!reveal)}
-              className="cursor-pointer px-[16px] h-[36px] bg-secondary hover:bg-accent transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
             >
-              {reveal ? (
-                <EyeOff width={14} height={14} />
-              ) : (
-                <Eye width={14} height={14} />
-              )}
+              {reveal ? <EyeOff /> : <Eye />}
               {reveal ? t('hide', 'Hide') : t('reveal', 'Reveal')}
-            </button>
+            </Button>
             <CopyButton text={user.publicApi} label={t('copy', 'Copy')} />
-            <button
-              type="button"
-              onClick={rotateKey}
-              className="cursor-pointer px-[16px] h-[36px] bg-secondary hover:bg-accent transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
-            >
-              <RotateCw width={14} height={14} />
+            <Button type="button" variant="destructive" onClick={rotateKey}>
+              <RotateCw />
               {t('rotate_key', 'Rotate Key')}
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
+              variant="outline"
               data-tooltip-id="tooltip"
               data-tooltip-content={t(
                 'payload_wizard_description',
@@ -758,14 +722,13 @@ const PublicApiContent = () => {
               onClick={() =>
                 window.open(`${frontEndUrl}/modal/dark/all`, '_blank')
               }
-              className="cursor-pointer px-[16px] h-[36px] bg-secondary hover:bg-accent transition-colors rounded-[8px] text-[13px] font-[600] flex items-center gap-[6px]"
             >
-              <ExternalLink width={14} height={14} />
+              <ExternalLink />
               {t('open_wizard', 'Open Wizard')}
-            </button>
+            </Button>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       <CliSection apiKey={user.publicApi} />
 
@@ -801,21 +764,14 @@ export const PublicComponent = () => {
       </h3>
       <div className="flex gap-[6px]">
         {(['api', 'developer'] as const).map((tab) => (
-          <button
+          <Button
             key={tab}
             type="button"
-            className={cn(
-              'cursor-pointer px-[20px] h-[44px] text-[15px] font-[600] rounded-[8px] transition-colors',
-              subTab === tab
-                ? 'bg-primary text-white'
-                : 'bg-secondary text-muted-foreground hover:bg-accent hover:text-foreground'
-            )}
+            variant={subTab === tab ? 'default' : 'secondary'}
             onClick={() => setSubTab(tab)}
           >
-            {tab === 'api'
-              ? t('access', 'Access')
-              : t('apps', 'Apps')}
-          </button>
+            {tab === 'api' ? t('access', 'Access') : t('apps', 'Apps')}
+          </Button>
         ))}
       </div>
       {subTab === 'api' && <PublicApiContent />}

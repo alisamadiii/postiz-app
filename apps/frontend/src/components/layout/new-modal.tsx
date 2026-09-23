@@ -24,10 +24,15 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@gitroom/react/ui/alert-dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@gitroom/react/ui/dialog';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { cn } from '@gitroom/react/helpers/cn';
 import { EventEmitter } from 'events';
-import { X } from 'lucide-react';
 
 interface OpenModalInterface {
   title?: any;
@@ -144,114 +149,106 @@ export const Component: FC<{
 
   if (modal.removeLayout) {
     return (
-      <div
-        style={{ zIndex }}
-        className={cn(
-          !modal.fullScreen
-            ? 'pb-[50px] min-w-full min-h-full'
-            : 'w-full h-full',
-          'fixed flex left-0 top-0 bg-popover transition-all animate-fadeIn overflow-y-auto text-foreground',
-          !isLast && '!overflow-hidden'
-        )}
-      >
-        <div className={cn(modal.fullScreen && 'flex', 'relative flex-1')}>
-          <div
+      <CurrentModalContext.Provider value={{ id: modal.id }}>
+        <Dialog
+          open
+          modal={false}
+          onOpenChange={(open) => {
+            if (!open) {
+              closeModalFunction();
+            }
+          }}
+        >
+          <DialogContent
+            hideClose
+            aria-describedby={undefined}
+            overlayStyle={{ zIndex }}
+            style={{ zIndex: zIndex + 1 }}
+            onEscapeKeyDown={(e) => e.preventDefault()}
+            onInteractOutside={(e) => e.preventDefault()}
+            onOpenAutoFocus={(e) => e.preventDefault()}
             className={cn(
+              'text-foreground block max-w-none rounded-none border-none bg-background p-0 text-base md:max-w-none',
               modal.fullScreen
-                ? 'flex flex-1'
-                : 'absolute top-0 left-0 min-w-full min-h-full'
+                ? 'flex h-[calc(100dvh-24px)] w-[calc(100vw-24px)] flex-col gap-0 overflow-hidden rounded-2xl'
+                : 'h-dvh w-screen overflow-y-auto pb-[50px]',
+              !isLast && '!overflow-hidden'
             )}
           >
-            <div
-              className={cn(
-                modal.fullScreen ? 'w-full h-full flex-1' : 'mx-auto py-[48px]'
-              )}
-              {...(modal.size && { style: { width: modal.size } })}
-            >
-              {typeof modal.children === 'function'
-                ? modal.children(closeModalFunction)
-                : modal.children}
-            </div>
-          </div>
-        </div>
-      </div>
+            <DialogTitle className="sr-only">
+              {typeof modal.title === 'string' && modal.title
+                ? modal.title
+                : 'Modal'}
+            </DialogTitle>
+            {modal.fullScreen ? (
+              <div className="flex w-full flex-1 overflow-y-auto">
+                {RenderComponent}
+              </div>
+            ) : (
+              <div
+                className="mx-auto py-[48px]"
+                {...(modal.size && { style: { width: modal.size } })}
+              >
+                {RenderComponent}
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
+      </CurrentModalContext.Provider>
     );
   }
 
   return (
     <CurrentModalContext.Provider value={{ id: modal.id }}>
-      <div
-        onClick={closeModalFunction}
-        style={{ zIndex }}
-        className={cn(
-          'fixed flex left-0 top-0 min-w-full min-h-full bg-popover transition-all animate-fadeIn overflow-y-auto text-foreground',
-          !modal.fullScreen && 'pb-[50px]'
-        )}
+      <Dialog
+        open
+        modal={false}
+        onOpenChange={(open) => {
+          if (!open) {
+            closeModalFunction();
+          }
+        }}
       >
-        <div className="relative flex-1">
+        <DialogContent
+          hideClose={modal.withCloseButton === false}
+          aria-describedby={undefined}
+          overlayStyle={{ zIndex }}
+          onOverlayClick={
+            modal.closeOnClickOutside === false ? undefined : closeModalFunction
+          }
+          onEscapeKeyDown={(e) => e.preventDefault()}
+          onInteractOutside={(e) => e.preventDefault()}
+          className={cn(
+            'text-foreground flex w-fit max-h-[calc(100dvh-2rem)] max-w-[calc(100vw-2rem)] flex-col gap-[20px] overflow-y-auto p-[32px] text-base md:max-w-[calc(100vw-2rem)]',
+            !modal.size && 'min-w-[600px]'
+          )}
+          style={{
+            zIndex: zIndex + 1,
+            ...(modal.size ? { width: modal.size } : {}),
+            ...(modal.height ? { height: modal.height } : {}),
+            ...(modal.maxSize ? { maxWidth: modal.maxSize } : {}),
+            ...(modal.top
+              ? { top: modal.top, transform: 'translateX(-50%)' }
+              : {}),
+          }}
+        >
+          {modal.title ? (
+            <DialogHeader>
+              <DialogTitle>{modal.title}</DialogTitle>
+            </DialogHeader>
+          ) : (
+            <DialogTitle className="sr-only">Modal</DialogTitle>
+          )}
           <div
-            style={
-              modal.top
-                ? { paddingTop: modal.top, paddingBottom: modal.top }
-                : {}
-            }
             className={cn(
-              'absolute min-w-full',
-              !modal.fullScreen
-                ? modal.top
-                  ? ''
-                  : 'min-h-full pt-[100px] pb-[100px]'
-                : 'h-screen',
-              modal.size && modal.height
-                ? 'flex justify-center items-center'
-                : 'top-0 left-0'
+              'whitespace-pre-line',
+              !!modal.height && !!modal.size && 'flex flex-1 flex-col'
             )}
           >
-            <div
-              className={cn(
-                !modal.removeLayout && 'gap-[40px] p-[32px]',
-                'bg-card mx-auto flex flex-col w-fit rounded-[24px] relative',
-                modal.size ? '' : 'min-w-[600px]',
-                modal.fullScreen && 'h-full'
-              )}
-              {...((!!modal.size || !!modal.height || !!modal.maxSize) && {
-                style: {
-                  ...(modal.size ? { width: modal.size } : {}),
-                  ...(modal.height ? { height: modal.height } : {}),
-                  ...(modal.maxSize ? { maxWidth: modal.maxSize } : {}),
-                },
-              })}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex items-center">
-                <div className="text-[24px] font-[600] flex-1">
-                  {modal.title}
-                </div>
-                {typeof modal.withCloseButton === 'undefined' ||
-                modal.withCloseButton ? (
-                  <div className="cursor-pointer">
-                    <button
-                      className="outline-none absolute end-[20px] top-[20px] mantine-UnstyledButton-root mantine-ActionIcon-root hover:bg-border cursor-pointer mantine-Modal-close mantine-1dcetaa"
-                      type="button"
-                      onClick={closeModalFunction}
-                    >
-                      <X width={16} height={16} />
-                    </button>
-                  </div>
-                ) : null}
-              </div>
-              <div
-                className={cn(
-                  'whitespace-pre-line',
-                  !!modal.height && !!modal.size && 'flex flex-1 flex-col'
-                )}
-              >
-                {RenderComponent}
-              </div>
-            </div>
+            {RenderComponent}
           </div>
-        </div>
-      </div>
+        </DialogContent>
+      </Dialog>
     </CurrentModalContext.Provider>
   );
 });
@@ -290,7 +287,7 @@ export const ModalManagerInner: FC = () => {
           isLast={modalManager.length - 1 === index}
           key={modal.id}
           modal={modal}
-          zIndex={200 + index}
+          zIndex={200 + index * 2}
           closeModal={closeModal}
         />
       ))}

@@ -1,9 +1,16 @@
 'use client';
 
-import { FC, useCallback } from 'react';
+import { FC } from 'react';
 import { Bold } from 'lucide-react';
-import { Editor, Transforms } from 'slate';
-import { ReactEditor } from 'slate-react';
+
+import { useT } from '@gitroom/react/translation/get.transation.service.client';
+import { Button } from '@gitroom/react/ui/button';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@gitroom/react/ui/tooltip';
+
 const originalMap = {
   a: '𝗮',
   b: '𝗯',
@@ -69,25 +76,26 @@ const originalMap = {
   '0': '𝟬',
 };
 const reverseMap = Object.fromEntries(
-  Object.entries(originalMap).map(([key, value]) => [value, key])
+  Object.entries(originalMap).map(([key, value]) => [value, key]),
 );
 export const BoldText: FC<{
   editor: any;
   currentValue: string;
 }> = ({ editor }) => {
+  const t = useT();
   const mark = () => {
     editor?.commands?.unsetUnderline();
     editor?.commands?.toggleBold();
     editor?.commands?.focus();
   };
   return (
-    <div
-      data-tooltip-id="tooltip"
-      data-tooltip-content="Bold Text"
-      onClick={mark}
-      className="select-none cursor-pointer rounded-[6px] w-[30px] h-[30px] bg-muted flex justify-center items-center"
-    >
-      <Bold className="size-4" />
-    </div>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button type="button" variant="ghost" size="icon" onClick={mark}>
+          <Bold className="size-4" />
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>{t('bold_text', 'Bold Text')}</TooltipContent>
+    </Tooltip>
   );
 };

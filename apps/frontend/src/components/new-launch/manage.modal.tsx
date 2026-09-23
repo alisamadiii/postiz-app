@@ -9,40 +9,50 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { AddEditModalProps } from '@gitroom/frontend/components/new-launch/add.edit.modal';
-import { cn } from '@gitroom/react/helpers/cn';
-import { useT } from '@gitroom/react/translation/get.transation.service.client';
-import { PicksSocialsComponent } from '@gitroom/frontend/components/new-launch/picks.socials.component';
-import { EditorWrapper } from '@gitroom/frontend/components/new-launch/editor';
-import { SelectCurrent } from '@gitroom/frontend/components/new-launch/select.current';
-import { ShowAllProviders } from '@gitroom/frontend/components/new-launch/providers/show.all.providers';
-import { useExistingData } from '@gitroom/frontend/components/launches/helpers/use.existing.data';
-import { useLaunchStore } from '@gitroom/frontend/components/new-launch/store';
-import { DatePicker } from '@gitroom/frontend/components/launches/helpers/date.picker';
-import { useShallow } from 'zustand/react/shallow';
-import { RepeatComponent } from '@gitroom/frontend/components/launches/repeat.component';
-import { TagsComponent } from '@gitroom/frontend/components/launches/tags.component';
-import { useToaster } from '@gitroom/react/toaster/toaster';
-import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
-import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
-import { makeId } from '@gitroom/nestjs-libraries/services/make.is';
-import { useModals } from '@gitroom/frontend/components/layout/new-modal';
-import { capitalize } from 'lodash';
-import { SelectCustomer } from '@gitroom/frontend/components/launches/select.customer';
 import { CopilotPopup } from '@copilotkit/react-ui';
-import { DummyCodeComponent } from '@gitroom/frontend/components/new-launch/dummy.code.component';
-import { CreationMethodBadge } from '@gitroom/frontend/components/launches/creation.method.badge';
+import dayjs from 'dayjs';
+import { capitalize } from 'lodash';
+import { Upload } from 'lucide-react';
+import { useDropzone } from 'react-dropzone';
+import { useShallow } from 'zustand/react/shallow';
+
+import { makeId } from '@gitroom/nestjs-libraries/services/make.is';
+import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
+import { cn } from '@gitroom/react/helpers/cn';
+import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
+import { useToaster } from '@gitroom/react/toaster/toaster';
+import { useT } from '@gitroom/react/translation/get.transation.service.client';
+import { Button } from '@gitroom/react/ui/button';
 import {
-  SettingsIcon,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@gitroom/react/ui/tooltip';
+import { CreationMethodBadge } from '@gitroom/frontend/components/launches/creation.method.badge';
+import { DatePicker } from '@gitroom/frontend/components/launches/helpers/date.picker';
+import { useExistingData } from '@gitroom/frontend/components/launches/helpers/use.existing.data';
+import { RepeatComponent } from '@gitroom/frontend/components/launches/repeat.component';
+import { SelectCustomer } from '@gitroom/frontend/components/launches/select.customer';
+import { TagsComponent } from '@gitroom/frontend/components/launches/tags.component';
+import { useModals } from '@gitroom/frontend/components/layout/new-modal';
+import { AddEditModalProps } from '@gitroom/frontend/components/new-launch/add.edit.modal';
+import { DummyCodeComponent } from '@gitroom/frontend/components/new-launch/dummy.code.component';
+import { EditorWrapper } from '@gitroom/frontend/components/new-launch/editor';
+import { PicksSocialsComponent } from '@gitroom/frontend/components/new-launch/picks.socials.component';
+import { ShowAllProviders } from '@gitroom/frontend/components/new-launch/providers/show.all.providers';
+import { SelectCurrent } from '@gitroom/frontend/components/new-launch/select.current';
+import {
+  serializeForDirtyCheck,
+  useLaunchStore,
+} from '@gitroom/frontend/components/new-launch/store';
+import { useShortlinkPreference } from '@gitroom/frontend/components/settings/shortlink-preference.component';
+import {
   ChevronDownIcon,
   CloseIcon,
+  SettingsIcon,
   TrashIcon,
-  DropdownArrowSmallIcon,
 } from '@gitroom/frontend/components/ui/icons';
 import { useHasScroll } from '@gitroom/frontend/components/ui/is.scroll.hook';
-import { useShortlinkPreference } from '@gitroom/frontend/components/settings/shortlink-preference.component';
-import dayjs from 'dayjs';
-import { Button } from '@gitroom/react/form/button';
 
 export const ManageModal: FC<AddEditModalProps> = (props) => {
   const t = useT();
@@ -56,6 +66,7 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
   const { data: shortlinkPreferenceData } = useShortlinkPreference();
 
   const { addEditSets, mutate, customClose, dummy } = props;
+  const isPublished = existingData?.posts?.[0]?.state === 'PUBLISHED';
 
   const {
     selectedIntegrations,
@@ -88,7 +99,7 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
       setSelectedIntegrations: state.setSelectedIntegrations,
       locked: state.locked,
       activateExitButton: state.activateExitButton,
-    }))
+    })),
   );
 
   useEffect(() => {
@@ -102,7 +113,7 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
       return (
         <div className="flex items-center gap-[10px]">
           <div className="relative">
-            <SettingsIcon size={15} className="text-white" />
+            <SettingsIcon size={15} className="text-primary-foreground" />
           </div>
           <div>Settings</div>
         </div>
@@ -116,12 +127,12 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
         <div className="relative">
           <img
             src={`/icons/platforms/${currentIntegration.identifier}.png`}
-            className="w-[20px] h-[20px] rounded-[4px]"
+            className="h-[20px] w-[20px] rounded-[4px]"
             alt={currentIntegration.identifier}
           />
           <SettingsIcon
             size={15}
-            className="text-white absolute -end-[5px] -bottom-[5px]"
+            className="text-primary-foreground absolute -end-[5px] -bottom-[5px]"
           />
         </div>
         <div>
@@ -134,16 +145,16 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
   const changeCustomer = useCallback(
     (customer: string) => {
       const neededIntegrations = integrations.filter(
-        (p) => p?.customer?.id === customer
+        (p) => p?.customer?.id === customer,
       );
       setSelectedIntegrations(
         neededIntegrations.map((p) => ({
           settings: {},
           selectedIntegrations: p,
-        }))
+        })),
       );
     },
-    [integrations]
+    [integrations],
   );
 
   const askClose = useCallback(async () => {
@@ -151,13 +162,32 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
       return;
     }
 
+    // Close silently when nothing changed since the modal was opened.
+    // Provider settings live inside each provider's form, so check those too.
+    const state = useLaunchStore.getState();
+    const providersDirty = state.selectedIntegrations.some((p) =>
+      p.ref?.current?.isDirty?.(),
+    );
+    if (
+      !providersDirty &&
+      state.snapshot &&
+      state.snapshot === serializeForDirtyCheck(state)
+    ) {
+      if (customClose) {
+        customClose();
+        return;
+      }
+      modal.closeAll();
+      return;
+    }
+
     if (
       await deleteDialog(
         t(
           'are_you_sure_you_want_to_close_this_modal_all_data_will_be_lost',
-          'Are you sure you want to close this modal? (all data will be lost)'
+          'Are you sure you want to close this modal? (all data will be lost)',
         ),
-        t('yes_close_it', 'Yes, close it!')
+        t('yes_close_it', 'Yes, close it!'),
       )
     ) {
       if (customClose) {
@@ -174,9 +204,9 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
       !(await deleteDialog(
         t(
           'are_you_sure_you_want_to_delete_post',
-          'Are you sure you want to delete this post?'
+          'Are you sure you want to delete this post?',
         ),
-        t('yes_delete_it', 'Yes, delete it!')
+        t('yes_delete_it', 'Yes, delete it!'),
       ))
     ) {
       setLoading(false);
@@ -205,61 +235,87 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
         const isRecurring =
           !!repeater || !!existingData?.posts?.[0]?.intervalInDays;
 
-        const whatToDo = await new Promise((resolve) => {
-          modal.openModal({
-            title: t('what_do_you_want_to_do', 'What do you want to do?'),
-            children: (
-              <div className="flex flex-col">
-                <div className="text-[20px] mb-[20px]">
-                  {t(
-                    'post_already_published_republish_warning',
-                    'This post was already published. Republishing will publish it again to'
-                  )}{' '}
-                  {channels} {t('republish_at', 'at')}{' '}
-                  {date.format('DD/MM/YYYY HH:mm')}.
-                  {isRecurring && (
-                    <div className="mt-[10px]">
-                      {t(
-                        'republish_recurring_note',
-                        'This is a recurring post: your changes apply to all future recurrences starting now.'
-                      )}
-                    </div>
-                  )}
-                </div>
-                <div className="flex w-full gap-[10px]">
-                  <div className="flex-1 flex">
-                    <Button
-                      type="button"
-                      className="flex-1"
-                      onClick={() => resolve('update')}
-                    >
-                      {t(
-                        'just_update_post_details',
-                        'Just update the post details'
-                      )}
-                    </Button>
-                  </div>
-                  <div className="flex-1 flex">
-                    <Button
-                      type="button"
-                      className="flex-1"
-                      onClick={() => resolve('republish')}
-                    >
-                      {t('republish_the_post', 'Republish the post')}
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            ),
-          });
-        });
-
-        if (whatToDo === 'update') {
-          type = 'update';
-        }
-
-        if (whatToDo === 'republish') {
+        if (isPublished) {
+          // Published posts are read-only, so "just update the details" is
+          // meaningless — confirm the republish directly.
+          if (
+            !(await deleteDialog(
+              `${t(
+                'post_already_published_republish_warning',
+                'This post was already published. Republishing will publish it again to',
+              )} ${channels} ${t('republish_at', 'at')} ${date.format(
+                'DD/MM/YYYY HH:mm',
+              )}.${
+                isRecurring
+                  ? ` ${t(
+                      'republish_recurring_note',
+                      'This is a recurring post: your changes apply to all future recurrences starting now.',
+                    )}`
+                  : ''
+              }`,
+              t('yes_republish_it', 'Yes, republish it!'),
+            ))
+          ) {
+            return;
+          }
           republish = true;
+        } else {
+          const whatToDo = await new Promise((resolve) => {
+            modal.openModal({
+              title: t('what_do_you_want_to_do', 'What do you want to do?'),
+              children: (
+                <div className="flex flex-col">
+                  <div className="mb-[20px] text-[20px]">
+                    {t(
+                      'post_already_published_republish_warning',
+                      'This post was already published. Republishing will publish it again to',
+                    )}{' '}
+                    {channels} {t('republish_at', 'at')}{' '}
+                    {date.format('DD/MM/YYYY HH:mm')}.
+                    {isRecurring && (
+                      <div className="mt-[10px]">
+                        {t(
+                          'republish_recurring_note',
+                          'This is a recurring post: your changes apply to all future recurrences starting now.',
+                        )}
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex w-full gap-[10px]">
+                    <div className="flex flex-1">
+                      <Button
+                        type="button"
+                        className="flex-1"
+                        onClick={() => resolve('update')}
+                      >
+                        {t(
+                          'just_update_post_details',
+                          'Just update the post details',
+                        )}
+                      </Button>
+                    </div>
+                    <div className="flex flex-1">
+                      <Button
+                        type="button"
+                        className="flex-1"
+                        onClick={() => resolve('republish')}
+                      >
+                        {t('republish_the_post', 'Republish the post')}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ),
+            });
+          });
+
+          if (whatToDo === 'update') {
+            type = 'update';
+          }
+
+          if (whatToDo === 'republish') {
+            republish = true;
+          }
         }
       }
 
@@ -293,7 +349,7 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
                 alt,
                 thumbnail,
                 thumbnailTimestamp,
-              })
+              }),
             ) || [],
         })),
       }));
@@ -318,9 +374,9 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
               ' ' +
               t(
                 'post_needs_content_or_image',
-                'Your post should have at least one character or one image.'
+                'Your post should have at least one character or one image.',
               ),
-            'warning'
+            'warning',
           );
           setLoading(false);
           focus(item.id, 'preview');
@@ -335,7 +391,7 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
                   item.settingsError ||
                   t('please_fix_your_settings', 'Please fix your settings')
                 }`,
-                'warning'
+                'warning',
               );
               focus(item.id, 'fix');
               setLoading(false);
@@ -348,7 +404,7 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
                 `${capitalize(item.identifier.split('-')[0])} (${item.name}): ${
                   item.errors
                 }`,
-                'warning'
+                'warning',
               );
               focus(item.id, 'preview');
               setLoading(false);
@@ -360,9 +416,9 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
               toaster.show(
                 `${item.name} (${item.identifier}) ${t(
                   'post_is_too_long',
-                  'post is too long, please fix it'
+                  'post is too long, please fix it',
                 )}`,
-                'warning'
+                'warning',
               );
               focus(item.id, 'preview');
               setLoading(false);
@@ -384,7 +440,7 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
               messages: allValues
                 // platforms that remove links won't keep shortlinks either
                 .filter(
-                  (p: any) => !integrationById(p.id)?.integration?.stripLinks
+                  (p: any) => !integrationById(p.id)?.integration?.stripLinks,
                 )
                 .flatMap((p: any) => p.values.flatMap((a: any) => a.content)),
             }),
@@ -400,11 +456,11 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
             shortLink = await deleteDialog(
               t(
                 'shortlink_urls_question',
-                'Do you want to shortlink the URLs? it will let you get statistics over clicks'
+                'Do you want to shortlink the URLs? it will let you get statistics over clicks',
               ),
               t('yes_shortlink_it', 'Yes, shortlink it!'),
               undefined,
-              t('no_original_urls', 'No, original URLs')
+              t('no_original_urls', 'No, original URLs'),
             );
           }
         }
@@ -449,7 +505,7 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
           toaster.show(
             !existingData.integration
               ? t('added_successfully', 'Added successfully')
-              : t('updated_successfully', 'Updated successfully')
+              : t('updated_successfully', 'Updated successfully'),
           );
         }
         if (customClose) {
@@ -463,30 +519,71 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
         }
       }
     },
-    [ref, repeater, tags, date, addEditSets, dummy, shortlinkPreferenceData]
+    [
+      ref,
+      repeater,
+      tags,
+      date,
+      addEditSets,
+      dummy,
+      shortlinkPreferenceData,
+      isPublished,
+    ],
   );
 
+  // Files can be dropped anywhere on the dialog; they are routed to the
+  // last-focused post editor (falling back to the first one).
+  const onDropFiles = useCallback((files: File[]) => {
+    const state = useLaunchStore.getState();
+    const handler =
+      state.dropHandlers[state.activeDropTarget || ''] ||
+      state.dropHandlers['post-0'] ||
+      Object.values(state.dropHandlers)[0];
+    handler?.(files);
+  }, []);
+
+  const { getRootProps, isDragActive } = useDropzone({
+    onDrop: onDropFiles,
+    noClick: true,
+    noKeyboard: true,
+    noDrag: isPublished,
+  });
+
   return (
-    <div className="w-full h-full flex-1 p-[40px] flex relative">
-      <div className="flex flex-1 bg-card rounded-[20px] flex-col">
-        <div className="flex-1 flex">
-          <div className="flex flex-col flex-1 border-e border-border">
-            <div className="bg-background h-[65px] rounded-s-[20px] !rounded-b-[0] flex items-center gap-[12px] px-[20px] text-[20px] font-[600]">
+    <div
+      {...getRootProps()}
+      className="relative flex h-full w-full flex-1 p-[40px]"
+    >
+      {isDragActive && (
+        <div className="border-primary bg-background/85 text-foreground pointer-events-none absolute inset-0 z-[150] flex flex-col items-center justify-center gap-[10px] rounded-[20px] border-2 border-dashed backdrop-blur-sm">
+          <Upload size={32} />
+          <div className="text-[16px] font-[600]">
+            {t('drop_files_here_to_upload', 'Drop your files here to upload')}
+          </div>
+        </div>
+      )}
+      <div className="flex flex-1 flex-col rounded-[20px]">
+        <div className="flex flex-1">
+          <div className="border-border flex flex-1 flex-col border-e">
+            <div className="bg-background flex h-[65px] items-center gap-[12px] rounded-s-[20px] !rounded-b-[0] px-[20px] text-[20px] font-[600]">
               {t('create_post_title', 'Create Post')}
               <CreationMethodBadge
                 creationMethod={existingData?.posts?.[0]?.creationMethod}
                 size="sm"
               />
             </div>
-            <div className="flex-1 flex flex-col gap-[16px]">
-              <div
-                className={cn('flex-1 relative', showSettings && 'hidden')}
-              >
+            <div className="flex flex-1 flex-col gap-[16px]">
+              <div className={cn('relative flex-1', showSettings && 'hidden')}>
                 <div
                   id="social-content"
-                  className="gap-[32px] flex flex-col pe-[8px] pt-[20px] ps-[20px] absolute top-0 left-0 w-full h-full overflow-x-hidden overflow-y-scroll scrollbar scrollbar-thumb-muted scrollbar-track-card"
+                  className="scrollbar scrollbar-thumb-muted scrollbar-track-transparent absolute top-0 left-0 flex h-full w-full flex-col gap-[32px] overflow-x-hidden overflow-y-auto ps-[20px] pe-[8px] pt-[20px]"
                 >
-                  <div className="flex w-full">
+                  <div
+                    className={cn(
+                      'flex w-full',
+                      isPublished && 'pointer-events-none opacity-50',
+                    )}
+                  >
                     <div className="flex flex-1">
                       <PicksSocialsComponent toolTip={true} />
                     </div>
@@ -499,15 +596,15 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
                       )}
                     </div>
                   </div>
-                  <div className="flex flex-1 gap-[6px] flex-col">
+                  <div className="flex flex-1 flex-col gap-[6px]">
                     <div>{!existingData.integration && <SelectCurrent />}</div>
-                    <div className="flex-1 flex">
+                    <div className="flex flex-1">
                       {!hide && <EditorWrapper totalPosts={1} value="" />}
                     </div>
                     <div
                       id="social-empty"
                       className={cn(
-                        'pb-[16px]'
+                        'pb-[16px]',
                         // current !== 'global' && 'hidden'
                       )}
                     />
@@ -517,39 +614,39 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
               <div
                 id="wrapper-settings"
                 className={cn(
-                  'pb-[20px] px-[20px] select-none',
-                  showSettings && 'flex-1 flex pt-[20px]',
-                  current === 'global' && 'hidden'
+                  'px-[20px] pb-[20px] select-none',
+                  showSettings && 'flex flex-1 pt-[20px]',
+                  current === 'global' && 'hidden',
                 )}
               >
-                <div className="flex-1 flex flex-col rounded-[12px] gap-[12px] overflow-hidden bg-card">
+                <div className="flex flex-1 flex-col gap-[12px] overflow-hidden rounded-[12px]">
                   <div
                     onClick={() => setShowSettings(!showSettings)}
                     className={cn(
-                      'bg-primary rounded-[12px] flex items-center gap-[8px] cursor-pointer p-[12px]',
-                      showSettings ? '!rounded-b-none' : ''
+                      'bg-primary flex cursor-pointer items-center gap-[8px] rounded-[12px] p-[12px]',
+                      showSettings ? '!rounded-b-none' : '',
                     )}
                   >
-                    <div className="flex-1 text-[14px] font-[600] text-white">
+                    <div className="text-primary-foreground flex-1 text-[14px] font-[600]">
                       {currentIntegrationText}
                     </div>
                     <div>
                       <ChevronDownIcon
                         rotated={showSettings}
-                        className="text-white"
+                        className="text-primary-foreground"
                       />
                     </div>
                   </div>
                   <div
                     className={cn(
                       !showSettings ? 'hidden' : 'flex-1',
-                      'text-[14px] text-foreground font-[500] relative'
+                      'text-foreground relative text-[14px] font-[500]',
                     )}
                   >
-                    <div className="absolute left-0 top-0 w-full h-full flex flex-col overflow-x-hidden overflow-y-auto scrollbar scrollbar-thumb-card scrollbar-track-muted">
+                    <div className="scrollbar scrollbar-thumb-card scrollbar-track-muted absolute top-0 left-0 flex h-full w-full flex-col overflow-x-hidden overflow-y-auto">
                       <div
                         id="social-settings"
-                        className="flex flex-col gap-[20px] bg-background"
+                        className="bg-background flex flex-col gap-[20px]"
                       />
                     </div>
                   </div>
@@ -560,25 +657,33 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
               </div>
             </div>
           </div>
-          <div className="w-[580px] flex flex-col">
-            <div className="bg-background h-[65px] rounded-e-[20px] !rounded-b-[0] flex items-center px-[20px] text-[20px] font-[600]">
+          <div className="flex w-[580px] flex-col">
+            <div className="bg-background flex h-[65px] items-center rounded-e-[20px] !rounded-b-[0] px-[20px] text-[20px] font-[600]">
               <div className="flex-1">{t('post_preview', 'Post Preview')}</div>
               <div className="cursor-pointer">
-                <CloseIcon onClick={askClose} className="text-[#A3A3A3]" />
+                <CloseIcon
+                  onClick={askClose}
+                  className="text-muted-foreground"
+                />
               </div>
             </div>
-            <div className="flex-1 relative">
+            <div className="relative flex-1">
               <Scrollable
                 scrollClasses="!pe-[20px]"
-                className="absolute top-0 p-[20px] pe-[8px] left-0 w-full h-full overflow-x-hidden overflow-y-scroll scrollbar scrollbar-thumb-muted scrollbar-track-card"
+                className="scrollbar scrollbar-thumb-muted scrollbar-track-transparent absolute top-0 left-0 h-full w-full overflow-x-hidden overflow-y-auto p-[20px] pe-[8px]"
               >
                 <ShowAllProviders ref={ref} />
               </Scrollable>
             </div>
           </div>
         </div>
-        <div className="select-none h-[84px] py-[20px] border-t border-border flex items-center">
-          <div className="flex-1 flex ps-[20px] gap-[8px]">
+        <div className="border-border flex h-[84px] items-center border-t py-[20px] select-none">
+          <div
+            className={cn(
+              'flex flex-1 gap-[8px] ps-[20px]',
+              isPublished && 'pointer-events-none opacity-50',
+            )}
+          >
             {!dummy && (
               <TagsComponent
                 name="tags"
@@ -594,99 +699,143 @@ export const ManageModal: FC<AddEditModalProps> = (props) => {
               <RepeatComponent repeat={repeater} onChange={setRepeater} />
             )}
           </div>
-          <div className="pe-[20px] flex items-center justify-end gap-[8px]">
+          <div className="flex items-center justify-end gap-[8px] pe-[20px]">
             {existingData?.integration && (
-              <button
+              <Button
+                variant="ghost"
                 onClick={deletePost}
-                className="cursor-pointer flex text-[#FF3F3F] gap-[8px] items-center text-[15px] font-[600]"
+                className="text-destructive hover:text-destructive"
               >
-                <div>
-                  <TrashIcon />
-                </div>
-                <div>{t('delete_post', 'Delete Post')}</div>
-              </button>
+                <TrashIcon />
+                {t('delete_post', 'Delete Post')}
+              </Button>
             )}
-            <DatePicker onChange={setDate} date={date} />
-            {!addEditSets && (
-              <button
+            <div
+              className={cn(isPublished && 'pointer-events-none opacity-50')}
+            >
+              <DatePicker onChange={setDate} date={date} />
+            </div>
+            {!addEditSets && !isPublished && (
+              <Button
+                variant="outline"
+                size="lg"
                 disabled={
                   selectedIntegrations.length === 0 || loading || locked
                 }
+                isLoading={loading}
+                showSpinner={true}
                 onClick={schedule('draft')}
-                className="relative cursor-pointer disabled:cursor-not-allowed px-[20px] h-[44px] bg-secondary justify-center items-center flex rounded-[8px] text-[15px] font-[600]"
               >
-                {loading && (
-                  <div className="absolute left-[50%] top-[50%] -translate-y-[50%] -translate-x-[50%]">
-                    <div className="animate-spin h-[20px] w-[20px] border-4 border-foreground border-t-transparent rounded-full" />
-                  </div>
-                )}
-                <div className={cn(loading && 'invisible')}>
-                  {t('save_as_draft', 'Save as Draft')}
-                </div>
-              </button>
+                {t('save_as_draft', 'Save as Draft')}
+              </Button>
             )}
             {addEditSets && (
-              <button
-                className="text-white text-[15px] font-[600] min-w-[180px] btnSub disabled:cursor-not-allowed disabled:opacity-80 outline-none gap-[8px] flex justify-center items-center h-[44px] rounded-[8px] bg-primary ps-[20px] pe-[16px]"
+              <Button
+                size="lg"
+                className="min-w-[180px]"
                 disabled={
                   selectedIntegrations.length === 0 || loading || locked
                 }
+                isLoading={loading}
+                showSpinner={true}
                 onClick={schedule('draft')}
               >
                 Save Set
-              </button>
+              </Button>
             )}
-            {!addEditSets && (
-              <div className="group cursor-pointer relative">
-                <button
-                  disabled={
-                    selectedIntegrations.length === 0 || loading || locked
-                  }
-                  onClick={schedule('schedule')}
-                  className="text-white relative min-w-[180px] btnSub disabled:cursor-not-allowed disabled:opacity-80 outline-none gap-[8px] flex justify-center items-center h-[44px] rounded-[8px] bg-primary ps-[20px] pe-[16px]"
-                >
-                  {loading && (
-                    <div className="absolute left-[50%] top-[50%] -translate-y-[50%] -translate-x-[50%]">
-                      <div className="animate-spin h-[20px] w-[20px] border-4 border-white border-t-transparent rounded-full" />
-                    </div>
-                  )}
-                  <div
-                    className={cn(
-                      'text-[15px] font-[600]',
-                      loading && 'invisible'
+            {!addEditSets && isPublished && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span>
+                    <Button
+                      size="lg"
+                      className="min-w-[180px]"
+                      disabled={
+                        selectedIntegrations.length === 0 || loading || locked
+                      }
+                      isLoading={loading}
+                      showSpinner={true}
+                      onClick={schedule('now')}
+                    >
+                      {t('republish', 'Republish')}
+                    </Button>
+                  </span>
+                </TooltipTrigger>
+                {selectedIntegrations.length === 0 && (
+                  <TooltipContent>
+                    {t(
+                      'select_at_least_one_channel',
+                      'Select at least one channel above',
                     )}
-                  >
-                    {selectedIntegrations.length === 0
-                      ? t('check_circles_above', 'Check the circles above')
-                      : dummy
-                      ? t('create_output', 'Create output')
-                      : !existingData?.integration
-                      ? t('add_to_calendar', 'Add to calendar')
-                      : existingData?.posts?.[0]?.state === 'DRAFT'
-                      ? t('schedule', 'Schedule')
-                      : t('update', 'Update')}
-                  </div>
-                  {!dummy && (
-                    <div className="flex justify-center items-center h-[20px] w-[20px] pt-[4px] arrow-change">
-                      <DropdownArrowSmallIcon className="group-hover:rotate-180 text-white" />
-                    </div>
-                  )}
-                </button>
-
-                {!dummy && (
-                  <button
-                    onClick={schedule('now')}
-                    disabled={
-                      selectedIntegrations.length === 0 || loading || locked
-                    }
-                    className="rounded-[8px] z-[300] disabled:cursor-not-allowed disabled:opacity-80 hidden group-hover:flex absolute bottom-[100%] -left-[12px] p-[12px] w-[206px] bg-card"
-                  >
-                    <div className="text-white rounded-[8px] bg-[#D82D7E] h-[44px] w-full flex justify-center items-center post-now">
-                      {t('post_now', 'Post Now')}
-                    </div>
-                  </button>
+                  </TooltipContent>
                 )}
-              </div>
+              </Tooltip>
+            )}
+            {!addEditSets && !isPublished && (
+              <>
+                {!dummy && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <span>
+                        <Button
+                          variant="secondary"
+                          size="lg"
+                          disabled={
+                            selectedIntegrations.length === 0 ||
+                            loading ||
+                            locked
+                          }
+                          isLoading={loading}
+                          showSpinner={true}
+                          onClick={schedule('now')}
+                        >
+                          {t('post_now', 'Post Now')}
+                        </Button>
+                      </span>
+                    </TooltipTrigger>
+                    {selectedIntegrations.length === 0 && (
+                      <TooltipContent>
+                        {t(
+                          'select_at_least_one_channel',
+                          'Select at least one channel above',
+                        )}
+                      </TooltipContent>
+                    )}
+                  </Tooltip>
+                )}
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span>
+                      <Button
+                        size="lg"
+                        className="min-w-[180px]"
+                        disabled={
+                          selectedIntegrations.length === 0 || loading || locked
+                        }
+                        isLoading={loading}
+                        showSpinner={true}
+                        onClick={schedule('schedule')}
+                      >
+                        {dummy
+                          ? t('create_output', 'Create output')
+                          : !existingData?.integration
+                            ? t('add_to_calendar', 'Add to calendar')
+                            : existingData?.posts?.[0]?.state === 'DRAFT'
+                              ? t('schedule', 'Schedule')
+                              : t('update', 'Update')}
+                      </Button>
+                    </span>
+                  </TooltipTrigger>
+                  {selectedIntegrations.length === 0 && (
+                    <TooltipContent>
+                      {t(
+                        'select_at_least_one_channel',
+                        'Select at least one channel above',
+                      )}
+                    </TooltipContent>
+                  )}
+                </Tooltip>
+              </>
             )}
           </div>
         </div>
@@ -709,7 +858,7 @@ After using the addPostFor{num} it will create a new addPostContentFor{num+ 1} f
           title: t('your_assistant', 'Your Assistant'),
           initial: t(
             'assistant_initial_message',
-            'Hi! I can help you to refine your social media posts.'
+            'Hi! I can help you to refine your social media posts.',
           ),
         }}
       />

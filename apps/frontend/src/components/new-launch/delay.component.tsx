@@ -1,12 +1,23 @@
 'use client';
 
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import { DelayIcon, DropdownArrowIcon } from '@gitroom/frontend/components/ui/icons';
+import { DelayIcon } from '@gitroom/frontend/components/ui/icons';
 import { cn } from '@gitroom/react/helpers/cn';
 import { useLaunchStore } from '@gitroom/frontend/components/new-launch/store';
 import { useShallow } from 'zustand/react/shallow';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
-import { useClickOutside } from '@mantine/hooks';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@gitroom/react/ui/popover';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@gitroom/react/ui/tooltip';
+import { Button } from '@gitroom/react/ui/button';
+import { Input } from '@gitroom/react/ui/input';
 
 const delayOptions = [
   { value: 1, label: '1m' },
@@ -26,8 +37,9 @@ export const DelayComponent: FC<{
   const t = useT();
   const [isOpen, setIsOpen] = useState(false);
   const [customValue, setCustomValue] = useState('');
-  
-  const isCustomDelay = currentDelay > 0 && !delayOptions.some((opt) => opt.value === currentDelay);
+
+  const isCustomDelay =
+    currentDelay > 0 && !delayOptions.some((opt) => opt.value === currentDelay);
 
   useEffect(() => {
     if (isOpen && isCustomDelay) {
@@ -44,13 +56,6 @@ export const DelayComponent: FC<{
       setInternalDelay: state.setInternalDelay,
     }))
   );
-
-  const ref = useClickOutside(() => {
-    if (!isOpen) {
-      return;
-    }
-    setIsOpen(false);
-  });
 
   const setDelay = useCallback(
     (index: number) => (minutes: number) => {
@@ -78,77 +83,81 @@ export const DelayComponent: FC<{
   };
 
   return (
-    <div ref={ref} className="relative">
-      <div
-        onClick={() => setIsOpen(!isOpen)}
-        data-tooltip-id="tooltip"
-        data-tooltip-content={
-          !currentDelay
-            ? t('delay_comment', 'Delay comment')
-            : `${t('delay_comment_by', 'Comment delayed by')} ${getCurrentDelayLabel()}`
-        }
-        className={cn(
-          'cursor-pointer flex items-center gap-[4px]',
-          currentDelay > 0 && 'bg-[#D82D7E] text-white rounded-full'
-        )}
-      >
-        <DelayIcon />
-      </div>
-      {isOpen && (
-        <div className="z-[300] absolute end-0 top-[100%] w-[200px] bg-card p-[8px] menu-shadow translate-y-[10px] flex flex-col rounded-[8px]">
-          <div className="grid grid-cols-4 gap-[4px]">
-            {delayOptions.map((option) => (
-              <div
-                onClick={() => handleSelectDelay(option.value)}
-                key={option.value}
-                className={cn(
-                  'h-[32px] flex items-center justify-center rounded-[4px] cursor-pointer hover:bg-background text-[13px]',
-                  currentDelay === option.value && 'bg-primary text-white hover:bg-primary/90'
-                )}
-              >
-                {option.label}
-              </div>
-            ))}
-          </div>
-          <div className="border-t border-foreground/10 mt-[8px] pt-[8px]">
-            <div className="flex gap-[4px]">
-              <input
-                type="number"
-                min="1"
-                value={customValue}
-                onChange={(e) => setCustomValue(e.target.value)}
-                onClick={(e) => e.stopPropagation()}
-                placeholder="Custom min"
-                className={cn(
-                  'flex-1 w-full h-[32px] px-[8px] rounded-[4px] bg-background border text-[13px] outline-none focus:border-primary',
-                  isCustomDelay ? 'border-primary' : 'border-foreground/10'
-                )}
-              />
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  const value = parseInt(customValue, 10);
-                  if (value > 0) {
-                    handleSelectDelay(value);
-                    setCustomValue('');
-                  }
-                }}
-                className="h-[32px] px-[10px] rounded-[4px] bg-primary text-white text-[12px] font-[600] hover:bg-primary/80"
-              >
-                Set
-              </button>
-            </div>
-          </div>
-          {currentDelay > 0 && (
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <PopoverTrigger asChild>
             <button
-              onClick={() => handleSelectDelay(0)}
-              className="mt-[8px] h-[32px] w-full rounded-[4px] text-[13px] text-red-400 hover:bg-red-400/10"
+              type="button"
+              className={cn(
+                'cursor-pointer flex items-center justify-center w-[28px] h-[28px] rounded-full',
+                currentDelay > 0 && 'bg-primary text-primary-foreground'
+              )}
             >
-              Remove delay
+              <DelayIcon />
             </button>
-          )}
+          </PopoverTrigger>
+        </TooltipTrigger>
+        <TooltipContent>
+          {!currentDelay
+            ? t('delay_comment', 'Delay comment')
+            : `${t('delay_comment_by', 'Comment delayed by')} ${getCurrentDelayLabel()}`}
+        </TooltipContent>
+      </Tooltip>
+      <PopoverContent
+        side="bottom"
+        align="end"
+        className="z-[700] w-[220px]"
+      >
+        <div className="grid grid-cols-4 gap-[4px]">
+          {delayOptions.map((option) => (
+            <button
+              type="button"
+              onClick={() => handleSelectDelay(option.value)}
+              key={option.value}
+              className={cn(
+                'h-[32px] flex items-center justify-center rounded-[4px] cursor-pointer hover:bg-muted text-[13px]',
+                currentDelay === option.value &&
+                  'bg-primary text-primary-foreground hover:bg-primary/90'
+              )}
+            >
+              {option.label}
+            </button>
+          ))}
         </div>
-      )}
-    </div>
+        <div className="border-t border-border mt-[8px] pt-[8px]">
+          <div className="flex gap-[4px]">
+            <Input
+              type="number"
+              min="1"
+              value={customValue}
+              onChange={(e) => setCustomValue(e.target.value)}
+              placeholder={t('custom_min', 'Custom min')}
+              className={cn('flex-1', isCustomDelay && 'border-primary')}
+            />
+            <Button
+              onClick={() => {
+                const value = parseInt(customValue, 10);
+                if (value > 0) {
+                  handleSelectDelay(value);
+                  setCustomValue('');
+                }
+              }}
+            >
+              {t('set', 'Set')}
+            </Button>
+          </div>
+        </div>
+        {currentDelay > 0 && (
+          <Button
+            variant="ghost"
+            onClick={() => handleSelectDelay(0)}
+            className="mt-[8px] w-full text-destructive hover:text-destructive"
+          >
+            {t('remove_delay', 'Remove delay')}
+          </Button>
+        )}
+      </PopoverContent>
+    </Popover>
   );
 };

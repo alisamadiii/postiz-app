@@ -34,8 +34,6 @@ import {
   DropdownMenuTrigger,
 } from '@gitroom/react/ui/dropdown-menu';
 import { Input } from '@gitroom/react/ui/input';
-import { AiImage } from '@gitroom/frontend/components/launches/ai.image';
-import { AiVideo } from '@gitroom/frontend/components/launches/ai.video';
 import { MediaComponentInner } from '@gitroom/frontend/components/launches/helpers/media.settings.component';
 import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
 import { DropFiles } from '@gitroom/frontend/components/layout/drop.files';
@@ -44,7 +42,6 @@ import {
   areYouSure,
   useModals,
 } from '@gitroom/frontend/components/layout/new-modal';
-import { useUser } from '@gitroom/frontend/components/layout/user.context';
 import { useUppyUploader } from '@gitroom/frontend/components/media/new.uploader';
 import { ThirdPartyMedia } from '@gitroom/frontend/components/third-parties/third-party.media';
 import { ThirdPartyMediaLibrary } from '@gitroom/frontend/components/third-parties/third-party.media-library';
@@ -126,7 +123,7 @@ export const Pagination: FC<{
     <ul className="mt-[15px] flex flex-row items-center justify-center gap-1">
       <li className={cn(current === 0 && 'pointer-events-none opacity-20')}>
         <div
-          className="ring-offset-background focus-visible:ring-ring hover:bg-primary inline-flex h-10 cursor-pointer items-center justify-center gap-1 rounded-md border-[#1F1F1F] px-4 py-2 ps-2.5 text-sm font-medium whitespace-nowrap text-gray-400 transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0"
+          className="ring-offset-background focus-visible:ring-ring hover:bg-primary border-border text-muted-foreground hover:text-primary-foreground inline-flex h-10 cursor-pointer items-center justify-center gap-1 rounded-md px-4 py-2 ps-2.5 text-sm font-medium whitespace-nowrap transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0"
           aria-label="Go to previous page"
           onClick={() => setPage(current - 1)}
         >
@@ -145,10 +142,10 @@ export const Pagination: FC<{
               aria-current="page"
               onClick={() => setPage(item - 1)}
               className={cn(
-                'ring-offset-background focus-visible:ring-ring hover:bg-primary border-border inline-flex h-10 w-10 cursor-pointer items-center justify-center gap-2 rounded-md border text-sm font-medium whitespace-nowrap transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+                'ring-offset-background focus-visible:ring-ring hover:bg-primary border-border hover:text-primary-foreground inline-flex h-10 w-10 cursor-pointer items-center justify-center gap-2 rounded-md border text-sm font-medium whitespace-nowrap transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
                 current === item - 1
-                  ? 'bg-primary !text-white'
-                  : 'text-foreground hover:text-white',
+                  ? 'bg-primary !text-primary-foreground'
+                  : 'text-foreground hover:text-primary-foreground',
               )}
             >
               {item}
@@ -162,7 +159,7 @@ export const Pagination: FC<{
         )}
       >
         <a
-          className="text-foreground group ring-offset-background focus-visible:ring-ring hover:bg-primary inline-flex h-10 cursor-pointer items-center justify-center gap-1 rounded-md border-[#1F1F1F] px-4 py-2 pe-2.5 text-sm font-medium whitespace-nowrap text-gray-400 transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0"
+          className="text-foreground group ring-offset-background focus-visible:ring-ring hover:bg-primary border-border text-muted-foreground hover:text-primary-foreground inline-flex h-10 cursor-pointer items-center justify-center gap-1 rounded-md px-4 py-2 pe-2.5 text-sm font-medium whitespace-nowrap transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0"
           aria-label="Go to next page"
           onClick={() => setPage(current + 1)}
         >
@@ -534,7 +531,7 @@ export const MediaBox: FC<{
               className={cn(
                 'grid grid-cols-3 gap-[12px] sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8',
                 !standalone &&
-                  'scrollbar scrollbar-thumb-muted scrollbar-track-card max-h-[60vh] overflow-y-auto',
+                  'scrollbar scrollbar-thumb-muted scrollbar-track-card max-h-[60vh]',
               )}
             >
               {isLoading &&
@@ -559,8 +556,8 @@ export const MediaBox: FC<{
                   return (
                     <div
                       className={cn(
-                        'group bg-red relative aspect-square overflow-hidden rounded-3xl',
-                        isSelected ? 'border-primary' : 'border-transparent',
+                        'group relative aspect-square overflow-hidden rounded-3xl outline-4 duration-200',
+                        isSelected ? 'outline-primary' : 'outline-transparent',
                       )}
                       key={media.id}
                       onClick={
@@ -582,7 +579,7 @@ export const MediaBox: FC<{
                         {media.originalName}
                       </div>
                       {isSelected && (
-                        <div className="bg-primary pointer-events-none absolute -end-[8px] -bottom-[8px] z-[20] flex h-[24px] w-[24px] items-center justify-center rounded-full text-[14px] font-[500] text-white">
+                        <div className="bg-primary text-primary-foreground pointer-events-none absolute end-[8px] bottom-[8px] z-[20] flex h-[24px] w-[24px] items-center justify-center rounded-full text-[14px] font-[500]">
                           {selected.findIndex((z: any) => z.id === media.id) +
                             1}
                         </div>
@@ -633,20 +630,21 @@ export const MediaBox: FC<{
         )}
         {!standalone && (
           <div className="mt-[32px] flex justify-end gap-[8px]">
-            <button
+            <Button
               onClick={() => modals.closeCurrent()}
-              className="border-foreground/10 flex h-[52px] cursor-pointer items-center justify-center rounded-[10px] border px-[20px]"
+              variant="outline"
+              size="lg"
             >
               {t('cancel', 'Cancel')}
-            </button>
+            </Button>
             {!isLoading && !!data?.results?.length && (
-              <button
+              <Button
                 onClick={standalone ? () => {} : addMedia}
                 disabled={selected.length === 0}
-                className="bg-primary flex h-[52px] cursor-pointer items-center justify-center rounded-[10px] px-[20px] text-white disabled:cursor-not-allowed disabled:opacity-80"
+                size="lg"
               >
                 {t('add_selected_media', 'Add selected media')}
-              </button>
+              </Button>
             )}
           </div>
         )}
@@ -694,7 +692,6 @@ export const MultiMediaComponent: FC<{
   const {
     name,
     error,
-    text,
     onChange,
     value,
     allData,
@@ -703,7 +700,6 @@ export const MultiMediaComponent: FC<{
     information,
     mediaNotAvailable,
   } = props;
-  const user = useUser();
   const modals = useModals();
   const t = useT();
   useEffect(() => {
@@ -784,7 +780,7 @@ export const MultiMediaComponent: FC<{
               {currentMedia.map((media, index) => (
                 <div
                   key={media.id}
-                  className="border-border relative flex h-[40px] w-[40px] cursor-pointer rounded-[5px] border-2 transition-all"
+                  className="border-border relative flex h-[90px] w-[90px] cursor-pointer rounded-[8px] border-2 transition-all"
                 >
                   <DragHandleIcon className="dragging absolute -start-[4px] -top-[4px] z-[20] cursor-move pe-[1px] pb-[3px]" />
 
@@ -833,7 +829,7 @@ export const MultiMediaComponent: FC<{
 
                   <CloseCircleIcon
                     onClick={clearMedia(index)}
-                    className="absolute -end-[4px] -top-[4px] z-[20] rounded-full bg-white"
+                    className="bg-background absolute -end-[4px] -top-[4px] z-[20] rounded-full"
                   />
                 </div>
               ))}
@@ -843,27 +839,13 @@ export const MultiMediaComponent: FC<{
         <div className="border-muted b1 text-foreground flex w-full gap-[8px] border-t px-[12px]">
           {!mediaNotAvailable && (
             <div className="b2 flex items-center gap-[4px] py-[10px]">
-              <div
-                onClick={showModal}
-                className="bg-muted flex h-[30px] cursor-pointer items-center justify-center rounded-[6px] px-[8px]"
-              >
-                <div className="flex items-center gap-[8px]">
-                  <div>
-                    <InsertMediaIcon />
-                  </div>
-                  <div className="maxMedia:hidden block text-[10px] font-[600]">
-                    {t('insert_media', 'Insert Media')}
-                  </div>
-                </div>
-              </div>
+              <Button type="button" variant="ghost" onClick={showModal}>
+                <InsertMediaIcon />
+                <span className="maxMedia:hidden block text-[10px] font-[600]">
+                  {t('insert_media', 'Insert Media')}
+                </span>
+              </Button>
               <ThirdPartyMedia allData={allData} onChange={changeMedia} />
-
-              {!!user?.tier?.ai && (
-                <>
-                  <AiImage value={text} onChange={changeMedia} />
-                  <AiVideo value={text} onChange={changeMedia} />
-                </>
-              )}
             </div>
           )}
           {!mediaNotAvailable && (
@@ -913,7 +895,6 @@ export const MediaComponent: FC<{
   const { name, type, label, description, onChange, value, width, height } =
     props;
   const { getValues } = useSettings();
-  const user = useUser();
   useEffect(() => {
     const settings = getValues()[props.name];
     if (settings) {

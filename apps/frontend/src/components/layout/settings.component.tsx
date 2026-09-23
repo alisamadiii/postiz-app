@@ -1,6 +1,5 @@
 'use client';
 
-import { useModals } from '@gitroom/frontend/components/layout/new-modal';
 import React, {
   FC,
   Ref,
@@ -9,30 +8,32 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
-import { showMediaBox } from '@gitroom/frontend/components/media/media.component';
-import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
-import { classValidatorResolver } from '@hookform/resolvers/class-validator';
-import { UserDetailDto } from '@gitroom/nestjs-libraries/dtos/users/user.details.dto';
-import { useToaster } from '@gitroom/react/toaster/toaster';
-import { useSWRConfig } from 'swr';
-import { cn } from '@gitroom/react/helpers/cn';
-import { TeamsComponent } from '@gitroom/frontend/components/settings/teams.component';
-import { useUser } from '@gitroom/frontend/components/layout/user.context';
-import { LogoutComponent } from '@gitroom/frontend/components/layout/logout.component';
-import { useSearchParams } from 'next/navigation';
-import { useVariables } from '@gitroom/react/helpers/variable.context';
-import { PublicComponent } from '@gitroom/frontend/components/public-api/public.component';
 import Link from 'next/link';
-import { Webhooks } from '@gitroom/frontend/components/webhooks/webhooks';
-import { Sets } from '@gitroom/frontend/components/sets/sets';
-import { SignaturesComponent } from '@gitroom/frontend/components/settings/signatures.component';
-import { Autopost } from '@gitroom/frontend/components/autopost/autopost';
-import { useT } from '@gitroom/react/translation/get.transation.service.client';
-import { SVGLine } from '@gitroom/frontend/components/launches/svg.line';
-import { GlobalSettings } from '@gitroom/frontend/components/settings/global.settings';
-import { ApprovedAppsComponent } from '@gitroom/frontend/components/approved-apps/approved-apps.component';
+import { useSearchParams } from 'next/navigation';
+import { classValidatorResolver } from '@hookform/resolvers/class-validator';
 import { Settings } from 'lucide-react';
+import { FormProvider, useForm } from 'react-hook-form';
+import { useSWRConfig } from 'swr';
+
+import { UserDetailDto } from '@gitroom/nestjs-libraries/dtos/users/user.details.dto';
+import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
+import { cn } from '@gitroom/react/helpers/cn';
+import { useVariables } from '@gitroom/react/helpers/variable.context';
+import { useToaster } from '@gitroom/react/toaster/toaster';
+import { useT } from '@gitroom/react/translation/get.transation.service.client';
+import { Button } from '@gitroom/react/ui/button';
+import { ApprovedAppsComponent } from '@gitroom/frontend/components/approved-apps/approved-apps.component';
+import { Autopost } from '@gitroom/frontend/components/autopost/autopost';
+import { useModals } from '@gitroom/frontend/components/layout/new-modal';
+import { useUser } from '@gitroom/frontend/components/layout/user.context';
+import { showMediaBox } from '@gitroom/frontend/components/media/media.component';
+import { PublicComponent } from '@gitroom/frontend/components/public-api/public.component';
+import { Sets } from '@gitroom/frontend/components/sets/sets';
+import { GlobalSettings } from '@gitroom/frontend/components/settings/global.settings';
+import { SignaturesComponent } from '@gitroom/frontend/components/settings/signatures.component';
+import { TeamsComponent } from '@gitroom/frontend/components/settings/teams.component';
+import { Webhooks } from '@gitroom/frontend/components/webhooks/webhooks';
+
 export const SettingsPopup: FC<{
   getRef?: Ref<any>;
 }> = (props) => {
@@ -87,7 +88,10 @@ export const SettingsPopup: FC<{
   const t = useT();
   const list = useMemo(() => {
     const arr = [];
-    arr.push({ tab: 'global_settings', label: t('global_settings', 'Global Settings') });
+    arr.push({
+      tab: 'global_settings',
+      label: t('global_settings', 'Global Settings'),
+    });
     // Populate tabs based on user permissions
     if (user?.tier?.team_members && isGeneral) {
       arr.push({ tab: 'teams', label: t('teams', 'Teams') });
@@ -107,7 +111,10 @@ export const SettingsPopup: FC<{
     if (user?.tier?.public_api && isGeneral && showLogout) {
       arr.push({ tab: 'api', label: t('developers', 'Developers') });
     }
-    arr.push({ tab: 'approved_apps', label: t('approved_apps', 'Approved Apps') });
+    arr.push({
+      tab: 'approved_apps',
+      label: t('approved_apps', 'Approved Apps'),
+    });
 
     return arr;
   }, [user, isGeneral, showLogout, t]);
@@ -118,38 +125,25 @@ export const SettingsPopup: FC<{
 
   return (
     <>
-      <div className="bg-card p-[20px] flex flex-col transition-all w-[260px]">
-        <div className="flex flex-1 flex-col gap-[15px]">
+      <div className="flex w-[260px] flex-col p-[20px] transition-all">
+        <div className="flex flex-1 flex-col gap-[4px]">
           {list.map(({ tab: tabKey, label }) => (
-            <div
+            <Button
               key={tabKey}
+              type="button"
+              variant={tabKey === tab ? 'secondary' : 'ghost'}
               className={cn(
-                'cursor-pointer flex items-center gap-[12px] group/profile hover:bg-accent rounded-e-[8px]',
-                tabKey === tab && 'bg-accent'
+                'justify-start',
+                tabKey !== tab && 'text-muted-foreground',
               )}
               onClick={() => setTab(tabKey)}
             >
-              <div
-                className={cn(
-                  'h-full w-[4px] rounded-s-[3px] opacity-0 group-hover/profile:opacity-100 transition-opacity',
-                  tabKey === tab && 'opacity-100'
-                )}
-              >
-                <SVGLine />
-              </div>
               {label}
-            </div>
+            </Button>
           ))}
         </div>
-        <div>
-          {showLogout && (
-            <div className="mt-4">
-              <LogoutComponent />
-            </div>
-          )}
-        </div>
       </div>
-      <div className="bg-card flex-1 flex-col flex p-[20px] gap-[12px]">
+      <div className="flex flex-1 flex-col gap-[12px] p-[20px]">
         <FormProvider {...form}>
           <form onSubmit={form.handleSubmit(submit)}>
             {!!getRef && (
@@ -157,8 +151,8 @@ export const SettingsPopup: FC<{
             )}
             <div
               className={cn(
-                'w-full mx-auto gap-[24px] flex flex-col relative',
-                !getRef && 'rounded-[4px]'
+                'relative mx-auto flex w-full flex-col gap-[24px]',
+                !getRef && 'rounded-[4px]',
               )}
             >
               {tab === 'global_settings' && (
@@ -226,7 +220,7 @@ export const SettingsComponent = () => {
     }
     settings.openModal({
       children: (
-        <div className="relative flex gap-[20px] flex-col flex-1 rounded-[4px] border border-border bg-muted p-[16px] w-[500px] mx-auto">
+        <div className="border-border bg-muted relative mx-auto flex w-[500px] flex-1 flex-col gap-[20px] rounded-[4px] border p-[16px]">
           <SettingsPopup />
         </div>
       ),
@@ -242,7 +236,7 @@ export const SettingsComponent = () => {
       <Settings
         width={40}
         height={40}
-        className="cursor-pointer relative z-[200]"
+        className="relative z-[200] cursor-pointer"
       />
     </Link>
   );

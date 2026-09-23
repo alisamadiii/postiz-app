@@ -3,6 +3,11 @@
 import { FC } from 'react';
 import { cn } from '@gitroom/react/helpers/cn';
 import SafeImage from '@gitroom/react/helpers/safe.image';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@gitroom/react/ui/tooltip';
 import { useLaunchStore } from '@gitroom/frontend/components/new-launch/store';
 import { useShallow } from 'zustand/react/shallow';
 import { useExistingData } from '@gitroom/frontend/components/launches/helpers/use.existing.data';
@@ -41,13 +46,10 @@ export const PicksSocialsComponent: FC<{ toolTip?: boolean }> = ({
                 return !f.inBetweenSteps && !f.disabled;
               })
               .map((integration) => (
+                <Tooltip key={integration.id}>
+                  <TooltipTrigger asChild>
                 <div
-                  key={integration.id}
                   className="flex gap-[8px] items-center"
-                  {...(toolTip && {
-                    'data-tooltip-id': 'tooltip',
-                    'data-tooltip-content': integration.name,
-                  })}
                 >
                   <div
                     onClick={() => {
@@ -62,7 +64,7 @@ export const PicksSocialsComponent: FC<{ toolTip?: boolean }> = ({
                         (p) => p.integration.id === integration.id
                       ) === -1
                         ? 'grayscale border-transparent'
-                        : 'border-[#622FF6]'
+                        : 'border-primary'
                     )}
                   >
                     <ImageWithFallback
@@ -74,7 +76,7 @@ export const PicksSocialsComponent: FC<{ toolTip?: boolean }> = ({
                           (p) => p.integration.id === integration.id
                         ) === -1
                           ? 'border-transparent'
-                          : 'border-[#000]'
+                          : 'border-background'
                       )}
                       alt={integration.identifier}
                       width={42}
@@ -97,6 +99,11 @@ export const PicksSocialsComponent: FC<{ toolTip?: boolean }> = ({
                     )}
                   </div>
                 </div>
+                  </TooltipTrigger>
+                  {toolTip && (
+                    <TooltipContent>{integration.name}</TooltipContent>
+                  )}
+                </Tooltip>
               ))}
           </div>
         </div>
