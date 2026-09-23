@@ -21,7 +21,7 @@ import { DNDProvider } from '@gitroom/frontend/components/launches/helpers/dnd.p
 import { useVariables } from '@gitroom/react/helpers/variable.context';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
 import { useIntegrationList } from '@gitroom/frontend/components/launches/helpers/use.integration.list';
-import useCookie from 'react-use-cookie';
+import { useTheme } from 'next-themes';
 import { Onboarding } from '@gitroom/frontend/components/onboarding/onboarding';
 import { useModals } from '@gitroom/frontend/components/layout/new-modal';
 import {
@@ -286,7 +286,8 @@ export const PlatformsComponent = () => {
   const t = useT();
   const modal = useModals();
   const [reload, setReload] = useState(false);
-  const [mode] = useCookie('mode', 'dark');
+  const { resolvedTheme } = useTheme();
+  const mode = resolvedTheme === 'light' ? 'light' : 'dark';
   const { isLoading, data: integrations, mutate } = useIntegrationList();
 
   const totalNonDisabledChannels = useMemo(() => {

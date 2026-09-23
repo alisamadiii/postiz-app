@@ -15,6 +15,7 @@ import { cn } from '@gitroom/react/helpers/cn';
 import { makeId } from '@gitroom/nestjs-libraries/services/make.is';
 import EmojiPicker from 'emoji-picker-react';
 import { Theme } from 'emoji-picker-react';
+import { useTheme } from 'next-themes';
 import { BoldText } from '@gitroom/frontend/components/new-launch/bold.text';
 import { UText } from '@gitroom/frontend/components/new-launch/u.text';
 import { SignatureBox } from '@gitroom/frontend/components/signature';
@@ -560,6 +561,7 @@ export const Editor: FC<{
   } = props;
   const [id] = useState(makeId(10));
   const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
+  const { resolvedTheme } = useTheme();
   const t = useT();
   const toaster = useToaster();
   const editorRef = useRef<undefined | { editor: any }>(undefined);
@@ -827,8 +829,9 @@ export const Editor: FC<{
                           <EmojiPicker
                             height={400}
                             theme={
-                              (localStorage.getItem('mode') as Theme) ||
-                              Theme.DARK
+                              resolvedTheme === 'light'
+                                ? Theme.LIGHT
+                                : Theme.DARK
                             }
                             onEmojiClick={(e) => {
                               addText(e.emoji);

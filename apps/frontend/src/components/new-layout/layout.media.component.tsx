@@ -4,7 +4,7 @@ import { MediaBox } from '@gitroom/frontend/components/media/media.component';
 
 export const MediaLayoutComponent = () => {
   return (
-    <div className="bg-card p-[20px] flex flex-1 flex-col gap-[15px] transition-all">
+    <div className="flex flex-1 flex-col gap-[15px] p-[20px] transition-all">
       <MediaBox setMedia={() => {}} closeModal={() => {}} standalone={true} />
     </div>
   );

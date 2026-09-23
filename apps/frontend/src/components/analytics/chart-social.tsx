@@ -4,7 +4,7 @@ import { FC, useEffect, useMemo, useRef } from 'react';
 import DrawChart from 'chart.js/auto';
 import { TotalList } from '@gitroom/frontend/components/analytics/stars.and.forks.interface';
 import { chunk } from 'lodash';
-import useCookie from 'react-use-cookie';
+import { useTheme } from 'next-themes';
 
 function mergeDataPoints(data: TotalList[], numPoints: number): TotalList[] {
   const res = chunk(data, Math.ceil(data.length / numPoints));
@@ -21,7 +21,8 @@ export const ChartSocial: FC<{
   color?: 'purple' | 'green' | 'blue';
 }> = (props) => {
   const { data, color = 'purple' } = props;
-  const [mode] = useCookie('mode', 'dark');
+  const { resolvedTheme } = useTheme();
+  const mode = resolvedTheme === 'light' ? 'light' : 'dark';
 
   const list = useMemo(() => {
     const merged = data.length < 7 ? data : mergeDataPoints(data, 7);
@@ -146,7 +147,7 @@ export const ChartSocial: FC<{
     return () => {
       chart?.current?.destroy();
     };
-  }, []);
+  }, [mode]);
 
   return <canvas className="w-full h-full" ref={ref} />;
 };

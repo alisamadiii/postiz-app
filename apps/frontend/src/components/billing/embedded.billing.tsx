@@ -9,8 +9,7 @@ import {
   CheckoutProvider,
   useCheckout,
 } from '@stripe/react-stripe-js/checkout';
-import { modeEmitter } from '@gitroom/frontend/components/layout/mode.component';
-import useCookie from 'react-use-cookie';
+import { useTheme } from 'next-themes';
 import { Button } from '@gitroom/react/form/button';
 import dayjs from 'dayjs';
 import { useToaster } from '@gitroom/react/toaster/toaster';
@@ -24,25 +23,8 @@ export const EmbeddedBilling: FC<{
   autoApplyCoupon?: string;
 }> = ({ stripe, secret, showCoupon = false, autoApplyCoupon }) => {
   const [saveSecret, setSaveSecret] = useState(secret);
-  const [loading, setLoading] = useState(false);
-  const [mode, setMode] = useCookie('mode', 'dark');
-
-  useEffect(() => {
-    modeEmitter.on('mode', (value) => {
-      setMode(value);
-      setLoading(true);
-    });
-
-    return () => {
-      modeEmitter.removeAllListeners();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (loading) {
-      setLoading(false);
-    }
-  }, [loading]);
+  const { resolvedTheme } = useTheme();
+  const mode = resolvedTheme === 'light' ? 'light' : 'dark';
 
   useEffect(() => {
     if (secret && saveSecret !== secret) {
@@ -50,13 +32,14 @@ export const EmbeddedBilling: FC<{
     }
   }, [secret, setSaveSecret]);
 
-  if (saveSecret !== secret || loading) {
+  if (saveSecret !== secret) {
     return null;
   }
 
   return (
     <div className="flex flex-col w-full pt-[48px] billing-form flex-1 tablet:pt-0">
       <CheckoutProvider
+        key={mode}
         stripe={stripe}
         options={{
           clientSecret: secret,
