@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useMemo } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { orderBy, groupBy } from 'lodash';
 import { State } from '@prisma/client';
 import {
@@ -10,6 +10,7 @@ import {
   Eye,
   BarChart3,
   Trash2,
+  FileJson,
 } from 'lucide-react';
 import { useCalendar } from '@gitroom/frontend/components/launches/calendar.context';
 import { usePostActions } from '@gitroom/frontend/components/launches/post.actions';
@@ -43,6 +44,38 @@ import {
 } from '@gitroom/react/ui/table';
 
 type Post = any;
+
+// Error status that reveals the exact failure message on click (the row itself
+// opens the editor, so this stops propagation and toggles an inline panel).
+const ErrorCell: FC<{ error?: string }> = ({ error }) => {
+  const [open, setOpen] = useState(false);
+  const t = useT();
+  if (!error) return <PostStatusBadge state={State.ERROR} />;
+  return (
+    <div className="flex flex-col items-start gap-1">
+      <button
+        type="button"
+        title={error}
+        onClick={() => setOpen((o) => !o)}
+        className="cursor-pointer text-left"
+      >
+        <PostStatusBadge state={State.ERROR} />
+      </button>
+      {open && (
+        <div className="max-w-[360px] whitespace-pre-wrap break-words rounded-md border border-destructive/30 bg-destructive/5 p-2 text-[12px] text-destructive">
+          {error}
+          <button
+            type="button"
+            onClick={() => navigator.clipboard?.writeText(error)}
+            className="mt-1 block text-[11px] underline opacity-80 hover:opacity-100"
+          >
+            {t('copy', 'Copy')}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
 
 // ERROR > DRAFT > QUEUE > PUBLISHED
 const STATE_PRIORITY: State[] = ['ERROR', 'DRAFT', 'QUEUE', 'PUBLISHED'];
@@ -98,6 +131,7 @@ export const PostsTable: FC = () => {
     editPost,
     deletePost,
     copyDebugJson,
+    showJson,
     openStatistics,
     openMissingRelease,
   } = usePostActions();
@@ -109,6 +143,9 @@ export const PostsTable: FC = () => {
       const text = stripHtmlValidation('none', first?.content || '').trim();
       const [title, ...rest] = text.split('\n').filter(Boolean);
       const state = aggregateState(posts);
+      const error = posts.find((p) => (p as any).error)?.['error'] as
+        | string
+        | undefined;
       const date = orderBy(posts, ['publishDate'], ['asc'])[0]?.publishDate;
       let media: Array<{ id: string; path: string }> = [];
       try {
@@ -129,6 +166,7 @@ export const PostsTable: FC = () => {
         title: title || t('no_content', 'No content'),
         description: rest.join(' '),
         state,
+        error,
         date,
         integrations,
         thumbnail,
@@ -241,9 +279,13 @@ export const PostsTable: FC = () => {
                     {row.description || '—'}
                   </div>
                 </TableCell>
-                <TableCell>
+                <TableCell onClick={(e) => e.stopPropagation()}>
                   <div className="flex flex-col gap-1">
-                    <PostStatusBadge state={row.state} />
+                    {row.state === 'ERROR' ? (
+                      <ErrorCell error={row.error} />
+                    ) : (
+                      <PostStatusBadge state={row.state} />
+                    )}
                     {row.state === 'QUEUE' && row.date && (
                       <span className="text-[12px] text-muted-foreground">
                         {newDayjs(row.date).local().format('MMM D, h:mm A')}
@@ -285,6 +327,10 @@ export const PostsTable: FC = () => {
                           {t('statistics', 'Statistics')}
                         </DropdownMenuItem>
                       )}
+                      <DropdownMenuItem onClick={showJson(row.post)}>
+                        <FileJson className="size-4" />
+                        {t('show_json', 'Show JSON')}
+                      </DropdownMenuItem>
                       <DropdownMenuItem onClick={copyDebugJson(row.post)}>
                         <Copy className="size-4" />
                         {t('copy_debug_json', 'Copy Debug JSON')}

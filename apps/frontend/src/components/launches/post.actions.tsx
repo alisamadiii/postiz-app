@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, Fragment, useCallback } from 'react';
+import { FC, Fragment, useCallback, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import copy from 'copy-to-clipboard';
 import { useCalendar } from '@gitroom/frontend/components/launches/calendar.context';
@@ -64,6 +64,66 @@ const DebugJsonModal: FC<{ post: any }> = ({ post }) => {
           {t('copy_debug_json', 'Copy Debug JSON')}
         </Button>
       </div>
+    </div>
+  );
+};
+
+// Fetches the full backend debug export for a post group and shows it as
+// formatted, scrollable, copyable JSON (schema + all post data + errors).
+const ShowJsonModal: FC<{ post: any }> = ({ post }) => {
+  const t = useT();
+  const fetch = useFetch();
+  const toaster = useToaster();
+  const [data, setData] = useState<any>(null);
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await (
+          await fetch(`/posts/group/${post.group}/debug-export`)
+        ).json();
+        setData(res);
+      } catch {
+        setFailed(true);
+      }
+    })();
+  }, [fetch, post.group]);
+
+  const json = data ? JSON.stringify(data, null, 2) : '';
+
+  return (
+    <div className="flex flex-col gap-[12px] p-[16px]">
+      <div className="flex items-center justify-between gap-[10px]">
+        <div className="text-foreground text-[14px]">
+          {t('post_full_data', 'Full post data (from backend)')}
+        </div>
+        <Button
+          type="button"
+          size="sm"
+          variant="secondary"
+          disabled={!data}
+          onClick={() => {
+            copy(json);
+            toaster.show(t('copied', 'Copied'), 'success');
+          }}
+        >
+          {t('copy', 'Copy')}
+        </Button>
+      </div>
+      {failed ? (
+        <div className="text-destructive text-[13px]">
+          {t('failed_to_load_data', 'Failed to load data')}
+        </div>
+      ) : !data ? (
+        <div className="text-muted-foreground text-[13px]">
+          {t('loading', 'Loading…')}
+        </div>
+      ) : (
+        <pre className="max-h-[60vh] overflow-auto whitespace-pre-wrap break-words rounded-md border border-border bg-muted/40 p-[12px] text-[12px]">
+          {json}
+        </pre>
+      )}
     </div>
   );
 };
@@ -160,6 +220,23 @@ export const usePostActions = (onMutate?: () => void) => {
     [modal, t]
   );
 
+  const showJson = useCallback(
+    (post: any) => () => {
+      modal.openModal({
+        title: t('show_json', 'Show JSON'),
+        closeOnClickOutside: true,
+        closeOnEscape: true,
+        withCloseButton: true,
+        classNames: {
+          modal: 'w-[100%] max-w-[900px]',
+        },
+        children: <ShowJsonModal post={post} />,
+        size: '70%',
+      });
+    },
+    [modal, t]
+  );
+
   const deletePost = useCallback(
     (post: any) => async () => {
       if (
@@ -225,6 +302,7 @@ export const usePostActions = (onMutate?: () => void) => {
     editPost,
     deletePost,
     copyDebugJson,
+    showJson,
     openStatistics,
     openMissingRelease,
   };

@@ -282,6 +282,7 @@ export class PostsRepository {
           releaseURL: true,
           releaseId: true,
           state: true,
+          error: true,
           image: true,
           intervalInDays: true,
           group: true,
