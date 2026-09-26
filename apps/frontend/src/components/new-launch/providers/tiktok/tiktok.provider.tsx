@@ -12,13 +12,6 @@ import {
 import { TikTokDto } from '@gitroom/nestjs-libraries/dtos/posts/providers-settings/tiktok.dto';
 import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@gitroom/react/ui/select';
-import {
   FormControl,
   FormField,
   FormItem,
@@ -33,6 +26,12 @@ import { Input } from '@gitroom/react/ui/input';
 import { TiktokPreview } from '@gitroom/frontend/components/new-launch/providers/tiktok/tiktok.preview';
 import { TikTokMusicSelector } from '@gitroom/frontend/components/new-launch/providers/tiktok/tiktok.music';
 import { TikTokLocationSelector } from '@gitroom/frontend/components/new-launch/providers/tiktok/tiktok.location';
+
+// Native <select> so the option list renders via the OS and can never be
+// occluded by the create-post modal (the Radix Select portal sat behind it).
+// Styled to match the app's SelectTrigger.
+const nativeSelectClass =
+  'h-[42px] w-full rounded-md border border-input bg-white dark:bg-muted px-3 py-2 text-sm outline-none transition-colors focus-visible:border-ring disabled:cursor-not-allowed disabled:opacity-50';
 
 const TikTokSettings: FC<{
   values?: any;
@@ -160,25 +159,20 @@ const TikTokSettings: FC<{
               <FormLabel>
                 {t('label_who_can_see_this_video', 'Who can see this video?')}
               </FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                value={field.value ?? undefined}
-                defaultValue={field.value}
-                disabled={isUploadMode}
-              >
-                <FormControl>
-                  <SelectTrigger className="h-[42px]">
-                    <SelectValue placeholder={t('select', 'Select')} />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
+              <FormControl>
+                <select
+                  className={nativeSelectClass}
+                  value={field.value ?? ''}
+                  onChange={field.onChange}
+                  disabled={isUploadMode}
+                >
                   {privacyLevel.map((item) => (
-                    <SelectItem key={item.value} value={item.value}>
+                    <option key={item.value} value={item.value}>
                       {item.label}
-                    </SelectItem>
+                    </option>
                   ))}
-                </SelectContent>
-              </Select>
+                </select>
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
@@ -200,24 +194,19 @@ const TikTokSettings: FC<{
             <FormLabel>
               {t('label_content_posting_method', 'Content posting method')}
             </FormLabel>
-            <Select
-              onValueChange={field.onChange}
-              value={field.value ?? undefined}
-              defaultValue={field.value}
-            >
-              <FormControl>
-                <SelectTrigger className="h-[42px]">
-                  <SelectValue placeholder={t('select', 'Select')} />
-                </SelectTrigger>
-              </FormControl>
-              <SelectContent>
+            <FormControl>
+              <select
+                className={nativeSelectClass}
+                value={field.value ?? ''}
+                onChange={field.onChange}
+              >
                 {contentPostingMethod.map((item) => (
-                  <SelectItem key={item.value} value={item.value}>
+                  <option key={item.value} value={item.value}>
                     {item.label}
-                  </SelectItem>
+                  </option>
                 ))}
-              </SelectContent>
-            </Select>
+              </select>
+            </FormControl>
             <FormMessage />
           </FormItem>
         )}
@@ -235,25 +224,20 @@ const TikTokSettings: FC<{
                   ? t('label_add_random_music', 'Add random music')
                   : t('label_auto_add_music', 'Auto add music')}
               </FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                value={field.value ?? undefined}
-                defaultValue={field.value}
-                disabled={isUploadMode}
-              >
-                <FormControl>
-                  <SelectTrigger className="h-[42px]">
-                    <SelectValue placeholder={t('select', 'Select')} />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
+              <FormControl>
+                <select
+                  className={nativeSelectClass}
+                  value={field.value ?? ''}
+                  onChange={field.onChange}
+                  disabled={isUploadMode}
+                >
                   {yesNo.map((item) => (
-                    <SelectItem key={item.value} value={item.value}>
+                    <option key={item.value} value={item.value}>
                       {item.label}
-                    </SelectItem>
+                    </option>
                   ))}
-                </SelectContent>
-              </Select>
+                </select>
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
